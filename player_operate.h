@@ -12,11 +12,11 @@
 //-----------------------------------------
 // プレイヤークラス
 //-----------------------------------------
-class CPlayer : public COperate
+class CPlayerOperate : public COperate
 {
 public:
-	CPlayer();
-	~CPlayer();
+	CPlayerOperate();
+	~CPlayerOperate();
 
 	HRESULT Init() override;
 	void Uninit() override;

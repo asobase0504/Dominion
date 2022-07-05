@@ -155,7 +155,7 @@
     <ClCompile Include="object.cpp" />
     <ClCompile Include="object2d.cpp" />
     <ClCompile Include="operate.cpp" />
-    <ClCompile Include="player.cpp" />
+    <ClCompile Include="player_operate.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="texture.cpp" />
   </ItemGroup>
@@ -171,7 +171,7 @@
     <ClInclude Include="object.h" />
     <ClInclude Include="object2d.h" />
     <ClInclude Include="operate.h" />
-    <ClInclude Include="player.h" />
+    <ClInclude Include="player_operate.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="texture.h" />
   </ItemGroup>

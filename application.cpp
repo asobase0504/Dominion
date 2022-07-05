@@ -16,6 +16,7 @@
 #include "character.h"
 #include "block.h"
 #include "map.h"
+#include "player_operate.h"
 
 //-----------------------------------------------------------------------------
 // 静的メンバー変数の初期化
@@ -89,8 +90,9 @@ HRESULT CApplication::Init(HWND hWnd, HINSTANCE hInstance)
 
 	// プレイヤークラス
 	character = CCharacter::Create();
-	character->SetPos(D3DXVECTOR3(800.0f, 300.0f, 0.0f));
-	character->SetSize(D3DXVECTOR2(20.0f,20.0f));
+	character->SetPos(D3DXVECTOR3(800.0f, 300.0f, 0.0f));	// 位置の設定
+	character->SetSize(D3DXVECTOR2(20.0f, 20.0f));	// 大きさの設定
+	character->SetOperate(new CPlayerOperate);	// 命令者の設定
 
 	return S_OK;
 }

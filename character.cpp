@@ -11,11 +11,14 @@
 #include "application.h"
 #include "input_keybord.h"
 #include "bullet.h"
+#include "operate.h"
+#include <assert.h>
 
 //-----------------------------------------
 // コンストラクタ
 //-----------------------------------------
-CCharacter::CCharacter()
+CCharacter::CCharacter() : 
+	m_operate(nullptr)
 {
 }
 
@@ -68,44 +71,14 @@ void CCharacter::Draw()
 //-----------------------------------------
 void CCharacter::Move()
 {
-	CApplication* application = CApplication::GetInstance();
-
-	float moveLength = 0.0f;
-	D3DXVECTOR3 moveInput = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
-	// モデルの移動
-	if (application->GetInput()->GetPress(DIK_W))
+	if (m_operate == nullptr)
 	{
-		moveInput.y -= 1.0f;
-		moveLength = 1.0f;
-	}
-	if (application->GetInput()->GetPress(DIK_A))
-	{
-		moveInput.x -= 1.0f;
-		moveLength = 1.0f;
-	}
-	if (application->GetInput()->GetPress(DIK_S))
-	{
-		moveInput.y += 1.0f;
-		moveLength = 1.0f;
-	}
-	if (application->GetInput()->GetPress(DIK_D))
-	{
-		moveInput.x += 1.0f;
-		moveLength = 1.0f;
-	}
-
-	D3DXVECTOR3 move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
-	if (moveLength > 0.0f)
-	{
-		D3DXVec3Normalize(&moveInput, &moveInput);
-
-		move = moveInput;
+		assert(false);
+		return;
 	}
 
 	// 方向ベクトル掛ける移動量
-	m_pos += move * moveLength * 2.0f * 2.0f;
+	m_pos += m_operate->Move() * 2.0f * 2.0f;
 	CObject2D::SetPos(m_pos);		// 位置の設定
 }
 
