@@ -23,6 +23,15 @@ public:
 		MOVE = 0,
 		BULLET_SHOT
 	};
+
+	enum SHOT_TYPE
+	{
+		UP_SHOT = 0,
+		DOWN_SHOT,
+		LEFT_SHOT,
+		RIGHT_SHOT,
+		NONE_SHOT
+	};
 public:
 	COperate();
 	~COperate();
@@ -32,7 +41,7 @@ public:
 	virtual void Update();
 
 	virtual D3DXVECTOR3 Move() = 0;
-	virtual bool BulletShot() = 0;
+	virtual SHOT_TYPE BulletShot() = 0;
 private:
 
 };

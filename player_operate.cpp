@@ -94,7 +94,26 @@ D3DXVECTOR3 CPlayerOperate::Move()
 //-----------------------------------------
 // ’e‚ð”­ŽË‚·‚éˆ—
 //-----------------------------------------
-bool CPlayerOperate::BulletShot()
+COperate::SHOT_TYPE CPlayerOperate::BulletShot()
 {
-	return false;
+	CApplication* application = CApplication::GetInstance();
+
+	if (application->GetInput()->GetTrigger(DIK_UP))
+	{
+		return UP_SHOT;
+	}
+	else if (application->GetInput()->GetTrigger(DIK_DOWN))
+	{
+		return DOWN_SHOT;
+	}
+	else if (application->GetInput()->GetTrigger(DIK_LEFT))
+	{
+		return LEFT_SHOT;
+	}
+	else if (application->GetInput()->GetTrigger(DIK_RIGHT))
+	{
+		return RIGHT_SHOT;
+	}
+
+	return NONE_SHOT;
 }

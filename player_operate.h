@@ -23,7 +23,7 @@ public:
 	void Update() override;
 
 	D3DXVECTOR3 Move() override;
-	bool BulletShot() override;
+	SHOT_TYPE BulletShot() override;
 
 private:
 

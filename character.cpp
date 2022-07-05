@@ -84,23 +84,29 @@ void CCharacter::Move()
 
 void CCharacter::BulletShot()
 {
-	CApplication* application = CApplication::GetInstance();
+	if (m_operate == nullptr)
+	{
+		assert(false);
+		return;
+	}
 
-	if (application->GetInput()->GetTrigger(DIK_UP))
+	switch (m_operate->BulletShot())
 	{
+	case COperate::UP_SHOT:
 		CBullet::Create(m_pos, D3DXVECTOR3(0.0f, -10.0f, 0.0f));
-	}
-	else if (application->GetInput()->GetTrigger(DIK_DOWN))
-	{
+		break;
+	case COperate::DOWN_SHOT:
 		CBullet::Create(m_pos, D3DXVECTOR3(0.0f, 10.0f, 0.0f));
-	}
-	else if (application->GetInput()->GetTrigger(DIK_LEFT))
-	{
+		break;
+	case COperate::LEFT_SHOT:
 		CBullet::Create(m_pos, D3DXVECTOR3(-10.0f, 0.0f, 0.0f));
-	}
-	else if (application->GetInput()->GetTrigger(DIK_RIGHT))
-	{
+		break;
+	case COperate::RIGHT_SHOT:
 		CBullet::Create(m_pos, D3DXVECTOR3(10.0f, 0.0f, 0.0f));
+		break;
+
+	default:
+		break;
 	}
 }
 
