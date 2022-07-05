@@ -25,6 +25,9 @@ class CMap;
 //-----------------------------------------
 class CApplication
 {
+public: // 定数
+	const int SCREEN_WIDTH = 1280;	// スクリーンの幅
+	const int SCREEN_HEIGHT = 720;	// スクリーンの高さ
 public: // 静的メンバー変数
 	static CApplication* application;
 public: // 静的関数

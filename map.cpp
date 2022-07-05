@@ -10,6 +10,7 @@
 #include "map.h"
 #include "main.h"
 #include "block.h"
+#include "application.h"
 #include "texture.h"
 #include <stdio.h>
 #include <assert.h>
@@ -18,8 +19,8 @@
 //const int CMap::MAX_Y_BLOCK = 17;	// Y軸の最大数
 const float CMap::BLOCK_SIZE = 30.0f;	// ブロックのサイズ
 const char* CMap::FILE_NAME = "data/map_03.txt";
-const float CMap::X_CENTER = SCREEN_WIDTH * 0.5f - (MAX_X_BLOCK * 0.5f * BLOCK_SIZE);	// マップを中央に配置するため(X軸)
-const float CMap::Y_CENTER = SCREEN_HEIGHT * 0.5f - (MAX_Y_BLOCK * 0.5f * BLOCK_SIZE);	// マップを中央に配置するため(Y軸)
+const float CMap::X_CENTER = CApplication::GetInstance()->SCREEN_WIDTH * 0.5f - (MAX_X_BLOCK * 0.5f * BLOCK_SIZE);	// マップを中央に配置するため(X軸)
+const float CMap::Y_CENTER = CApplication::GetInstance()->SCREEN_HEIGHT * 0.5f - (MAX_Y_BLOCK * 0.5f * BLOCK_SIZE);	// マップを中央に配置するため(Y軸)
 
 //--------------------------------------------------
 // コンストラクタ

@@ -51,6 +51,7 @@ private:
 	float rotY;			// ‰ñ“]
 	float fLength;		// ’·‚³
 	float fAngle;		// Šp“x
+protected:
 	D3DXVECTOR2 size;	// ‘å‚«‚³
 	D3DXCOLOR col;		// F
 };

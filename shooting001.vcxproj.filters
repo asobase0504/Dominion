@@ -30,9 +30,6 @@
     <ClCompile Include="bullet.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="block.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -68,6 +65,12 @@
     </ClCompile>
     <ClCompile Include="player_operate.cpp">
       <Filter>ソース ファイル\03_Operate</Filter>
+    </ClCompile>
+    <ClCompile Include="AI_operate.cpp">
+      <Filter>ソース ファイル\03_Operate</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>ソース ファイル\00_Main</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +114,9 @@
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="player_operate.h">
+      <Filter>ソース ファイル\03_Operate</Filter>
+    </ClInclude>
+    <ClInclude Include="AI_operate.h">
       <Filter>ソース ファイル\03_Operate</Filter>
     </ClInclude>
   </ItemGroup>

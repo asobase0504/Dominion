@@ -12,10 +12,6 @@
 //*****************************************************************************
 #include <d3dx9.h>
 
-// スクリーンの幅
-const int SCREEN_WIDTH = 1280;
-// スクリーンの高さ
-const int SCREEN_HEIGHT = 720;
 
 #endif // !_RENDERER_H_
 #pragma once

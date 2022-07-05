@@ -56,6 +56,27 @@ void CCharacter::Update()
 {
 	Move();
 	BulletShot();
+
+	if (m_pos.x + size.x <= 0.0f - size.x)
+	{
+		m_pos.x = CApplication::GetInstance()->SCREEN_WIDTH;
+		SetPos(m_pos);
+	}
+	if (m_pos.x - size.x >= CApplication::GetInstance()->SCREEN_WIDTH + size.x)
+	{
+		m_pos.x = 0.0f;
+		SetPos(m_pos);
+	}
+	if (m_pos.y + size.y <= 0.0f - size.y)
+	{
+		m_pos.y = CApplication::GetInstance()->SCREEN_HEIGHT;
+		SetPos(m_pos);
+	}
+	if (m_pos.y - size.y >= CApplication::GetInstance()->SCREEN_HEIGHT + size.y)
+	{
+		m_pos.y = 0.0f;
+		SetPos(m_pos);
+	}
 }
 
 //-----------------------------------------

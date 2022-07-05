@@ -4,19 +4,19 @@
 // Author YudaKaito
 // 
 //=========================================
-#ifndef _PLAYER_OPERATE_H_
-#define _PLAYER_OPERATE_H_
+#ifndef _AI_OPERATE_H_
+#define _AI_OPERATE_H_
 
 #include "operate.h"
 
 //-----------------------------------------
 // プレイヤークラス
 //-----------------------------------------
-class CPlayerOperate : public COperate
+class CAIOperate : public COperate
 {
 public:
-	CPlayerOperate();
-	~CPlayerOperate();
+	CAIOperate();
+	~CAIOperate();
 
 	HRESULT Init() override;
 	void Uninit() override;
@@ -28,4 +28,4 @@ public:
 private:
 
 };
-#endif // !_PLAYER_H_
+#endif // !_AI_OPERATE_H_

@@ -144,6 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AI_operate.cpp" />
     <ClCompile Include="application.cpp" />
     <ClCompile Include="block.cpp" />
     <ClCompile Include="bullet.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AI_operate.h" />
     <ClInclude Include="application.h" />
     <ClInclude Include="block.h" />
     <ClInclude Include="bullet.h" />
