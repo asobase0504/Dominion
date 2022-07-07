@@ -52,43 +52,39 @@ void CPlayerOperate::Update()
 //-----------------------------------------
 D3DXVECTOR3 CPlayerOperate::Move()
 {
-	CApplication* application = CApplication::GetInstance();
+	CInputKeybord* input = CApplication::GetInstance()->GetInput();
 
-	float moveLength = 0.0f;
+	//bool isMove = false;
 	D3DXVECTOR3 moveInput = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// ƒ‚ƒfƒ‹‚ÌˆÚ“®
-	if (application->GetInput()->GetPress(DIK_W))
+	if (input->GetPress(DIK_W))
 	{
 		moveInput.y -= 1.0f;
-		moveLength = 1.0f;
+		//isMove = true;
 	}
-	if (application->GetInput()->GetPress(DIK_A))
+	if (input->GetPress(DIK_A))
 	{
 		moveInput.x -= 1.0f;
-		moveLength = 1.0f;
+		//isMove = true;
 	}
-	if (application->GetInput()->GetPress(DIK_S))
+	if (input->GetPress(DIK_S))
 	{
 		moveInput.y += 1.0f;
-		moveLength = 1.0f;
+		//isMove = true;
 	}
-	if (application->GetInput()->GetPress(DIK_D))
+	if (input->GetPress(DIK_D))
 	{
 		moveInput.x += 1.0f;
-		moveLength = 1.0f;
+		//isMove = true;
 	}
 
-	D3DXVECTOR3 move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
-	if (moveLength > 0.0f)
+	if (/*isMove*/ moveInput.x != 0.0f || moveInput.y != 0.0f)
 	{
 		D3DXVec3Normalize(&moveInput, &moveInput);
-
-		move = moveInput;
 	}
 
-	return move;
+	return moveInput;
 }
 
 //-----------------------------------------
@@ -96,21 +92,21 @@ D3DXVECTOR3 CPlayerOperate::Move()
 //-----------------------------------------
 COperate::SHOT_TYPE CPlayerOperate::BulletShot()
 {
-	CApplication* application = CApplication::GetInstance();
+	CInputKeybord* input = CApplication::GetInstance()->GetInput();
 
-	if (application->GetInput()->GetTrigger(DIK_UP))
+	if (input->GetRelease(DIK_UP))
 	{
 		return UP_SHOT;
 	}
-	else if (application->GetInput()->GetTrigger(DIK_DOWN))
+	else if (input->GetRelease(DIK_DOWN))
 	{
 		return DOWN_SHOT;
 	}
-	else if (application->GetInput()->GetTrigger(DIK_LEFT))
+	else if (input->GetRelease(DIK_LEFT))
 	{
 		return LEFT_SHOT;
 	}
-	else if (application->GetInput()->GetTrigger(DIK_RIGHT))
+	else if (input->GetRelease(DIK_RIGHT))
 	{
 		return RIGHT_SHOT;
 	}

@@ -31,6 +31,7 @@ private:
 	static const char* FILE_NAME;	// マップファイル名
 	static const float X_CENTER;	// マップを中央に配置するため(X軸)
 	static const float Y_CENTER;	// マップを中央に配置するため(Y軸)
+
 public:
 	CMap();
 	~CMap();
@@ -42,6 +43,7 @@ public:
 	void Set();
 	void Load();
 	CBlock* GetBlock();
+
 private:
 	std::vector<CBlock*> m_block;
 	CBlock::TYPE m_blockIdx[MAX_X_BLOCK][MAX_Y_BLOCK];

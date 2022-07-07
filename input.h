@@ -21,6 +21,7 @@ public:
 	virtual HRESULT Init(HINSTANCE hInstance, HWND hWnd);
 	virtual void Uninit();
 	virtual void Update() = 0;
+
 protected:
 	LPDIRECTINPUTDEVICE8 m_pDevise;
 	static LPDIRECTINPUT8 m_pInput;

@@ -21,7 +21,7 @@ class CCharacter : public CObject2D
 {
 public:
 	CCharacter();
-	~CCharacter();
+	~CCharacter() override;
 
 	HRESULT Init() override;
 	void Uninit() override;
@@ -35,7 +35,9 @@ public:
 	void SetOperate(COperate* inOperate) { m_operate = inOperate; }
 
 	static CCharacter* Create();
+
 private:
 	COperate* m_operate;	// –½—ß‚ğo‚·l
 };
+
 #endif // !_CHARACTER_H_

@@ -24,6 +24,7 @@ public:
 	LPDIRECT3DDEVICE9 GetDevice() { return pD3DDevice; }
 private:
 	void DrawFPS();
+
 private:
 	LPDIRECT3D9 pD3D;				// Direct3Dオブジェクト
 	LPDIRECT3DDEVICE9 pD3DDevice;	// Deviceオブジェクト

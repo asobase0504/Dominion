@@ -203,21 +203,11 @@ void CObject2D::SetCol(const D3DXCOLOR & inColor)
 //=============================================================================
 CObject2D* CObject2D::Create()
 {
-	if (numAll >= NUM_MAX)
-	{
-		return nullptr;
-	}
-
-	int idx = numAll;
 	CObject2D* objectCreate = new CObject2D;
-	objectCreate->createIdx = idx;
 
-	if (objectCreate != nullptr)
+	if ((objectCreate == nullptr) || FAILED(objectCreate->Init()))
 	{
-		if (FAILED(objectCreate->Init()))
-		{
-			assert(false);
-		}
+		assert(false);
 	}
 
 	return objectCreate;

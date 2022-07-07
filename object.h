@@ -12,14 +12,15 @@
 class CObject
 {
 public:	// 列挙型
-
 	// CObjectクラスの派生先
 	enum TYPE
 	{
 		OBJECT_2D
 	};
+
 public:	// 定数
 	static const int NUM_MAX = 1500;
+
 public:	// 静的関数
 	static void ReleaseAll();
 	static void UpdateAll();
@@ -34,13 +35,16 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 
-	const D3DXVECTOR3& GetPos() { return m_pos; }	// 位置の取得
+	const D3DXVECTOR3& GetPos() const { return m_pos; }	// 位置の取得
 	virtual void SetPos(const D3DXVECTOR3& inPos) { m_pos = inPos; }	// 位置の設定
 	void Release();
-protected:
+
+private:
 	static CObject* object[NUM_MAX];	// オブジェクト
 	static int numAll;	// 最大数
 	int createIdx;		// 生成番号
+
+protected:
 	D3DXVECTOR3 m_pos;	// 位置
 };
 

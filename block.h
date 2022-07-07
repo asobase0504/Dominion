@@ -31,14 +31,15 @@ public:
 	};
 
 	static const int MAX_BLOCK = 40 * 17;
+
 public:
 	CBlock();
-	~CBlock();
+	~CBlock() override;
 
 	HRESULT Init() override;
-	void Uninit();
-	void Update();
-	void Draw();
+	void Uninit() override;
+	void Update() override;
+	void Draw() override;
 
 	static CBlock* Create(TYPE type);
 	void ChangeType(TYPE type);

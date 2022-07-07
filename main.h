@@ -13,5 +13,4 @@
 #include <d3dx9.h>
 
 
-#endif // !_RENDERER_H_
-#pragma once
+#endif // !_MAIN_H_

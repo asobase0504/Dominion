@@ -94,6 +94,7 @@ HRESULT CApplication::Init(HWND hWnd, HINSTANCE hInstance)
 	character->SetPos(D3DXVECTOR3(800.0f, 300.0f, 0.0f));	// И ТuВћРЁТи
 	character->SetSize(D3DXVECTOR2(20.0f, 20.0f));	// СеВЂВ≥ВћРЁТи
 	character->SetOperate(new CPlayerOperate);	// ЦљЧяО“ВћРЁТи
+
 	character = CCharacter::Create();
 	character->SetPos(D3DXVECTOR3(200.0f, 300.0f, 0.0f));	// И ТuВћРЁТи
 	character->SetSize(D3DXVECTOR2(20.0f, 20.0f));	// СеВЂВ≥ВћРЁТи

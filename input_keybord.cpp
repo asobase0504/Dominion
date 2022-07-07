@@ -100,7 +100,7 @@ void CInputKeybord::Update()
 //-----------------------------------------
 bool CInputKeybord::GetPress(int nKey)
 {
-	return (m_aKeyState[nKey] & 0x80) ? true : false;
+	return (m_aKeyState[nKey] & 0x80) != 0;
 }
 
 //-----------------------------------------
@@ -108,7 +108,7 @@ bool CInputKeybord::GetPress(int nKey)
 //-----------------------------------------
 bool CInputKeybord::GetTrigger(int nKey)
 {
-	return (m_aKeyStateTrigger[nKey] & 0x80) ? true : false;
+	return (m_aKeyStateTrigger[nKey] & 0x80) != 0;
 }
 
 //-----------------------------------------
@@ -116,5 +116,5 @@ bool CInputKeybord::GetTrigger(int nKey)
 //-----------------------------------------
 bool CInputKeybord::GetRelease(int nKey)
 {
-	return (m_aKeyStateRelease[nKey] & 0x80) ? true : false;
+	return (m_aKeyStateRelease[nKey] & 0x80) != 0;
 }

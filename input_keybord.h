@@ -27,4 +27,5 @@ private:
 	BYTE m_aKeyStateTrigger[256];
 	BYTE m_aKeyStateRelease[256];
 };
+
 #endif // !_INPUT_KETBORD_H_

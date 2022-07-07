@@ -59,7 +59,7 @@ void CCharacter::Update()
 
 	if (m_pos.x + size.x <= 0.0f - size.x)
 	{
-		m_pos.x = CApplication::GetInstance()->SCREEN_WIDTH;
+		m_pos.x = static_cast<float>(CApplication::GetInstance()->SCREEN_WIDTH);
 		SetPos(m_pos);
 	}
 	if (m_pos.x - size.x >= CApplication::GetInstance()->SCREEN_WIDTH + size.x)
@@ -69,7 +69,7 @@ void CCharacter::Update()
 	}
 	if (m_pos.y + size.y <= 0.0f - size.y)
 	{
-		m_pos.y = CApplication::GetInstance()->SCREEN_HEIGHT;
+		m_pos.y = static_cast<float>(CApplication::GetInstance()->SCREEN_HEIGHT);
 		SetPos(m_pos);
 	}
 	if (m_pos.y - size.y >= CApplication::GetInstance()->SCREEN_HEIGHT + size.y)

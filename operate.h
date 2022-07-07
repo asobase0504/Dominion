@@ -34,7 +34,7 @@ public:
 	};
 public:
 	COperate();
-	~COperate();
+	virtual ~COperate();
 
 	virtual HRESULT Init();
 	virtual void Uninit();
@@ -45,4 +45,5 @@ public:
 private:
 
 };
+
 #endif // !_OPERATE_H_

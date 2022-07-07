@@ -16,7 +16,7 @@ class CAIOperate : public COperate
 {
 public:
 	CAIOperate();
-	~CAIOperate();
+	~CAIOperate() override;
 
 	HRESULT Init() override;
 	void Uninit() override;
@@ -24,8 +24,8 @@ public:
 
 	D3DXVECTOR3 Move() override;
 	SHOT_TYPE BulletShot() override;
-
 private:
 
 };
+
 #endif // !_AI_OPERATE_H_

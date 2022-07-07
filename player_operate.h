@@ -16,7 +16,7 @@ class CPlayerOperate : public COperate
 {
 public:
 	CPlayerOperate();
-	~CPlayerOperate();
+	~CPlayerOperate() override;
 
 	HRESULT Init() override;
 	void Uninit() override;
@@ -28,4 +28,5 @@ public:
 private:
 
 };
-#endif // !_PLAYER_H_
+
+#endif // !_PLAYER_OPERATE_H_

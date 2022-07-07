@@ -34,23 +34,25 @@ public:	// 静的関数
 
 public:
 	CObject2D();
-	~CObject2D();
+	~CObject2D() override;
 
-	HRESULT Init();
-	void Uninit();
-	void Update();
-	void Draw();
+	HRESULT Init() override;
+	void Uninit() override;
+	void Update() override;
+	void Draw() override;
 
 	void SetPos(const D3DXVECTOR3& inPos) override;
 	void SetSize(const D3DXVECTOR2& inSize);
 	void SetCol(const D3DXCOLOR& inColor);
 	void SetTexture(CTexture::TEXTURE inTex) { m_texture = inTex; }
+
 private:
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	// VtxBuff
 	CTexture::TEXTURE m_texture;	// テクスチャ
 	float rotY;			// 回転
 	float fLength;		// 長さ
 	float fAngle;		// 角度
+
 protected:
 	D3DXVECTOR2 size;	// 大きさ
 	D3DXCOLOR col;		// 色

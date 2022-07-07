@@ -13,7 +13,7 @@ class CBullet : public CObject2D
 {
 public:
 	CBullet();
-	~CBullet();
+	~CBullet() override;
 
 	HRESULT Init() override;
 	void Uninit() override;

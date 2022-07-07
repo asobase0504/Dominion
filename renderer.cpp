@@ -17,10 +17,10 @@ CRenderer::CRenderer() :
 	pD3DDevice(nullptr)
 {
 #ifdef _DEBUG
-		// フォント
-		pFont = nullptr;
+	// フォント
+	pFont = nullptr;
 #endif // _DEBUG
-	}
+}
 
 //=============================================================================
 // デストラクタ
