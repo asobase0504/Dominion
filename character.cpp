@@ -103,6 +103,9 @@ void CCharacter::Move()
 	CObject2D::SetPos(m_pos);		// ˆÊ’u‚Ìİ’è
 }
 
+//-----------------------------------------
+// ’e‚Ì”­Ë
+//-----------------------------------------
 void CCharacter::BulletShot()
 {
 	if (m_controller == nullptr)
