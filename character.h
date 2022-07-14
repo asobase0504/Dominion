@@ -19,6 +19,13 @@ class CController;
 //-----------------------------------------
 class CCharacter : public CObject2D
 {
+public: // 列挙型
+	enum TEAM
+	{
+		TEAM_00,
+		TEAM_01
+	};
+
 public:
 	CCharacter();
 	~CCharacter() override;
@@ -33,11 +40,16 @@ public:
 
 	// 命令者の設定
 	void SetController(CController* inOperate) { m_controller = inOperate; }
+	void SetTeam(const TEAM inTeam);
 
-	static CCharacter* Create();
+	static CCharacter* Create(TEAM inTeam);
+
+private: // プライベート関数
+	void ScreenFromOutTime();
 
 private:
 	CController* m_controller;	// 命令を出す人
+	TEAM m_team;				// 所属してるチーム
 };
 
 #endif // !_CHARACTER_H_

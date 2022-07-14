@@ -57,26 +57,8 @@ void CCharacter::Update()
 	Move();
 	BulletShot();
 
-	if (m_pos.x + size.x <= 0.0f - size.x)
-	{
-		m_pos.x = static_cast<float>(CApplication::GetInstance()->SCREEN_WIDTH);
-		SetPos(m_pos);
-	}
-	if (m_pos.x - size.x >= CApplication::GetInstance()->SCREEN_WIDTH + size.x)
-	{
-		m_pos.x = 0.0f;
-		SetPos(m_pos);
-	}
-	if (m_pos.y + size.y <= 0.0f - size.y)
-	{
-		m_pos.y = static_cast<float>(CApplication::GetInstance()->SCREEN_HEIGHT);
-		SetPos(m_pos);
-	}
-	if (m_pos.y - size.y >= CApplication::GetInstance()->SCREEN_HEIGHT + size.y)
-	{
-		m_pos.y = 0.0f;
-		SetPos(m_pos);
-	}
+	// スクリーン外に出た時
+	ScreenFromOutTime();
 }
 
 //-----------------------------------------
@@ -114,19 +96,20 @@ void CCharacter::BulletShot()
 		return;
 	}
 
+	// 弾の発射
 	switch (m_controller->BulletShot())
 	{
 	case CController::UP_SHOT:
-		CBullet::Create(m_pos, D3DXVECTOR3(0.0f, -10.0f, 0.0f));
+		CBullet::Create(m_pos, D3DXVECTOR3(0.0f, -10.0f, 0.0f),m_team);
 		break;
 	case CController::DOWN_SHOT:
-		CBullet::Create(m_pos, D3DXVECTOR3(0.0f, 10.0f, 0.0f));
+		CBullet::Create(m_pos, D3DXVECTOR3(0.0f, 10.0f, 0.0f), m_team);
 		break;
 	case CController::LEFT_SHOT:
-		CBullet::Create(m_pos, D3DXVECTOR3(-10.0f, 0.0f, 0.0f));
+		CBullet::Create(m_pos, D3DXVECTOR3(-10.0f, 0.0f, 0.0f), m_team);
 		break;
 	case CController::RIGHT_SHOT:
-		CBullet::Create(m_pos, D3DXVECTOR3(10.0f, 0.0f, 0.0f));
+		CBullet::Create(m_pos, D3DXVECTOR3(10.0f, 0.0f, 0.0f), m_team);
 		break;
 
 	default:
@@ -135,9 +118,29 @@ void CCharacter::BulletShot()
 }
 
 //-----------------------------------------
+// チームの設定
+//-----------------------------------------
+void CCharacter::SetTeam(const TEAM inTeam)
+{
+	m_team = inTeam;
+
+	switch (m_team)
+	{
+	case TEAM_00:
+		CObject2D::SetCol(D3DXCOLOR(0.0f,0.0f,0.0f,1.0f));		// 位置の設定
+		break;
+	case TEAM_01:
+		CObject2D::SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));		// 位置の設定
+		break;
+	default:
+		break;
+	}
+}
+
+//-----------------------------------------
 // 生成
 //-----------------------------------------
-CCharacter* CCharacter::Create()
+CCharacter* CCharacter::Create(TEAM team)
 {
 	CCharacter* player = new CCharacter;
 
@@ -147,6 +150,34 @@ CCharacter* CCharacter::Create()
 	}
 
 	player->Init();
+	player->SetTeam(team);
 
 	return player;
+}
+
+//-----------------------------------------
+// スクリーン外に出た時
+//-----------------------------------------
+void CCharacter::ScreenFromOutTime()
+{
+	if (m_pos.x + size.x <= 0.0f - size.x)
+	{
+		m_pos.x = static_cast<float>(CApplication::GetInstance()->SCREEN_WIDTH);
+		SetPos(m_pos);
+	}
+	if (m_pos.x - size.x >= CApplication::GetInstance()->SCREEN_WIDTH + size.x)
+	{
+		m_pos.x = 0.0f;
+		SetPos(m_pos);
+	}
+	if (m_pos.y + size.y <= 0.0f - size.y)
+	{
+		m_pos.y = static_cast<float>(CApplication::GetInstance()->SCREEN_HEIGHT);
+		SetPos(m_pos);
+	}
+	if (m_pos.y - size.y >= CApplication::GetInstance()->SCREEN_HEIGHT + size.y)
+	{
+		m_pos.y = 0.0f;
+		SetPos(m_pos);
+	}
 }

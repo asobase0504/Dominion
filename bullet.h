@@ -8,6 +8,7 @@
 #define _BULLET_H_
 
 #include "object2d.h"
+#include "character.h"
 
 class CBullet : public CObject2D
 {
@@ -20,9 +21,14 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	static CBullet* Create(const D3DXVECTOR3& inPos, const D3DXVECTOR3& inMove);
+	void SetTeam(const CCharacter::TEAM inTeam);
+
+	static CBullet* Create(const D3DXVECTOR3& inPos, const D3DXVECTOR3& inMove , const CCharacter::TEAM inTeam);
+private: // プライベート関数
+	void ScreenFromOutTime();
 private:
-	D3DXVECTOR3 m_move;
-	int m_life;
+	D3DXVECTOR3 m_move;			// 移動量
+	CCharacter::TEAM m_team;	// 所属チーム
+	int m_life;					// 体力
 };
 #endif // !_PLAYER_H_

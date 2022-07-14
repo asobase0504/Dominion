@@ -90,15 +90,15 @@ HRESULT CApplication::Init(HWND hWnd, HINSTANCE hInstance)
 	map->Set();
 
 	// プレイヤークラス
-	character = CCharacter::Create();
+	character = CCharacter::Create(CCharacter::TEAM_00);	// 生成
 	character->SetPos(D3DXVECTOR3(800.0f, 300.0f, 0.0f));	// 位置の設定
-	character->SetSize(D3DXVECTOR2(20.0f, 20.0f));	// 大きさの設定
-	character->SetController(new CPlayerController);	// 命令者の設定
+	character->SetSize(D3DXVECTOR2(20.0f, 20.0f));			// 大きさの設定
+	character->SetController(new CAIController);			// 命令者の設定
 
-	character = CCharacter::Create();
+	character = CCharacter::Create(CCharacter::TEAM_01);	// 生成
 	character->SetPos(D3DXVECTOR3(200.0f, 300.0f, 0.0f));	// 位置の設定
-	character->SetSize(D3DXVECTOR2(20.0f, 20.0f));	// 大きさの設定
-	character->SetController(new CPlayerController);	// 命令者の設定
+	character->SetSize(D3DXVECTOR2(20.0f, 20.0f));			// 大きさの設定
+	character->SetController(new CPlayerController);		// 命令者の設定
 
 	return S_OK;
 }
