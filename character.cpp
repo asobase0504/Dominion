@@ -11,14 +11,14 @@
 #include "application.h"
 #include "input_keybord.h"
 #include "bullet.h"
-#include "operate.h"
+#include "controller.h"
 #include <assert.h>
 
 //-----------------------------------------
 // コンストラクタ
 //-----------------------------------------
 CCharacter::CCharacter() : 
-	m_operate(nullptr)
+	m_controller(nullptr)
 {
 }
 
@@ -92,37 +92,37 @@ void CCharacter::Draw()
 //-----------------------------------------
 void CCharacter::Move()
 {
-	if (m_operate == nullptr)
+	if (m_controller == nullptr)
 	{
 		assert(false);
 		return;
 	}
 
 	// 方向ベクトル掛ける移動量
-	m_pos += m_operate->Move() * 2.0f * 2.0f;
+	m_pos += m_controller->Move() * 2.0f * 2.0f;
 	CObject2D::SetPos(m_pos);		// 位置の設定
 }
 
 void CCharacter::BulletShot()
 {
-	if (m_operate == nullptr)
+	if (m_controller == nullptr)
 	{
 		assert(false);
 		return;
 	}
 
-	switch (m_operate->BulletShot())
+	switch (m_controller->BulletShot())
 	{
-	case COperate::UP_SHOT:
+	case CController::UP_SHOT:
 		CBullet::Create(m_pos, D3DXVECTOR3(0.0f, -10.0f, 0.0f));
 		break;
-	case COperate::DOWN_SHOT:
+	case CController::DOWN_SHOT:
 		CBullet::Create(m_pos, D3DXVECTOR3(0.0f, 10.0f, 0.0f));
 		break;
-	case COperate::LEFT_SHOT:
+	case CController::LEFT_SHOT:
 		CBullet::Create(m_pos, D3DXVECTOR3(-10.0f, 0.0f, 0.0f));
 		break;
-	case COperate::RIGHT_SHOT:
+	case CController::RIGHT_SHOT:
 		CBullet::Create(m_pos, D3DXVECTOR3(10.0f, 0.0f, 0.0f));
 		break;
 

@@ -15,7 +15,7 @@
 //-----------------------------------------
 // オペレータークラス
 //-----------------------------------------
-class COperate
+class CController
 {
 public:
 	enum TYPE
@@ -33,8 +33,8 @@ public:
 		NONE_SHOT
 	};
 public:
-	COperate();
-	virtual ~COperate();
+	CController();
+	virtual ~CController();
 
 	virtual HRESULT Init();
 	virtual void Uninit();

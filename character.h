@@ -12,7 +12,7 @@
 //-----------------------------------------
 // 前方宣言
 //-----------------------------------------
-class COperate;
+class CController;
 
 //-----------------------------------------
 // プレイヤークラス
@@ -32,12 +32,12 @@ public:
 	void BulletShot();
 
 	// 命令者の設定
-	void SetOperate(COperate* inOperate) { m_operate = inOperate; }
+	void SetController(CController* inOperate) { m_controller = inOperate; }
 
 	static CCharacter* Create();
 
 private:
-	COperate* m_operate;	// 命令を出す人
+	CController* m_controller;	// 命令を出す人
 };
 
 #endif // !_CHARACTER_H_

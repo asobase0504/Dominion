@@ -7,28 +7,28 @@
 //=========================================
 // include
 //=========================================
-#include "player_operate.h"
+#include "player_controller.h"
 #include "application.h"
 #include "input_keybord.h"
 
 //-----------------------------------------
 // コンストラクタ
 //-----------------------------------------
-CPlayerOperate::CPlayerOperate()
+CPlayerController::CPlayerController()
 {
 }
 
 //-----------------------------------------
 // デストラクタ
 //-----------------------------------------
-CPlayerOperate::~CPlayerOperate()
+CPlayerController::~CPlayerController()
 {
 }
 
 //-----------------------------------------
 // 初期化
 //-----------------------------------------
-HRESULT CPlayerOperate::Init()
+HRESULT CPlayerController::Init()
 {
 	return S_OK;
 }
@@ -36,21 +36,21 @@ HRESULT CPlayerOperate::Init()
 //-----------------------------------------
 // 終了
 //-----------------------------------------
-void CPlayerOperate::Uninit()
+void CPlayerController::Uninit()
 {
 }
 
 //-----------------------------------------
 // 更新
 //-----------------------------------------
-void CPlayerOperate::Update()
+void CPlayerController::Update()
 {
 }
 
 //-----------------------------------------
 // 移動
 //-----------------------------------------
-D3DXVECTOR3 CPlayerOperate::Move()
+D3DXVECTOR3 CPlayerController::Move()
 {
 	CInputKeybord* input = CApplication::GetInstance()->GetInput();
 
@@ -90,7 +90,7 @@ D3DXVECTOR3 CPlayerOperate::Move()
 //-----------------------------------------
 // 弾を発射する処理
 //-----------------------------------------
-COperate::SHOT_TYPE CPlayerOperate::BulletShot()
+CController::SHOT_TYPE CPlayerController::BulletShot()
 {
 	CInputKeybord* input = CApplication::GetInstance()->GetInput();
 

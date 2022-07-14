@@ -7,16 +7,16 @@
 #ifndef _AI_OPERATE_H_
 #define _AI_OPERATE_H_
 
-#include "operate.h"
+#include "controller.h"
 
 //-----------------------------------------
 // プレイヤークラス
 //-----------------------------------------
-class CAIOperate : public COperate
+class CAIController : public CController
 {
 public:
-	CAIOperate();
-	~CAIOperate() override;
+	CAIController();
+	~CAIController() override;
 
 	HRESULT Init() override;
 	void Uninit() override;

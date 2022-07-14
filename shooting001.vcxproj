@@ -144,7 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AI_operate.cpp" />
+    <ClCompile Include="AI_controller.cpp" />
     <ClCompile Include="application.cpp" />
     <ClCompile Include="block.cpp" />
     <ClCompile Include="bullet.cpp" />
@@ -155,13 +155,13 @@
     <ClCompile Include="map.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="object2d.cpp" />
-    <ClCompile Include="operate.cpp" />
-    <ClCompile Include="player_operate.cpp" />
+    <ClCompile Include="controller.cpp" />
+    <ClCompile Include="player_controller.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AI_operate.h" />
+    <ClInclude Include="AI_controller.h" />
     <ClInclude Include="application.h" />
     <ClInclude Include="block.h" />
     <ClInclude Include="bullet.h" />
@@ -171,8 +171,8 @@
     <ClInclude Include="map.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="object2d.h" />
-    <ClInclude Include="operate.h" />
-    <ClInclude Include="player_operate.h" />
+    <ClInclude Include="controller.h" />
+    <ClInclude Include="player_controller.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="texture.h" />
   </ItemGroup>

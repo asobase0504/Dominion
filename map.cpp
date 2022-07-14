@@ -49,7 +49,7 @@ HRESULT CMap::Init()
 //--------------------------------------------------
 void CMap::Uninit()
 {
-	for (CBlock* block : m_block)
+	for (CBlock*& block : m_block)
 	{
 		block->Uninit();
 		block = nullptr;

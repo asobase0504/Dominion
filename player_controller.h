@@ -1,5 +1,5 @@
 //=========================================
-// 
+// Controller
 // プレイヤークラス
 // Author YudaKaito
 // 
@@ -7,16 +7,16 @@
 #ifndef _PLAYER_OPERATE_H_
 #define _PLAYER_OPERATE_H_
 
-#include "operate.h"
+#include "controller.h"
 
 //-----------------------------------------
 // プレイヤークラス
 //-----------------------------------------
-class CPlayerOperate : public COperate
+class CPlayerController : public CController
 {
 public:
-	CPlayerOperate();
-	~CPlayerOperate() override;
+	CPlayerController();
+	~CPlayerController() override;
 
 	HRESULT Init() override;
 	void Uninit() override;
