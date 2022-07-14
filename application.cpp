@@ -98,7 +98,7 @@ HRESULT CApplication::Init(HWND hWnd, HINSTANCE hInstance)
 	character = CCharacter::Create();
 	character->SetPos(D3DXVECTOR3(200.0f, 300.0f, 0.0f));	// ˆÊ’u‚Ìİ’è
 	character->SetSize(D3DXVECTOR2(20.0f, 20.0f));	// ‘å‚«‚³‚Ìİ’è
-	character->SetOperate(new CAIOperate);	// –½—ßÒ‚Ìİ’è
+	character->SetOperate(new CPlayerOperate);	// –½—ßÒ‚Ìİ’è
 
 	return S_OK;
 }

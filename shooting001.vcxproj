@@ -168,7 +168,6 @@
     <ClInclude Include="character.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="input_keybord.h" />
-    <ClInclude Include="main.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="object2d.h" />

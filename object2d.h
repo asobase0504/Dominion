@@ -7,7 +7,6 @@
 #ifndef _OBJECT2D_H_
 #define _OBJECT2D_H_
 
-#include "main.h"
 #include "object.h"
 #include "texture.h"
 

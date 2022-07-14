@@ -88,9 +88,6 @@
     <ClInclude Include="application.h">
       <Filter>ソース ファイル\00_Main</Filter>
     </ClInclude>
-    <ClInclude Include="main.h">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClInclude>
     <ClInclude Include="input.h">
       <Filter>ソース ファイル\01_Input</Filter>
     </ClInclude>

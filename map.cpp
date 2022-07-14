@@ -8,7 +8,6 @@
 // include
 //--------------------------------------------------
 #include "map.h"
-#include "main.h"
 #include "block.h"
 #include "application.h"
 #include "texture.h"
