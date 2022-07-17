@@ -32,7 +32,7 @@ public:
 	static const int MAX_BLOCK = 40 * 17;
 
 public:
-	CBlock();
+	CBlock(CObject::TYPE type = CObject::TYPE::BLOCK);
 	~CBlock() override;
 
 	HRESULT Init() override;

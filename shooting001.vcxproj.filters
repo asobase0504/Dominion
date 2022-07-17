@@ -18,7 +18,7 @@
     <Filter Include="ソース ファイル\02_Object">
       <UniqueIdentifier>{46662834-efab-4c03-b618-defc1f03dcd1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\03_Operate">
+    <Filter Include="ソース ファイル\03_Cpntroller">
       <UniqueIdentifier>{0d4dda8f-550b-4600-8408-706d6820c1bc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -60,13 +60,13 @@
       <Filter>ソース ファイル\00_Main</Filter>
     </ClCompile>
     <ClCompile Include="controller.cpp">
-      <Filter>ソース ファイル\03_Operate</Filter>
+      <Filter>ソース ファイル\03_Cpntroller</Filter>
     </ClCompile>
     <ClCompile Include="player_controller.cpp">
-      <Filter>ソース ファイル\03_Operate</Filter>
+      <Filter>ソース ファイル\03_Cpntroller</Filter>
     </ClCompile>
     <ClCompile Include="AI_controller.cpp">
-      <Filter>ソース ファイル\03_Operate</Filter>
+      <Filter>ソース ファイル\03_Cpntroller</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -104,13 +104,13 @@
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="controller.h">
-      <Filter>ソース ファイル\03_Operate</Filter>
+      <Filter>ソース ファイル\03_Cpntroller</Filter>
     </ClInclude>
     <ClInclude Include="player_controller.h">
-      <Filter>ソース ファイル\03_Operate</Filter>
+      <Filter>ソース ファイル\03_Cpntroller</Filter>
     </ClInclude>
     <ClInclude Include="AI_controller.h">
-      <Filter>ソース ファイル\03_Operate</Filter>
+      <Filter>ソース ファイル\03_Cpntroller</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

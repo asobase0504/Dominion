@@ -27,7 +27,7 @@ public: // —ñ‹“Œ^
 	};
 
 public:
-	CCharacter();
+	CCharacter(CObject::TYPE type = CObject::TYPE::CHARACTER);
 	~CCharacter() override;
 
 	HRESULT Init() override;

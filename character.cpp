@@ -17,7 +17,8 @@
 //-----------------------------------------
 // コンストラクタ
 //-----------------------------------------
-CCharacter::CCharacter() : 
+CCharacter::CCharacter(CObject::TYPE type) :
+	CObject2D(type),
 	m_controller(nullptr)
 {
 }

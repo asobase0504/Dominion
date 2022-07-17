@@ -13,7 +13,8 @@
 //=============================================================================
 // コンストラクタ
 //=============================================================================
-CObject2D::CObject2D() :
+CObject2D::CObject2D(TYPE type) :
+	CObject(type),
 	m_pVtxBuff(nullptr),
 	m_texture(CTexture::TEXTURE::TEXTURE_NONE),
 	rotY(0.0f),

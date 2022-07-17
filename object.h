@@ -14,9 +14,12 @@ class CObject
 {
 public:	// 列挙型
 	// CObjectクラスの派生先
-	enum TYPE
+	enum class TYPE
 	{
-		OBJECT_2D
+		CHARACTER = 0,
+		BULLET,
+		BLOCK,
+		NONE
 	};
 
 public:	// 定数
@@ -28,7 +31,7 @@ public:	// 静的関数
 	static void DrawAll();
 
 public:
-	CObject();
+	CObject(TYPE type);
 	virtual ~CObject();
 
 	virtual HRESULT Init() = 0;
@@ -50,6 +53,7 @@ private:
 protected:
 	D3DXVECTOR3 m_pos;	// 位置
 	bool m_enabled;		// 存在してるか？
+	TYPE m_type;		// 種類
 };
 
 #endif // !_RENDERER_H_

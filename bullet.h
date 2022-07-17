@@ -13,7 +13,7 @@
 class CBullet : public CObject2D
 {
 public:
-	CBullet();
+	CBullet(CObject::TYPE type = CObject::TYPE::BULLET);
 	~CBullet() override;
 
 	HRESULT Init() override;

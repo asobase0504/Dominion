@@ -26,13 +26,13 @@ public:
 	};
 
 	// 頂点フォーマット
-	const DWORD FVF_VERTEX_2D = (D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1);
+	static const DWORD FVF_VERTEX_2D = (D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1);
 
 public:	// 静的関数
 	static CObject2D* Create();
 
 public:
-	CObject2D();
+	CObject2D(TYPE type = TYPE::NONE);
 	~CObject2D() override;
 
 	HRESULT Init() override;

@@ -17,10 +17,11 @@ int CObject::numAll = 0;
 //----------------------------------------
 // コンストラクタ
 //----------------------------------------
-CObject::CObject() :
+CObject::CObject(TYPE type) :
 	m_pos(D3DXVECTOR3(0.0f,0.0f,0.0f)),
 	createIdx(0)
 {
+	m_type = type;
 	object.push_back(this);
 }
 

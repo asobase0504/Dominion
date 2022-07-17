@@ -13,7 +13,8 @@
 //-----------------------------------------
 // コンストラクタ
 //-----------------------------------------
-CBullet::CBullet() :
+CBullet::CBullet(CObject::TYPE type) :
+	CObject2D(type),
 	m_move(D3DXVECTOR3(0.0f, 0.0f, 0.0f)),
 	m_life(0)
 {
