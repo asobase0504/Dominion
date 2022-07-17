@@ -11,7 +11,7 @@
 // ê√ìIÉÅÉìÉoÅ[ïœêîÇÃêÈåæ
 //=========================================
 const int CObject::NUM_MAX;
-CObject* CObject::object[NUM_MAX] = {};
+std::list<CObject*> CObject::object = {};
 int CObject::numAll = 0;
  
 //----------------------------------------
@@ -21,16 +21,7 @@ CObject::CObject() :
 	m_pos(D3DXVECTOR3(0.0f,0.0f,0.0f)),
 	createIdx(0)
 {
-	for (int i = 0; i < NUM_MAX; i++)
-	{
-		if (object[i] == nullptr)
-		{
-			numAll++;
-			object[i] = this;
-			createIdx = i;
-			break;
-		}
-	}
+	object.push_back(this);
 }
 
 //----------------------------------------
@@ -43,15 +34,17 @@ CObject::~CObject()
 //----------------------------------------
 // îjä¸
 //----------------------------------------
-void CObject::Release()
+auto CObject::Release()
 {
-	int idx = createIdx;
-	if (object[idx] != nullptr)
+	for (auto it = object.begin(); it != object.end(); it++)
 	{
-		object[idx]->Uninit();
-		delete object[idx];
-		object[idx] = nullptr;
-		numAll--;
+		if ((*it) != this)
+		{
+			continue;
+		}
+
+		delete this;
+		return object.erase(it);
 	}
 }
 
@@ -60,14 +53,17 @@ void CObject::Release()
 //----------------------------------------
 void CObject::ReleaseAll()
 {
-	for (int i = 0; i < NUM_MAX; i++)
+	for (auto it = object.begin(); it != object.end();)
 	{
-		if (object[i] != nullptr)
+		(*it)->Uninit();
+
+		if (!(*it)->m_enabled)
 		{
-			object[i]->Uninit();
-			delete object[i];
-			object[i] = nullptr;
+			it = (*it)->Release();
+			continue;
 		}
+
+		it++;
 	}
 }
 
@@ -76,12 +72,17 @@ void CObject::ReleaseAll()
 //----------------------------------------
 void CObject::UpdateAll()
 {
-	for (int i = 0; i < NUM_MAX; i++)
+	for (auto it = object.begin(); it != object.end();)
 	{
-		if (object[i] != nullptr)
+		(*it)->Update();
+
+		if (!(*it)->m_enabled)
 		{
-			object[i]->Update();
+			it = (*it)->Release();
+			continue;
 		}
+
+		it++;
 	}
 }
 
@@ -90,11 +91,8 @@ void CObject::UpdateAll()
 //----------------------------------------
 void CObject::DrawAll()
 {
-	for (int i = 0; i < NUM_MAX; i++)
+	for (auto it = object.begin(); it != object.end(); it++)
 	{
-		if (object[i] != nullptr)
-		{
-			object[i]->Draw();
-		}
+		(*it)->Draw();
 	}
 }

@@ -101,6 +101,8 @@ void CObject2D::Uninit()
 		m_pVtxBuff->Release();
 		m_pVtxBuff = nullptr;
 	}
+
+	m_enabled = false;
 }
 
 //=============================================================================

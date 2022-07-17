@@ -57,12 +57,13 @@ void CBullet::Update()
 	// 位置の設定
 	SetPos(GetPos() + m_move);
 
+	// スクリーン外の処理
 	ScreenFromOutTime();
 
 	// 死亡処理
 	if (m_life <= 0)
 	{
-		Release();
+		m_enabled = false;
 	}
 }
 
@@ -140,4 +141,17 @@ void CBullet::ScreenFromOutTime()
 		m_pos.y = 0.0f;
 		SetPos(m_pos);
 	}
+}
+
+//-----------------------------------------
+// 弾との当たり判定
+//-----------------------------------------
+void CBullet::HitWithBullet()
+{
+	//CObject** object = CApplication::GetInstance()->GetMyObject();
+
+	//for (CObject* object : object)
+	//{
+
+	//}
 }

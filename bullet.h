@@ -26,6 +26,7 @@ public:
 	static CBullet* Create(const D3DXVECTOR3& inPos, const D3DXVECTOR3& inMove , const CCharacter::TEAM inTeam);
 private: // プライベート関数
 	void ScreenFromOutTime();
+	void HitWithBullet();
 private:
 	D3DXVECTOR3 m_move;			// 移動量
 	CCharacter::TEAM m_team;	// 所属チーム

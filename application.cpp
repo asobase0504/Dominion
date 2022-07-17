@@ -93,7 +93,7 @@ HRESULT CApplication::Init(HWND hWnd, HINSTANCE hInstance)
 	character = CCharacter::Create(CCharacter::TEAM_00);	// ¶¬
 	character->SetPos(D3DXVECTOR3(800.0f, 300.0f, 0.0f));	// ˆÊ’u‚ÌÝ’è
 	character->SetSize(D3DXVECTOR2(20.0f, 20.0f));			// ‘å‚«‚³‚ÌÝ’è
-	character->SetController(new CAIController);			// –½—ßŽÒ‚ÌÝ’è
+	character->SetController(new CPlayerController);			// –½—ßŽÒ‚ÌÝ’è
 
 	character = CCharacter::Create(CCharacter::TEAM_01);	// ¶¬
 	character->SetPos(D3DXVECTOR3(200.0f, 300.0f, 0.0f));	// ˆÊ’u‚ÌÝ’è

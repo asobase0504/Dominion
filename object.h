@@ -8,6 +8,7 @@
 #define _OBJECT_H_
 
 #include <d3dx9.h>
+#include <list>
 
 class CObject
 {
@@ -37,15 +38,18 @@ public:
 
 	const D3DXVECTOR3& GetPos() const { return m_pos; }	// 位置の取得
 	virtual void SetPos(const D3DXVECTOR3& inPos) { m_pos = inPos; }	// 位置の設定
-	void Release();
 
 private:
-	static CObject* object[NUM_MAX];	// オブジェクト
+	auto Release();
+
+private:
+	static std::list<CObject*> object;	// オブジェクト
 	static int numAll;	// 最大数
 	int createIdx;		// 生成番号
 
 protected:
 	D3DXVECTOR3 m_pos;	// 位置
+	bool m_enabled;		// 存在してるか？
 };
 
 #endif // !_RENDERER_H_
