@@ -10,6 +10,7 @@
 #include "bullet.h"
 #include "application.h"
 #include "collision.h"
+#include "block.h"
 
 //-----------------------------------------
 // コンストラクタ
@@ -140,7 +141,7 @@ void CBullet::Collision()
 
 		if ((*it)->CObject::GetType() == CObject::TYPE::BLOCK)
 		{
-			//HitWithBlock((CBlock*)(*it));
+			HitWithBlock((CBlock*)(*it));
 		}
 
 		if ((*it)->CObject::GetType() == CObject::TYPE::BULLET)
@@ -203,4 +204,41 @@ void CBullet::HitWithBullet(CBullet* inBullet)
 		inBullet->m_isDeleted = true;
 		m_isDeleted = true;
 	}
+}
+
+//-----------------------------------------
+// ブロックとの当たり判定
+//-----------------------------------------
+void CBullet::HitWithBlock(CBlock * inBlock)
+{
+	CBlock* block = inBlock;
+
+	int blockType = (int)block->CBlock::GetType();
+
+	if ((int)m_team == blockType)
+	{
+		return;
+	}
+
+	D3DXVECTOR3 outpos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 vec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	float dist;
+
+	D3DXVECTOR3 pairSize = D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f) * 0.5f;
+	D3DXVECTOR3 mySize = D3DXVECTOR3(size.x, size.y, 0.0f) * 0.5f;
+
+	if (Collision::RectangleTop(block->GetPos(), pairSize, m_pos, mySize, &outpos, NULL, NULL)
+		|| Collision::RectangleLeft(block->GetPos(), pairSize, m_pos, mySize, &outpos, NULL, NULL)
+		|| Collision::RectangleRight(block->GetPos(), pairSize, m_pos, mySize, &outpos, NULL, NULL)
+		|| Collision::RectangleDown(block->GetPos(), pairSize, m_pos, mySize, &outpos, NULL, NULL))
+	{
+		if (blockType == CBlock::NONE)
+		{
+			m_isDeleted = true;
+			return;
+		}
+
+		block->ChangeType();
+	}
+
 }

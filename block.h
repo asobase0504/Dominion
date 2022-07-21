@@ -41,7 +41,7 @@ public:
 	void Draw() override;
 
 	static CBlock* Create(BLOCK_TYPE type);
-	void ChangeType(BLOCK_TYPE type);
+	void ChangeType();
 	BLOCK_TYPE GetType();
 
 private:

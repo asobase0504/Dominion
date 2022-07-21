@@ -97,7 +97,7 @@ CBlock* CBlock::Create(CBlock::BLOCK_TYPE type)
 //--------------------------------------------------
 // 種別の切り替え
 //--------------------------------------------------
-void CBlock::ChangeType(BLOCK_TYPE type)
+void CBlock::ChangeType()
 {
 	switch (m_team)
 	{
@@ -105,9 +105,11 @@ void CBlock::ChangeType(BLOCK_TYPE type)
 		break;
 	case BLOCK_TYPE::BLOCK_01:
 		m_team = BLOCK_TYPE::BLOCK_02;
+		SetCol(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 		break;
 	case BLOCK_TYPE::BLOCK_02:
 		m_team = BLOCK_TYPE::BLOCK_01;
+		SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 		break;
 	default:
 		MessageBox(NULL, TEXT("想定外の列挙型を検出。"), TEXT("swith文の条件式"), MB_ICONHAND);

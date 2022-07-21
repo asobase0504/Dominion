@@ -29,6 +29,7 @@ private: // プライベート関数
 	void Collision();
 	void ScreenFromOutTime();
 	void HitWithBullet(CBullet* inBullet);
+	void HitWithBlock(CBlock* inBlock);
 private:
 	D3DXVECTOR3 m_move;			// 移動量
 	CCharacter::TEAM m_team;	// 所属チーム
