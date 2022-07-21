@@ -7,6 +7,8 @@
 #include "object.h"
 #include "renderer.h"
 
+#include <assert.h>
+
 //=========================================
 // Ã“Iƒƒ“ƒo[•Ï”‚ÌéŒ¾
 //=========================================
@@ -19,7 +21,8 @@ int CObject::numAll = 0;
 //----------------------------------------
 CObject::CObject(TYPE type) :
 	m_pos(D3DXVECTOR3(0.0f,0.0f,0.0f)),
-	createIdx(0)
+	createIdx(0),
+	m_isDeleted(false)
 {
 	m_type = type;
 	object.push_back(this);
@@ -47,6 +50,9 @@ auto CObject::Release()
 		delete this;
 		return object.erase(it);
 	}
+
+	assert(false);
+	return object.begin();
 }
 
 //----------------------------------------
@@ -58,7 +64,7 @@ void CObject::ReleaseAll()
 	{
 		(*it)->Uninit();
 
-		if (!(*it)->m_enabled)
+		if (!(*it)->m_isDeleted)
 		{
 			it = (*it)->Release();
 			continue;
@@ -73,11 +79,14 @@ void CObject::ReleaseAll()
 //----------------------------------------
 void CObject::UpdateAll()
 {
-	for (auto it = object.begin(); it != object.end();)
+	for (auto it = object.begin(); it != object.end(); it++)
 	{
 		(*it)->Update();
+	}
 
-		if (!(*it)->m_enabled)
+	for (auto it = object.begin(); it != object.end();)
+	{
+		if ((*it)->m_isDeleted)
 		{
 			it = (*it)->Release();
 			continue;

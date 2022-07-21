@@ -68,6 +68,9 @@
     <ClCompile Include="AI_controller.cpp">
       <Filter>ソース ファイル\03_Cpntroller</Filter>
     </ClCompile>
+    <ClCompile Include="collision.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h">
@@ -111,6 +114,9 @@
     </ClInclude>
     <ClInclude Include="AI_controller.h">
       <Filter>ソース ファイル\03_Cpntroller</Filter>
+    </ClInclude>
+    <ClInclude Include="collision.h">
+      <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -13,6 +13,8 @@
 // 前方宣言
 //-----------------------------------------
 class CController;
+class CBullet;
+class CBlock;
 
 //-----------------------------------------
 // プレイヤークラス
@@ -47,9 +49,14 @@ public:
 private: // プライベート関数
 	void ScreenFromOutTime();
 
+	void Collision();
+	void HitWithBlock(CBlock* inBlock);
+	void HitWithBullet(CBullet* inBullet);
+
 private:
 	CController* m_controller;	// 命令を出す人
 	TEAM m_team;				// 所属してるチーム
+	D3DXVECTOR3 m_move;			// 移動量
 };
 
 #endif // !_CHARACTER_H_

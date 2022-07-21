@@ -16,7 +16,7 @@
 //--------------------------------------------------
 CBlock::CBlock(CObject::TYPE type) :
 	CObject2D(type),
-	m_type(TYPE::NONE)
+	m_team(BLOCK_TYPE::NONE)
 {
 }
 
@@ -50,7 +50,6 @@ void CBlock::Uninit()
 //--------------------------------------------------
 void CBlock::Update()
 {
-	//CObject2D::Update();
 }
 
 //--------------------------------------------------
@@ -64,7 +63,7 @@ void CBlock::Draw()
 //--------------------------------------------------
 // 設定
 //--------------------------------------------------
-CBlock* CBlock::Create(TYPE type)
+CBlock* CBlock::Create(CBlock::BLOCK_TYPE type)
 {
 	CBlock* block = new CBlock;
 
@@ -75,15 +74,17 @@ CBlock* CBlock::Create(TYPE type)
 
 	block->Init();
 
+	block->m_team = type;
+
 	switch (type)
 	{
-	case TYPE::NONE:
+	case BLOCK_TYPE::NONE:
 		block->SetCol(D3DXCOLOR(1.0f,1.0f,1.0f,0.0f));
 		break;
-	case TYPE::BLOCK_01:
+	case BLOCK_TYPE::BLOCK_01:
 		block->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 		break;
-	case TYPE::BLOCK_02:
+	case BLOCK_TYPE::BLOCK_02:
 		block->SetCol(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 		break;
 	default:
@@ -96,17 +97,17 @@ CBlock* CBlock::Create(TYPE type)
 //--------------------------------------------------
 // 種別の切り替え
 //--------------------------------------------------
-void CBlock::ChangeType(TYPE type)
+void CBlock::ChangeType(BLOCK_TYPE type)
 {
-	switch (m_type)
+	switch (m_team)
 	{
-	case TYPE::NONE:
+	case BLOCK_TYPE::NONE:
 		break;
-	case TYPE::BLOCK_01:
-		m_type = TYPE::BLOCK_02;
+	case BLOCK_TYPE::BLOCK_01:
+		m_team = BLOCK_TYPE::BLOCK_02;
 		break;
-	case TYPE::BLOCK_02:
-		m_type = TYPE::BLOCK_01;
+	case BLOCK_TYPE::BLOCK_02:
+		m_team = BLOCK_TYPE::BLOCK_01;
 		break;
 	default:
 		MessageBox(NULL, TEXT("想定外の列挙型を検出。"), TEXT("swith文の条件式"), MB_ICONHAND);
@@ -118,7 +119,7 @@ void CBlock::ChangeType(TYPE type)
 //--------------------------------------------------
 // 種別の取得
 //--------------------------------------------------
-CBlock::TYPE CBlock::GetType()
+CBlock::BLOCK_TYPE CBlock::GetType()
 {
-	return m_type;
+	return m_team;
 }

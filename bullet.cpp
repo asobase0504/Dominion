@@ -9,6 +9,7 @@
 //-----------------------------------------
 #include "bullet.h"
 #include "application.h"
+#include "collision.h"
 
 //-----------------------------------------
 // コンストラクタ
@@ -52,11 +53,19 @@ void CBullet::Uninit()
 //-----------------------------------------
 void CBullet::Update()
 {
+	if (GetIsDeleted())
+	{
+		return;
+	}
+
 	// 体力の減少
 	m_life--;
 
 	// 位置の設定
 	SetPos(GetPos() + m_move);
+
+	// 当たり判定
+	Collision();
 
 	// スクリーン外の処理
 	ScreenFromOutTime();
@@ -64,7 +73,7 @@ void CBullet::Update()
 	// 死亡処理
 	if (m_life <= 0)
 	{
-		m_enabled = false;
+		m_isDeleted = true;
 	}
 }
 
@@ -118,6 +127,30 @@ CBullet* CBullet::Create(const D3DXVECTOR3& inPos, const D3DXVECTOR3& inMove, co
 }
 
 //-----------------------------------------
+// 全体の当たり判定
+//-----------------------------------------
+void CBullet::Collision()
+{
+	for (auto it = GetMyObject()->begin(); it != GetMyObject()->end(); it++)
+	{
+		if ((*it)->GetIsDeleted())
+		{
+			continue;
+		}
+
+		if ((*it)->CObject::GetType() == CObject::TYPE::BLOCK)
+		{
+			//HitWithBlock((CBlock*)(*it));
+		}
+
+		if ((*it)->CObject::GetType() == CObject::TYPE::BULLET)
+		{
+			HitWithBullet((CBullet*)(*it));
+		}
+	}
+}
+
+//-----------------------------------------
 // スクリーン外に出た時
 //-----------------------------------------
 void CBullet::ScreenFromOutTime()
@@ -147,12 +180,27 @@ void CBullet::ScreenFromOutTime()
 //-----------------------------------------
 // 弾との当たり判定
 //-----------------------------------------
-void CBullet::HitWithBullet()
+void CBullet::HitWithBullet(CBullet* inBullet)
 {
-	//CObject** object = CApplication::GetInstance()->GetMyObject();
+	CBullet* pBullet = inBullet;
 
-	//for (CObject* object : object)
-	//{
+	if ((int)m_team == (int)pBullet->CBullet::GetTeam())
+	{
+		return;
+	}
 
-	//}
+	D3DXVECTOR3 outpos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	// 弾のサイズ
+	D3DXVECTOR3 bulletSize = D3DXVECTOR3(pBullet->GetSize().x, pBullet->GetSize().y, 0.0f) * 0.5f;
+
+	// 自分のサイズ
+	D3DXVECTOR3 mySize = D3DXVECTOR3(size.x, size.y, 0.0f) * 0.5f;
+
+	// プレイヤー上、ブロック下の当たり判定
+	if (Collision::CircleAndCircle(pBullet->GetPos(), D3DXVec3Length(&bulletSize), m_pos, D3DXVec3Length(&mySize)))
+	{
+		inBullet->m_isDeleted = true;
+		m_isDeleted = true;
+	}
 }

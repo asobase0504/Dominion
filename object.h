@@ -29,6 +29,7 @@ public:	// 静的関数
 	static void ReleaseAll();
 	static void UpdateAll();
 	static void DrawAll();
+	static const std::list<CObject*>* GetMyObject() { return &object; }
 
 public:
 	CObject(TYPE type);
@@ -39,8 +40,11 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 
-	const D3DXVECTOR3& GetPos() const { return m_pos; }	// 位置の取得
+	// 外部アクセス用
+	const D3DXVECTOR3& GetPos() { return m_pos; }	// 位置の取得
 	virtual void SetPos(const D3DXVECTOR3& inPos) { m_pos = inPos; }	// 位置の設定
+	const TYPE GetType() { return m_type; }
+	const bool GetIsDeleted() { return m_isDeleted; }
 
 private:
 	auto Release();
@@ -52,7 +56,7 @@ private:
 
 protected:
 	D3DXVECTOR3 m_pos;	// 位置
-	bool m_enabled;		// 存在してるか？
+	bool m_isDeleted;	// 削除フラグ
 	TYPE m_type;		// 種類
 };
 

@@ -151,6 +151,7 @@
     <ClCompile Include="block.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="character.cpp" />
+    <ClCompile Include="collision.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="input_keybord.cpp" />
     <ClCompile Include="main.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="block.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="character.h" />
+    <ClInclude Include="collision.h" />
     <ClInclude Include="input.h" />
     <ClInclude Include="input_keybord.h" />
     <ClInclude Include="map.h" />

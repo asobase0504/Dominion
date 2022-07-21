@@ -22,11 +22,13 @@ public:
 	void Draw() override;
 
 	void SetTeam(const CCharacter::TEAM inTeam);
+	CCharacter::TEAM GetTeam() { return m_team; }
 
 	static CBullet* Create(const D3DXVECTOR3& inPos, const D3DXVECTOR3& inMove , const CCharacter::TEAM inTeam);
 private: // プライベート関数
+	void Collision();
 	void ScreenFromOutTime();
-	void HitWithBullet();
+	void HitWithBullet(CBullet* inBullet);
 private:
 	D3DXVECTOR3 m_move;			// 移動量
 	CCharacter::TEAM m_team;	// 所属チーム

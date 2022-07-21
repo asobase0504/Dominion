@@ -45,6 +45,7 @@ public:
 	void SetCol(const D3DXCOLOR& inColor);
 	void SetTexture(CTexture::TEXTURE inTex) { m_texture = inTex; }
 
+	const D3DXVECTOR2 GetSize() { return size; }
 private:
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	// VtxBuff
 	CTexture::TEXTURE m_texture;	// テクスチャ

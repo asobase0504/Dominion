@@ -21,10 +21,10 @@ public:
 	//--------------------------------------------------
 	// ƒuƒƒbƒNó‘Ô‚Ì—ñ‹“Œ^
 	//--------------------------------------------------
-	enum class TYPE
+	enum BLOCK_TYPE
 	{
-		NONE = 0,
-		BLOCK_01,
+		NONE = -1,
+		BLOCK_01 = 0,
 		BLOCK_02,
 		MAX
 	};
@@ -40,11 +40,11 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	static CBlock* Create(TYPE type);
-	void ChangeType(TYPE type);
-	TYPE GetType();
+	static CBlock* Create(BLOCK_TYPE type);
+	void ChangeType(BLOCK_TYPE type);
+	BLOCK_TYPE GetType();
 
 private:
-	TYPE m_type;	// ó‘Ô
+	BLOCK_TYPE m_team;	// ó‘Ô
 };
 #endif // !_BLOCK_H_
