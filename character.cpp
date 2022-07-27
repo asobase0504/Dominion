@@ -18,11 +18,19 @@
 #include <assert.h>
 
 //-----------------------------------------
+// 定義
+//-----------------------------------------
+const int CCharacter::LIMIT_BULLET_COUNT = 5;
+const int CCharacter::RELOAD_TIME = 30;
+
+//-----------------------------------------
 // コンストラクタ
 //-----------------------------------------
 CCharacter::CCharacter(CObject::TYPE type) :
 	CObject2D(type),
-	m_controller(nullptr)
+	m_controller(nullptr),
+	m_remainsBulletCount(0),
+	m_reloadCount(0)
 {
 }
 
@@ -40,6 +48,7 @@ CCharacter::~CCharacter()
 HRESULT CCharacter::Init()
 {
 	CObject2D::Init();
+	m_remainsBulletCount = LIMIT_BULLET_COUNT;
 	SetTexture(CTexture::TEXTURE::TEXTURE_PLAYER);
 	return S_OK;
 }
@@ -69,6 +78,17 @@ void CCharacter::Update()
 
 	// ブロックとの当たり判定
 	Collision();
+
+	if (m_remainsBulletCount < LIMIT_BULLET_COUNT)
+	{
+		m_reloadCount++;
+
+		if (m_reloadCount % RELOAD_TIME == 0)
+		{
+			m_reloadCount = 0;
+			m_remainsBulletCount++;
+		}
+	}
 }
 
 //-----------------------------------------
@@ -107,19 +127,29 @@ void CCharacter::BulletShot()
 		return;
 	}
 
+	// 残弾数が0だったら。
+	if (m_remainsBulletCount <= 0)
+	{
+		return;
+	}
+
 	// 弾の発射
 	switch (m_controller->BulletShot())
 	{
 	case CController::UP_SHOT:
 		CBullet::Create(m_pos, D3DXVECTOR3(0.0f, -10.0f, 0.0f),m_team);
+		m_remainsBulletCount--;
 		break;
 	case CController::DOWN_SHOT:
 		CBullet::Create(m_pos, D3DXVECTOR3(0.0f, 10.0f, 0.0f), m_team);
+		m_remainsBulletCount--;
 		break;
 	case CController::LEFT_SHOT:
 		CBullet::Create(m_pos, D3DXVECTOR3(-10.0f, 0.0f, 0.0f), m_team);
+		m_remainsBulletCount--;
 		break;
 	case CController::RIGHT_SHOT:
+		m_remainsBulletCount--;
 		CBullet::Create(m_pos, D3DXVECTOR3(10.0f, 0.0f, 0.0f), m_team);
 		break;
 
@@ -261,7 +291,7 @@ void CCharacter::HitWithBlock(CBlock* inBlock)
 		if (Collision::RectangleRight(block->GetPos(), D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f) * 0.5f, m_pos, D3DXVECTOR3(size.x, size.y, 0.0f) * 0.5f, &outpos, NULL, NULL))
 		{
 			vec.x += -1.0f;
-			float dist = (-size.x) * 0.5f + (m_pos.x - outpos.x);
+			dist = (-size.x) * 0.5f + (m_pos.x - outpos.x);
 			m_pos.x -= dist + dist * 0.0001f;
 			CObject2D::SetPos(m_pos);		// 位置の設定
 		}

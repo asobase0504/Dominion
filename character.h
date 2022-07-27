@@ -21,6 +21,10 @@ class CBlock;
 //-----------------------------------------
 class CCharacter : public CObject2D
 {
+public: // 定義
+	static const int LIMIT_BULLET_COUNT;
+	static const int RELOAD_TIME;
+
 public: // 列挙型
 	enum TEAM
 	{
@@ -57,6 +61,8 @@ private:
 	CController* m_controller;	// 命令を出す人
 	TEAM m_team;				// 所属してるチーム
 	D3DXVECTOR3 m_move;			// 移動量
+	int m_remainsBulletCount;	// 残りの弾数
+	int m_reloadCount;			// リロードカウント
 };
 
 #endif // !_CHARACTER_H_
