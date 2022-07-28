@@ -17,6 +17,7 @@ class CRenderer;
 class CObject;
 class CCharacter;
 class CInputKeybord;
+class CDirectInput;
 class CTexture;
 class CMap;
 
@@ -44,14 +45,16 @@ public:	// メンバー関数
 	void Update();
 	void Draw();
 
-	CRenderer* GetRenderer();
-	CObject** GetMyObject();
-	CInputKeybord* GetInput();
-	CTexture* GetTextureClass();
+	CRenderer* GetRenderer() { return renderer; }
+	CObject** GetMyObject() { return &object; }
+	CInputKeybord* GetInput() { return input; }
+	CDirectInput* GetDirectInput() { return directInput; }
+	CTexture* GetTextureClass() { return texture; }
 
 private: // 動的メンバー変数
 	CRenderer* renderer;
 	CInputKeybord* input;
+	CDirectInput* directInput;
 	CTexture* texture;
 	CObject* object;
 	CCharacter* character;

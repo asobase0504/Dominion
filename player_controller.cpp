@@ -10,6 +10,7 @@
 #include "player_controller.h"
 #include "application.h"
 #include "input_keybord.h"
+#include "input_directinput.h"
 
 //-----------------------------------------
 // コンストラクタ
@@ -54,8 +55,15 @@ D3DXVECTOR3 CPlayerController::Move()
 {
 	CInputKeybord* input = CApplication::GetInstance()->GetInput();
 
+	//CDirectInput* dinput = CApplication::GetInstance()->GetDirectInput();
+
 	//bool isMove = false;
 	D3DXVECTOR3 moveInput = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	if (input == nullptr)
+	{
+		return moveInput;
+	}
 
 	// モデルの移動
 	if (input->GetPress(DIK_W))
@@ -93,6 +101,11 @@ D3DXVECTOR3 CPlayerController::Move()
 CController::SHOT_TYPE CPlayerController::BulletShot()
 {
 	CInputKeybord* input = CApplication::GetInstance()->GetInput();
+
+	if (input == nullptr)
+	{
+		return NONE_SHOT;
+	}
 
 	if (input->GetRelease(DIK_UP))
 	{

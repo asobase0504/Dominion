@@ -23,7 +23,7 @@ public:
 
 protected:
 	LPDIRECTINPUTDEVICE8 m_pDevise;
-	static LPDIRECTINPUT8 m_pInput;
+	LPDIRECTINPUT8 m_pInput;
 };
 
 #endif // !_INPUT_H_

@@ -209,7 +209,7 @@ bool PointAndRectangle(const D3DXVECTOR3 & pointPos, const D3DXVECTOR3 & rectang
 bool CircleAndCircle(const D3DXVECTOR3& pos1, const float size1, const D3DXVECTOR3& pos2, const float size2)
 {
 	D3DXVECTOR3 dist = pos1 - pos2;
-	float c = sqrt(dist.x * dist.x + dist.y * dist.y);
+	float c = sqrtf(dist.x * dist.x + dist.y * dist.y);
 
 	if (c <= size1 + size2)
 	{

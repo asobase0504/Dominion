@@ -10,6 +10,7 @@
 #include "application.h"
 #include <assert.h>
 #include "input_keybord.h"
+#include "input_directinput.h"
 #include "renderer.h"
 #include "texture.h"
 #include "object2d.h"
@@ -42,7 +43,12 @@ CApplication* CApplication::GetInstance()
 //=============================================================================
 CApplication::CApplication() :
 	renderer(nullptr),
-	object(nullptr)
+	input(nullptr),
+	directInput(nullptr),
+	texture(nullptr),
+	object(nullptr),
+	character(nullptr),
+	map(nullptr)
 {
 }
 
@@ -70,6 +76,12 @@ HRESULT CApplication::Init(HWND hWnd, HINSTANCE hInstance)
 		return E_FAIL;
 	}
 
+	//directInput = new CDirectInput;
+	//if (FAILED(directInput->Init(hInstance, hWnd)))
+	//{
+	//	return E_FAIL;
+	//}
+
 	// レンダリングクラス
 	renderer = new CRenderer;
 	if (FAILED(renderer->Init(hWnd, true)))
@@ -79,7 +91,7 @@ HRESULT CApplication::Init(HWND hWnd, HINSTANCE hInstance)
 
 	// テクスチャ
 	texture = new CTexture;
-	//texture->LoadAll();
+	texture->LoadAll();
 
 	// マップクラス
 	map = new CMap;
@@ -134,6 +146,15 @@ void CApplication::Uninit()
 		input = nullptr;
 	}
 
+	// 入力処理の解放
+	if (directInput != nullptr)
+	{
+		directInput->Uninit();
+
+		delete directInput;
+		directInput = nullptr;
+	}
+
 	// レンダラーの解放
 	if (renderer != nullptr)
 	{
@@ -157,6 +178,7 @@ void CApplication::Uninit()
 void CApplication::Update()
 {
 	input->Update();
+	//directInput->Update();
 	renderer->Update();
 }
 
@@ -166,36 +188,4 @@ void CApplication::Update()
 void CApplication::Draw()
 {
 	renderer->Draw();
-}
-
-//=============================================================================
-// レンダリングのインスタンス取得
-//=============================================================================
-CRenderer* CApplication::GetRenderer()
-{
-	return renderer;
-}
-
-//=============================================================================
-// オブジェクトのインスタンス取得
-//=============================================================================
-CObject** CApplication::GetMyObject()
-{
-	return &object;
-}
-
-//=============================================================================
-// 入力処理の取得
-//=============================================================================
-CInputKeybord* CApplication::GetInput()
-{
-	return input;
-}
-
-//=============================================================================
-// テクスチャクラスの取得
-//=============================================================================
-CTexture* CApplication::GetTextureClass()
-{
-	return texture;
 }

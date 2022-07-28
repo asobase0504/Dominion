@@ -63,13 +63,7 @@ HRESULT CInputKeybord::Init(HINSTANCE hInstance, HWND hWnd)
 //-----------------------------------------
 void CInputKeybord::Uninit()
 {
-	// 入力デバイス（キーボード）の放棄
-	if (m_pDevise != NULL)
-	{
-		m_pDevise->Unacquire();	// キーボードへのアクセス権を放棄
-		m_pDevise->Release();
-		m_pDevise = NULL;
-	}
+	CInput::Uninit();
 }
 
 //-----------------------------------------

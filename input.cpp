@@ -8,17 +8,18 @@
 // include
 //=========================================
 #include "input.h"
+#include "input_xinput.h"
 
 //=========================================
 // 静的メンバー変数の初期化
 //=========================================
-LPDIRECTINPUT8 CInput::m_pInput = nullptr;
 
 //-----------------------------------------
 // 初期化
 //-----------------------------------------
 CInput::CInput() : 
-	m_pDevise(nullptr)
+	m_pDevise(nullptr),
+	m_pInput(nullptr)
 {
 }
 
@@ -49,6 +50,14 @@ HRESULT CInput::Init(HINSTANCE hInstance, HWND hWnd)
 //-----------------------------------------
 void CInput::Uninit()
 {
+	// 入力デバイスの放棄
+	if (m_pDevise != NULL)
+	{
+		m_pDevise->Unacquire();	// キーボードへのアクセス権を放棄
+		m_pDevise->Release();
+		m_pDevise = NULL;
+	}
+
 	// DirectInputオブジェクトの破壊
 	if (m_pInput != NULL)
 	{

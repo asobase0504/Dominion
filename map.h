@@ -45,7 +45,7 @@ public:
 
 private:
 	std::vector<CBlock*> m_block;
-	CBlock::BLOCK_TYPE m_blockIdx[MAX_X_BLOCK][MAX_Y_BLOCK];
+	std::vector<std::vector<CBlock::BLOCK_TYPE>> m_blockIdx;
 };
 
 #endif // !_MAP_H_

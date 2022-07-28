@@ -21,6 +21,9 @@
     <Filter Include="ソース ファイル\03_Cpntroller">
       <UniqueIdentifier>{0d4dda8f-550b-4600-8408-706d6820c1bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Stage">
+      <UniqueIdentifier>{d34f2a52-70b7-4c95-bb42-419947bb7574}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bullet.cpp">
@@ -71,6 +74,18 @@
     <ClCompile Include="collision.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="input_xinput.cpp">
+      <Filter>ソース ファイル\01_Input</Filter>
+    </ClCompile>
+    <ClCompile Include="input_directinput.cpp">
+      <Filter>ソース ファイル\01_Input</Filter>
+    </ClCompile>
+    <ClCompile Include="error_warning.cpp">
+      <Filter>ソース ファイル\00_Main</Filter>
+    </ClCompile>
+    <ClCompile Include="file.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h">
@@ -118,5 +133,22 @@
     <ClInclude Include="collision.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="input_xinput.h">
+      <Filter>ソース ファイル\01_Input</Filter>
+    </ClInclude>
+    <ClInclude Include="input_directinput.h">
+      <Filter>ソース ファイル\01_Input</Filter>
+    </ClInclude>
+    <ClInclude Include="error_warning.h">
+      <Filter>ソース ファイル\00_Main</Filter>
+    </ClInclude>
+    <ClInclude Include="file.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\FILE\STAGE\stage01.json">
+      <Filter>Stage</Filter>
+    </None>
   </ItemGroup>
 </Project>
