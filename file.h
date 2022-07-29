@@ -15,7 +15,7 @@
 //=====================================
 // êßå‰ä÷êî
 void OutputStatus();
-std::vector<std::vector<CBlock::BLOCK_TYPE>> LoadJson(const wchar_t* cUrl);
+void LoadJsonStage(const wchar_t* cUrl);
 void LoadJsonTex(const char* cUrl);
 void OutputStatusTex();
 void SetTex();

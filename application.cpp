@@ -14,11 +14,7 @@
 #include "renderer.h"
 #include "texture.h"
 #include "object2d.h"
-#include "character.h"
-#include "block.h"
-#include "map.h"
-#include "player_controller.h"
-#include "AI_controller.h"
+#include "game.h"
 
 //-----------------------------------------------------------------------------
 // 静的メンバー変数の初期化
@@ -46,9 +42,7 @@ CApplication::CApplication() :
 	input(nullptr),
 	directInput(nullptr),
 	texture(nullptr),
-	object(nullptr),
-	character(nullptr),
-	map(nullptr)
+	object(nullptr)
 {
 }
 
@@ -57,11 +51,11 @@ CApplication::CApplication() :
 //=============================================================================
 CApplication::~CApplication()
 {
-	assert(object == nullptr);
 	assert(renderer == nullptr);
-	assert(character == nullptr);
 	assert(input == nullptr);
+	assert(directInput == nullptr);
 	assert(texture == nullptr);
+	assert(object == nullptr);
 }
 
 //=============================================================================
@@ -93,24 +87,12 @@ HRESULT CApplication::Init(HWND hWnd, HINSTANCE hInstance)
 	texture = new CTexture;
 	texture->LoadAll();
 
-	// マップクラス
-	map = new CMap;
-	if (FAILED(map->Init()))
+	// ゲームモード
+	game = new CGame;
+	if (FAILED(game->Init()))
 	{
 		return E_FAIL;
 	}
-	map->Set();
-
-	// プレイヤークラス
-	character = CCharacter::Create(CCharacter::TEAM_00);	// 生成
-	character->SetPos(D3DXVECTOR3(800.0f, 300.0f, 0.0f));	// 位置の設定
-	character->SetSize(D3DXVECTOR2(20.0f, 20.0f));			// 大きさの設定
-	character->SetController(new CPlayerController);		// 命令者の設定
-
-	character = CCharacter::Create(CCharacter::TEAM_01);	// 生成
-	character->SetPos(D3DXVECTOR3(200.0f, 300.0f, 0.0f));	// 位置の設定
-	character->SetSize(D3DXVECTOR2(20.0f, 20.0f));			// 大きさの設定
-	character->SetController(new CPlayerController);		// 命令者の設定
 
 	return S_OK;
 }
@@ -123,10 +105,10 @@ void CApplication::Uninit()
 	// オブジェクト全体の解放
 	CObject::ReleaseAll();
 
-	// プレイヤーのクリア
-	if (character != nullptr)
+	// ゲームのクリア
+	if (game != nullptr)
 	{
-		character = nullptr;
+		game = nullptr;
 	}
 
 	// テクスチャの解放
@@ -170,6 +152,7 @@ void CApplication::Uninit()
 		delete application;
 		application = nullptr;
 	}
+	assert(application == nullptr);
 }
 
 //=============================================================================

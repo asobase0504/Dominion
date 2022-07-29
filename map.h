@@ -42,6 +42,7 @@ public:
 	void Set();
 	void Load();
 	CBlock* GetBlock();
+	void SetMap(std::vector<std::vector<CBlock::BLOCK_TYPE>> inBlockIdx) { m_blockIdx = inBlockIdx; }
 
 private:
 	std::vector<CBlock*> m_block;

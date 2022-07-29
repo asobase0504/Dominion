@@ -104,7 +104,7 @@ void CMap::Set()
 //--------------------------------------------------
 void CMap::Load()
 {
-	m_blockIdx = LoadJson(L"data/FILE/STAGE/stage01.json");
+	LoadJsonStage(L"data/FILE/STAGE/stage01.json");
 }
 
 //--------------------------------------------------

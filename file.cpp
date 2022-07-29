@@ -10,8 +10,10 @@
 
 #include "application.h"
 #include "texture.h"
+#include "game.h"
+#include "map.h"
 
-nlohmann::json j;//リストの生成
+nlohmann::json stage;//リストの生成
 
 nlohmann::json TEX;//リストの生成
 
@@ -28,23 +30,17 @@ void OutputStatus()
 //============================
 // 読込み
 //============================
-std::vector<std::vector<CBlock::BLOCK_TYPE>> LoadJson(const wchar_t* cUrl)
+void LoadJsonStage(const wchar_t* cUrl)
 {
 	std::ifstream ifs(cUrl);
 	std::vector<std::vector<CBlock::BLOCK_TYPE>> blockIdx;
 
 	if (ifs)
 	{
-		//StringToWString(UTF8toSjis(j["name"]));
-		//DataSet.unionsname = StringToWString(UTF8toSjis(j["unions"] ["name"]));
-		ifs >> j;
+		ifs >> stage;
 
-		//こっちで構造体にデータを入れてます//文字は変換つけないとばぐるぞ＾＾これ-＞UTF8toSjis()
-		blockIdx = j["MAP"];
-
-		return blockIdx;
+		CApplication::GetInstance()->GetGame()->GetMap()->SetMap(stage["MAP"]);
 	}
-	return blockIdx;
 }
 
 void LoadJsonTex(const char* cUrl)

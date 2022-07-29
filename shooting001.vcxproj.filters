@@ -24,6 +24,12 @@
     <Filter Include="Stage">
       <UniqueIdentifier>{d34f2a52-70b7-4c95-bb42-419947bb7574}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\04_Mode">
+      <UniqueIdentifier>{48f00a93-53ea-4db8-9029-d9913dbc6a89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\04_Mode\01_Game">
+      <UniqueIdentifier>{4c881af5-b061-444d-9fb7-b7421a8acc50}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bullet.cpp">
@@ -86,6 +92,9 @@
     <ClCompile Include="file.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="game.cpp">
+      <Filter>ソース ファイル\04_Mode\01_Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h">
@@ -144,6 +153,9 @@
     </ClInclude>
     <ClInclude Include="file.h">
       <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="game.h">
+      <Filter>ソース ファイル\04_Mode\01_Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

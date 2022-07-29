@@ -20,6 +20,7 @@ class CInputKeybord;
 class CDirectInput;
 class CTexture;
 class CMap;
+class CGame;
 
 //-----------------------------------------
 // アプリケーションクラス
@@ -50,15 +51,15 @@ public:	// メンバー関数
 	CInputKeybord* GetInput() { return input; }
 	CDirectInput* GetDirectInput() { return directInput; }
 	CTexture* GetTextureClass() { return texture; }
+	CGame* GetGame() { return game; }
 
 private: // 動的メンバー変数
+	CGame* game;
 	CRenderer* renderer;
 	CInputKeybord* input;
 	CDirectInput* directInput;
 	CTexture* texture;
 	CObject* object;
-	CCharacter* character;
-	CMap* map;
 };
 
 #endif // !_APPLICATION_H_
