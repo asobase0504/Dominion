@@ -222,7 +222,6 @@ void CBullet::HitWithBlock(CBlock * inBlock)
 
 	D3DXVECTOR3 outpos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 vec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	float dist;
 
 	D3DXVECTOR3 pairSize = D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f) * 0.5f;
 	D3DXVECTOR3 mySize = D3DXVECTOR3(size.x, size.y, 0.0f) * 0.5f;

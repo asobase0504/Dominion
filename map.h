@@ -26,10 +26,10 @@ class CMap
 private:
 	static const int MAX_X_BLOCK = 40;	// X軸の最大数
 	static const int MAX_Y_BLOCK = 17;	// Y軸の最大数
-	static const float BLOCK_SIZE;	// ブロックのサイズ
-	static const char* FILE_NAME;	// マップファイル名
-	static const float X_CENTER;	// マップを中央に配置するため(X軸)
-	static const float Y_CENTER;	// マップを中央に配置するため(Y軸)
+	static float BLOCK_SIZE;		// ブロックのサイズ
+	static const char* FILE_NAME;		// マップファイル名
+	static const float X_CENTER;		// マップを中央に配置するため(X軸)
+	static const float Y_CENTER;		// マップを中央に配置するため(Y軸)
 
 public:
 	CMap();
@@ -41,11 +41,11 @@ public:
 	void Draw();
 	void Set();
 	void Load();
-	CBlock* GetBlock();
+	CBlock* GetBlock(int indexX, int indexY);
 	void SetMap(std::vector<std::vector<CBlock::BLOCK_TYPE>> inBlockIdx) { m_blockIdx = inBlockIdx; }
 
 private:
-	std::vector<CBlock*> m_block;
+	std::vector<std::vector<CBlock*>> m_block;
 	std::vector<std::vector<CBlock::BLOCK_TYPE>> m_blockIdx;
 };
 

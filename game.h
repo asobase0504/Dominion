@@ -32,7 +32,7 @@ public:	// メンバー関数
 
 	// ゲッタ―
 	CMap* GetMap() { return map; }
-	std::vector<CCharacter*> GetCharacter() { return character; }
+	std::vector<CCharacter*>* GetCharacter() { return &character; }
 
 private: // 動的メンバー変数
 	std::vector<CCharacter*> character;
