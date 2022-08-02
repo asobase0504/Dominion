@@ -134,24 +134,30 @@ void CCharacter::BulletShot()
 		return;
 	}
 
+	CBullet* bullet;
+
 	// 弾の発射
 	switch (m_controller->BulletShot())
 	{
 	case CController::UP_SHOT:
-		CBullet::Create(m_pos, D3DXVECTOR3(0.0f, -10.0f, 0.0f),m_team);
+		bullet = CBullet::Create(m_pos, D3DXVECTOR3(0.0f, -10.0f, 0.0f),m_team);
+		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
 		m_remainsBulletCount--;
 		break;
 	case CController::DOWN_SHOT:
-		CBullet::Create(m_pos, D3DXVECTOR3(0.0f, 10.0f, 0.0f), m_team);
+		bullet = CBullet::Create(m_pos, D3DXVECTOR3(0.0f, 10.0f, 0.0f), m_team);
+		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
 		m_remainsBulletCount--;
 		break;
 	case CController::LEFT_SHOT:
-		CBullet::Create(m_pos, D3DXVECTOR3(-10.0f, 0.0f, 0.0f), m_team);
+		bullet = CBullet::Create(m_pos, D3DXVECTOR3(-10.0f, 0.0f, 0.0f), m_team);
+		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
 		m_remainsBulletCount--;
 		break;
 	case CController::RIGHT_SHOT:
+		bullet = CBullet::Create(m_pos, D3DXVECTOR3(10.0f, 0.0f, 0.0f), m_team);
+		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
 		m_remainsBulletCount--;
-		CBullet::Create(m_pos, D3DXVECTOR3(10.0f, 0.0f, 0.0f), m_team);
 		break;
 
 	default:
@@ -179,6 +185,9 @@ void CCharacter::SetTeam(const TEAM inTeam)
 	}
 }
 
+//-----------------------------------------
+// 乗ってるブロックの番号を設定
+//-----------------------------------------
 bool CCharacter::SetBlockIndex(const int count, std::vector<int> inIndex)
 {
 	for (int i = 0; i < 4; i++)
@@ -242,7 +251,8 @@ void CCharacter::ScreenFromOutTime()
 //-----------------------------------------
 void CCharacter::Collision()
 {
-	int count = 0;
+	m_ofBlockCount = 0;
+
 	for (int i = 0; i < 4;i++)
 	{
 		if (m_ofBlockIndex[i].empty())
@@ -250,113 +260,42 @@ void CCharacter::Collision()
 			continue;
 		}
 
-		CMap* pMap = CApplication::GetInstance()->GetGame()->GetMap();
-
 		int CenterX = m_ofBlockIndex[i][0];
 		int LeftX = m_ofBlockIndex[i][0] - 1;
 		int RightX = m_ofBlockIndex[i][0] + 1;
+
 		int CenterY = m_ofBlockIndex[i][1];
 		int TopY = m_ofBlockIndex[i][1] - 1;
 		int BottomY = m_ofBlockIndex[i][1] + 1;
 
+		// ブロック端の場合の処理
 		if (LeftX < 0)
 		{
-			LeftX = 0;
+			LeftX = 31;
+		}
+		if (RightX > 31)
+		{
+			RightX = 0;
 		}
 		if (TopY < 0)
 		{
-			TopY = 0;
+			TopY = 17;
 		}
-		if (RightX > 32)
+		if (BottomY > 17)
 		{
-			RightX = 31;
-		}
-		if (BottomY > 18)
-		{
-			BottomY = 17;
+			BottomY = 0;
 		}
 
-		bool hit;
-		hit = HitWithBlock(pMap->GetBlock(LeftX, TopY));
-		if (hit)
-		{
-			if (SetBlockIndex(count, { LeftX, TopY }))
-			{
-				count++;
-			}		
-		}
-
-		hit = HitWithBlock(pMap->GetBlock(CenterX, TopY));
-		if (hit)
-		{
-			if (SetBlockIndex(count, { CenterX, TopY }))
-			{
-				count++;
-			}
-		}
-
-		hit = HitWithBlock(pMap->GetBlock(RightX, TopY));
-		if (hit)
-		{
-			if (SetBlockIndex(count, { RightX, TopY }))
-			{
-				count++;
-			}
-		}
-
-		hit = HitWithBlock(pMap->GetBlock(LeftX, CenterY));
-		if (hit)
-		{
-			if (SetBlockIndex(count, { LeftX, CenterY }))
-			{
-				count++;
-			}
-		}
-
-		hit = HitWithBlock(pMap->GetBlock(CenterX, CenterY));
-		if (hit)
-		{
-			if (SetBlockIndex(count, { CenterX, CenterY }))
-			{
-				count++;
-			}
-		}
-
-		hit = HitWithBlock(pMap->GetBlock(RightX, CenterY));
-		if (hit)
-		{
-			if (SetBlockIndex(count, { RightX, CenterY }))
-			{
-				count++;
-			}
-		}
-
-		hit = HitWithBlock(pMap->GetBlock(LeftX, BottomY));
-		if (hit)
-		{
-			if (SetBlockIndex(count, { LeftX, BottomY }))
-			{
-				count++;
-			}
-		}
-
-		hit = HitWithBlock(pMap->GetBlock(CenterX, BottomY));
-		if (hit)
-		{
-			if (SetBlockIndex(count, { CenterX, BottomY }))
-			{
-				count++;
-			}
-		}
-
-		hit = HitWithBlock(pMap->GetBlock(RightX, BottomY));
-		if (hit)
-		{
-			if (SetBlockIndex(count, { RightX, BottomY }))
-			{
-				count++;
-			}
-		}
+		// ブロックの当たり判定
+		SetHitBlock(LeftX, TopY);			// 左上
+		SetHitBlock(CenterX, TopY);			// 上
+		SetHitBlock(RightX, TopY);			// 右上
+		SetHitBlock(LeftX, CenterY);		// 左真ん中
+		SetHitBlock(CenterX, CenterY);		// 真ん中
+		SetHitBlock(RightX, CenterY);		// 右真ん中
+		SetHitBlock(LeftX, BottomY);		// 左下
+		SetHitBlock(CenterX, BottomY);		// 下
+		SetHitBlock(RightX, BottomY);		// 右下
 	}
 
 	for (auto it = GetMyObject()->begin(); it != GetMyObject()->end(); it++)
@@ -369,6 +308,24 @@ void CCharacter::Collision()
 		if ((*it)->CObject::GetType() == CObject::TYPE::BULLET)
 		{
 			HitWithBullet((CBullet*)(*it));
+		}
+	}
+}
+
+//------------------------------------------------------------------
+// ブロックとの当たり判定呼び出しと、乗ってるブロックの設定
+//------------------------------------------------------------------
+void CCharacter::SetHitBlock(int x, int y)
+{
+	CMap* pMap = CApplication::GetInstance()->GetGame()->GetMap();
+
+	bool isHit = HitWithBlock(pMap->GetBlock(x, y));	// 当たったか否か
+
+	if (isHit)
+	{ // 当たった場合
+		if (SetBlockIndex(m_ofBlockCount, { x, y }))
+		{ // 設定出来た場合
+			m_ofBlockCount++;
 		}
 	}
 }
@@ -432,7 +389,6 @@ bool CCharacter::HitWithBlock(CBlock* inBlock)
 		{
 			vec.y = -1.0f;
 			dist = (-size.y) * 0.5f + (m_pos.y - outpos.y);
-
 			m_pos.y -= dist + dist * 0.0001f;
 			CObject2D::SetPos(m_pos);		// 位置の設定
 		}

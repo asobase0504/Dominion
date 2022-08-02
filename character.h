@@ -45,7 +45,7 @@ public:
 	void Move();
 	void BulletShot();
 
-	// セッター
+	// setter
 	void SetController(CController* inOperate) { m_controller = inOperate; }
 	void SetTeam(const TEAM inTeam);
 	bool SetBlockIndex(const int count,std::vector<int> inIndex);
@@ -56,6 +56,7 @@ private: // プライベート関数
 	void ScreenFromOutTime();
 
 	void Collision();
+	void SetHitBlock(int x,int y);
 	bool HitWithBlock(CBlock* inBlock);
 	void HitWithBullet(CBullet* inBullet);
 
@@ -66,6 +67,7 @@ private:
 	int m_remainsBulletCount;	// 残りの弾数
 	int m_reloadCount;			// リロードカウント
 	std::vector<std::vector<int>> m_ofBlockIndex;			// 乗ってるブロックの番号
+	int m_ofBlockCount;			// 乗ってるブロックの個数
 };
 
 #endif // !_CHARACTER_H_

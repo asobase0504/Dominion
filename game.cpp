@@ -53,26 +53,26 @@ HRESULT CGame::Init()
 
 	// キャラクターの設定
 	{
-		int x = stage["PLAYERS"].at(0)["SPAWN"].at(0);								// Xの位置番号を取得
-		int y = stage["PLAYERS"].at(0)["SPAWN"].at(1);								// Yの位置番号を取得
-		character.push_back(CCharacter::Create(stage["PLAYERS"].at(0)["TYPE"]));	// 生成
-		character.at(0)->SetSize(D3DXVECTOR2(25.0f, 25.0f));						// 大きさの設定
-		D3DXVECTOR3 pos = map->GetBlock(x, y)->GetPos();							// 位置の取得
-		character.at(0)->SetPos(pos);												// 位置の設定
-		character.at(0)->SetBlockIndex(0, { x,y });									// 所属ブロックを設定
-		character.at(0)->SetController(new CPlayerController);						// 命令者の設定
+		int x = stage["PLAYERS"].at(0)["SPAWN"].at(0);							// Xの位置番号を取得
+		int y = stage["PLAYERS"].at(0)["SPAWN"].at(1);							// Yの位置番号を取得
+		character.push_back(CCharacter::Create(stage["PLAYERS"].at(0)["TYPE"]));// 生成
+		character.at(0)->SetSize(D3DXVECTOR2(25.0f, 25.0f));					// 大きさの設定
+		D3DXVECTOR3 pos = map->GetBlock(x, y)->GetPos();						// 位置の取得
+		character.at(0)->SetPos(pos);											// 位置の設定
+		character.at(0)->SetBlockIndex(0, { x,y });								// 所属ブロックを設定
+		character.at(0)->SetController(new CAIController);						// 命令者の設定
 	}
 
 	// キャラクターの設定
 	{
-		int x = stage["PLAYERS"].at(1)["SPAWN"].at(0);								// Xの位置番号を取得
-		int y = stage["PLAYERS"].at(1)["SPAWN"].at(1);								// Yの位置番号を取得
-		character.push_back(CCharacter::Create(stage["PLAYERS"].at(1)["TYPE"]));	// 生成
-		character.at(1)->SetSize(D3DXVECTOR2(25.0f, 25.0f));						// 大きさの設定
-		D3DXVECTOR3 pos = map->GetBlock(x, y)->GetPos();							// 位置の取得
-		character.at(1)->SetPos(pos);												// 位置の設定
-		character.at(1)->SetBlockIndex(0, { x,y });									// 所属ブロックを設定
-		character.at(1)->SetController(new CPlayerController);						// 命令者の設定
+		int x = stage["PLAYERS"].at(1)["SPAWN"].at(0);							// Xの位置番号を取得
+		int y = stage["PLAYERS"].at(1)["SPAWN"].at(1);							// Yの位置番号を取得
+		character.push_back(CCharacter::Create(stage["PLAYERS"].at(1)["TYPE"]));// 生成
+		character.at(1)->SetSize(D3DXVECTOR2(25.0f, 25.0f));					// 大きさの設定
+		D3DXVECTOR3 pos = map->GetBlock(x, y)->GetPos();						// 位置の取得
+		character.at(1)->SetPos(pos);											// 位置の設定
+		character.at(1)->SetBlockIndex(0, { x,y });								// 所属ブロックを設定
+		character.at(1)->SetController(new CPlayerController);					// 命令者の設定
 	}
 
 	return S_OK;

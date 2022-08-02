@@ -11,6 +11,8 @@
 #include "application.h"
 #include "collision.h"
 #include "block.h"
+#include "game.h"
+#include "map.h"
 
 //-----------------------------------------
 // コンストラクタ
@@ -37,6 +39,7 @@ CBullet::~CBullet()
 HRESULT CBullet::Init()
 {
 	CObject2D::Init();
+	m_ofBlockIndex.resize(4);
 	m_life = 200;	// 初期値
 	return S_OK;
 }
@@ -106,6 +109,19 @@ void CBullet::SetTeam(const CCharacter::TEAM inTeam)
 	}
 }
 
+bool CBullet::SetBlockIndex(const int count, std::vector<int> inIndex)
+{
+	for (int i = 0; i < 4; i++)
+	{
+		if (m_ofBlockIndex[i] == inIndex)
+		{
+			return false;
+		}
+	}
+	m_ofBlockIndex[count] = inIndex;
+	return true;
+}
+
 //-----------------------------------------
 // 生成
 //-----------------------------------------
@@ -132,6 +148,53 @@ CBullet* CBullet::Create(const D3DXVECTOR3& inPos, const D3DXVECTOR3& inMove, co
 //-----------------------------------------
 void CBullet::Collision()
 {
+	m_ofBlockCount = 0;
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (m_ofBlockIndex[i].empty())
+		{
+			continue;
+		}
+
+		int CenterX = m_ofBlockIndex[i][0];
+		int LeftX = m_ofBlockIndex[i][0] - 1;
+		int RightX = m_ofBlockIndex[i][0] + 1;
+
+		int CenterY = m_ofBlockIndex[i][1];
+		int TopY = m_ofBlockIndex[i][1] - 1;
+		int BottomY = m_ofBlockIndex[i][1] + 1;
+
+		// ブロック端の場合の処理
+		if (LeftX < 0)
+		{
+			LeftX = 31;
+		}
+		if (RightX > 31)
+		{
+			RightX = 0;
+		}
+		if (TopY < 0)
+		{
+			TopY = 17;
+		}
+		if (BottomY > 17)
+		{
+			BottomY = 0;
+		}
+
+		// ブロックの当たり判定
+		SetHitBlock(LeftX, TopY);			// 左上
+		SetHitBlock(CenterX, TopY);			// 上
+		SetHitBlock(RightX, TopY);			// 右上
+		SetHitBlock(LeftX, CenterY);		// 左真ん中
+		SetHitBlock(CenterX, CenterY);		// 真ん中
+		SetHitBlock(RightX, CenterY);		// 右真ん中
+		SetHitBlock(LeftX, BottomY);		// 左下
+		SetHitBlock(CenterX, BottomY);		// 下
+		SetHitBlock(RightX, BottomY);		// 右下
+	}
+
 	for (auto it = GetMyObject()->begin(); it != GetMyObject()->end(); it++)
 	{
 		if ((*it)->GetIsDeleted())
@@ -139,14 +202,27 @@ void CBullet::Collision()
 			continue;
 		}
 
-		if ((*it)->CObject::GetType() == CObject::TYPE::BLOCK)
-		{
-			HitWithBlock((CBlock*)(*it));
-		}
-
 		if ((*it)->CObject::GetType() == CObject::TYPE::BULLET)
 		{
 			HitWithBullet((CBullet*)(*it));
+		}
+	}
+}
+
+//------------------------------------------------------------------
+// ブロックとの当たり判定呼び出しと、乗ってるブロックの設定
+//------------------------------------------------------------------
+void CBullet::SetHitBlock(int x, int y)
+{
+	CMap* pMap = CApplication::GetInstance()->GetGame()->GetMap();
+
+	bool isHit = HitWithBlock(pMap->GetBlock(x, y));	// 当たったか否か
+
+	if (isHit)
+	{ // 当たった場合
+		if (SetBlockIndex(m_ofBlockCount, { x, y }))
+		{ // 設定出来た場合
+			m_ofBlockCount++;
 		}
 	}
 }
@@ -209,7 +285,7 @@ void CBullet::HitWithBullet(CBullet* inBullet)
 //-----------------------------------------
 // ブロックとの当たり判定
 //-----------------------------------------
-void CBullet::HitWithBlock(CBlock * inBlock)
+bool CBullet::HitWithBlock(CBlock * inBlock)
 {
 	CBlock* block = inBlock;
 
@@ -217,7 +293,11 @@ void CBullet::HitWithBlock(CBlock * inBlock)
 
 	if ((int)m_team == blockType)
 	{
-		return;
+		if (Collision::RectangleAndRectangle(m_pos, D3DXVECTOR3(size.x, size.y, 0.0f), block->GetPos(), D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f) * 0.5f))
+		{
+			return true;
+		}
+		return false;
 	}
 
 	D3DXVECTOR3 outpos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -234,10 +314,11 @@ void CBullet::HitWithBlock(CBlock * inBlock)
 		if (blockType == CBlock::NONE)
 		{
 			m_isDeleted = true;
-			return;
+			return false;
 		}
 
 		block->ChangeType();
+		return true;
 	}
-
+	return false;
 }
