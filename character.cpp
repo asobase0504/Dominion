@@ -9,6 +9,8 @@
 //-----------------------------------------
 #include "character.h"
 #include "application.h"
+#include "game.h"
+#include "map.h"
 #include "input_keybord.h"
 #include "bullet.h"
 #include "controller.h"
@@ -49,6 +51,7 @@ HRESULT CCharacter::Init()
 {
 	CObject2D::Init();
 	m_remainsBulletCount = LIMIT_BULLET_COUNT;
+	m_ofBlockIndex.resize(4);
 	SetTexture(CTexture::TEXTURE::TEXTURE_PLAYER);
 	return S_OK;
 }
@@ -67,18 +70,16 @@ void CCharacter::Uninit()
 //-----------------------------------------
 void CCharacter::Update()
 {
-	// 移動
-	Move();
+	Move();	// 移動
 
-	// 弾の発射
-	BulletShot();
+	BulletShot();	// 弾の発射
 
-	// スクリーン外に出た時
-	ScreenFromOutTime();
+	ScreenFromOutTime();	// スクリーン外に出た時
 
 	// ブロックとの当たり判定
 	Collision();
 
+	// 弾数の回復
 	if (m_remainsBulletCount < LIMIT_BULLET_COUNT)
 	{
 		m_reloadCount++;
@@ -111,7 +112,7 @@ void CCharacter::Move()
 	}
 
 	// 方向ベクトル掛ける移動量
-	m_move = m_controller->Move() * 2.0f * 2.0f;
+	m_move = m_controller->Move() * 4.0f;
 	m_pos += m_move;
 	CObject2D::SetPos(m_pos);		// 位置の設定
 }
@@ -178,6 +179,19 @@ void CCharacter::SetTeam(const TEAM inTeam)
 	}
 }
 
+bool CCharacter::SetBlockIndex(const int count, std::vector<int> inIndex)
+{
+	for (int i = 0; i < 4; i++)
+	{
+		if(m_ofBlockIndex[i] == inIndex)
+		{
+			return false;
+		}
+	}
+	m_ofBlockIndex[count] = inIndex;
+	return true;
+}
+
 //-----------------------------------------
 // 生成
 //-----------------------------------------
@@ -228,16 +242,128 @@ void CCharacter::ScreenFromOutTime()
 //-----------------------------------------
 void CCharacter::Collision()
 {
+	int count = 0;
+	for (int i = 0; i < 4;i++)
+	{
+		if (m_ofBlockIndex[i].empty())
+		{
+			continue;
+		}
+
+		CMap* pMap = CApplication::GetInstance()->GetGame()->GetMap();
+
+		int CenterX = m_ofBlockIndex[i][0];
+		int LeftX = m_ofBlockIndex[i][0] - 1;
+		int RightX = m_ofBlockIndex[i][0] + 1;
+		int CenterY = m_ofBlockIndex[i][1];
+		int TopY = m_ofBlockIndex[i][1] - 1;
+		int BottomY = m_ofBlockIndex[i][1] + 1;
+
+		if (LeftX < 0)
+		{
+			LeftX = 0;
+		}
+		if (TopY < 0)
+		{
+			TopY = 0;
+		}
+		if (RightX > 32)
+		{
+			RightX = 31;
+		}
+		if (BottomY > 18)
+		{
+			BottomY = 17;
+		}
+
+		bool hit;
+		hit = HitWithBlock(pMap->GetBlock(LeftX, TopY));
+		if (hit)
+		{
+			if (SetBlockIndex(count, { LeftX, TopY }))
+			{
+				count++;
+			}		
+		}
+
+		hit = HitWithBlock(pMap->GetBlock(CenterX, TopY));
+		if (hit)
+		{
+			if (SetBlockIndex(count, { CenterX, TopY }))
+			{
+				count++;
+			}
+		}
+
+		hit = HitWithBlock(pMap->GetBlock(RightX, TopY));
+		if (hit)
+		{
+			if (SetBlockIndex(count, { RightX, TopY }))
+			{
+				count++;
+			}
+		}
+
+		hit = HitWithBlock(pMap->GetBlock(LeftX, CenterY));
+		if (hit)
+		{
+			if (SetBlockIndex(count, { LeftX, CenterY }))
+			{
+				count++;
+			}
+		}
+
+		hit = HitWithBlock(pMap->GetBlock(CenterX, CenterY));
+		if (hit)
+		{
+			if (SetBlockIndex(count, { CenterX, CenterY }))
+			{
+				count++;
+			}
+		}
+
+		hit = HitWithBlock(pMap->GetBlock(RightX, CenterY));
+		if (hit)
+		{
+			if (SetBlockIndex(count, { RightX, CenterY }))
+			{
+				count++;
+			}
+		}
+
+		hit = HitWithBlock(pMap->GetBlock(LeftX, BottomY));
+		if (hit)
+		{
+			if (SetBlockIndex(count, { LeftX, BottomY }))
+			{
+				count++;
+			}
+		}
+
+		hit = HitWithBlock(pMap->GetBlock(CenterX, BottomY));
+		if (hit)
+		{
+			if (SetBlockIndex(count, { CenterX, BottomY }))
+			{
+				count++;
+			}
+		}
+
+		hit = HitWithBlock(pMap->GetBlock(RightX, BottomY));
+		if (hit)
+		{
+			if (SetBlockIndex(count, { RightX, BottomY }))
+			{
+				count++;
+			}
+		}
+	}
+
 	for (auto it = GetMyObject()->begin(); it != GetMyObject()->end(); it++)
 	{
 		if ((*it)->GetIsDeleted())
 		{
 			continue;
-		}
-
-		if ((*it)->CObject::GetType() == CObject::TYPE::BLOCK)
-		{
-			HitWithBlock((CBlock*)(*it));
 		}
 
 		if ((*it)->CObject::GetType() == CObject::TYPE::BULLET)
@@ -250,7 +376,7 @@ void CCharacter::Collision()
 //-----------------------------------------
 // ブロックとの当たり判定
 //-----------------------------------------
-void CCharacter::HitWithBlock(CBlock* inBlock)
+bool CCharacter::HitWithBlock(CBlock* inBlock)
 {
 	CBlock* block = inBlock;
 
@@ -258,7 +384,11 @@ void CCharacter::HitWithBlock(CBlock* inBlock)
 
 	if ((int)m_team == blockType)
 	{
-		return;
+		if (Collision::RectangleAndRectangle(m_pos, D3DXVECTOR3(size.x, size.y, 0.0f), block->GetPos(), D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f) * 0.5f))
+		{
+			return true;
+		}
+		return false;
 	}
 
 	D3DXVECTOR3 outpos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -307,6 +437,7 @@ void CCharacter::HitWithBlock(CBlock* inBlock)
 			CObject2D::SetPos(m_pos);		// 位置の設定
 		}
 	}
+	return false;
 }
 
 //-----------------------------------------
