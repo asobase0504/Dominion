@@ -166,6 +166,15 @@ void CCharacter::BulletShot()
 }
 
 //-----------------------------------------
+// コントローラーの設定
+//-----------------------------------------
+void CCharacter::SetController(CController * inOperate)
+{
+	m_controller = inOperate;
+	m_controller->SetToOrder(this);
+}
+
+//-----------------------------------------
 // チームの設定
 //-----------------------------------------
 void CCharacter::SetTeam(const TEAM inTeam)
@@ -253,6 +262,21 @@ void CCharacter::Collision()
 {
 	m_ofBlockCount = 0;
 
+	auto HitBlock = [this](int x, int y)
+	{
+		CMap* pMap = CApplication::GetInstance()->GetGame()->GetMap();
+
+		bool isHit = HitWithBlock(pMap->GetBlock(x, y));	// 当たったか否か
+
+		if (isHit)
+		{ // 当たった場合
+			if (SetBlockIndex(m_ofBlockCount, { x, y }))
+			{ // 設定出来た場合
+				m_ofBlockCount++;
+			}
+		}
+	};
+
 	for (int i = 0; i < 4;i++)
 	{
 		if (m_ofBlockIndex[i].empty())
@@ -287,15 +311,15 @@ void CCharacter::Collision()
 		}
 
 		// ブロックの当たり判定
-		SetHitBlock(LeftX, TopY);			// 左上
-		SetHitBlock(CenterX, TopY);			// 上
-		SetHitBlock(RightX, TopY);			// 右上
-		SetHitBlock(LeftX, CenterY);		// 左真ん中
-		SetHitBlock(CenterX, CenterY);		// 真ん中
-		SetHitBlock(RightX, CenterY);		// 右真ん中
-		SetHitBlock(LeftX, BottomY);		// 左下
-		SetHitBlock(CenterX, BottomY);		// 下
-		SetHitBlock(RightX, BottomY);		// 右下
+		HitBlock(LeftX, TopY);			// 左上
+		HitBlock(CenterX, TopY);			// 上
+		HitBlock(RightX, TopY);			// 右上
+		HitBlock(LeftX, CenterY);		// 左真ん中
+		HitBlock(CenterX, CenterY);		// 真ん中
+		HitBlock(RightX, CenterY);		// 右真ん中
+		HitBlock(LeftX, BottomY);		// 左下
+		HitBlock(CenterX, BottomY);		// 下
+		HitBlock(RightX, BottomY);		// 右下
 	}
 
 	for (auto it = GetMyObject()->begin(); it != GetMyObject()->end(); it++)
@@ -308,24 +332,6 @@ void CCharacter::Collision()
 		if ((*it)->CObject::GetType() == CObject::TYPE::BULLET)
 		{
 			HitWithBullet((CBullet*)(*it));
-		}
-	}
-}
-
-//------------------------------------------------------------------
-// ブロックとの当たり判定呼び出しと、乗ってるブロックの設定
-//------------------------------------------------------------------
-void CCharacter::SetHitBlock(int x, int y)
-{
-	CMap* pMap = CApplication::GetInstance()->GetGame()->GetMap();
-
-	bool isHit = HitWithBlock(pMap->GetBlock(x, y));	// 当たったか否か
-
-	if (isHit)
-	{ // 当たった場合
-		if (SetBlockIndex(m_ofBlockCount, { x, y }))
-		{ // 設定出来た場合
-			m_ofBlockCount++;
 		}
 	}
 }

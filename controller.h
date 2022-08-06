@@ -11,6 +11,7 @@
 // include
 //-----------------------------------------
 #include <d3dx9.h>
+#include "object.h"
 
 //-----------------------------------------
 // オペレータークラス
@@ -42,8 +43,11 @@ public:
 
 	virtual D3DXVECTOR3 Move() = 0;
 	virtual SHOT_TYPE BulletShot() = 0;
-private:
 
+	// Setter
+	void SetToOrder(CObject* inOrder) { m_toOrder = inOrder; }
+protected:
+	CObject* m_toOrder;	// 命令先
 };
 
 #endif // !_OPERATE_H_

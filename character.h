@@ -45,10 +45,13 @@ public:
 	void Move();
 	void BulletShot();
 
-	// setter
-	void SetController(CController* inOperate) { m_controller = inOperate; }
+	// Setter
+	void SetController(CController* inOperate);
 	void SetTeam(const TEAM inTeam);
 	bool SetBlockIndex(const int count,std::vector<int> inIndex);
+
+	// Getter
+	std::vector<std::vector<int>> GetOfBlock() { return m_ofBlockIndex; }
 
 	static CCharacter* Create(TEAM inTeam);
 
@@ -56,7 +59,6 @@ private: // プライベート関数
 	void ScreenFromOutTime();
 
 	void Collision();
-	void SetHitBlock(int x,int y);
 	bool HitWithBlock(CBlock* inBlock);
 	void HitWithBullet(CBullet* inBullet);
 

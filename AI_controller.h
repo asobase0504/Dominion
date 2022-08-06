@@ -25,7 +25,7 @@ public:
 	D3DXVECTOR3 Move() override;
 	SHOT_TYPE BulletShot() override;
 private:
-
+	bool isBulletShot;
 };
 
 #endif // !_AI_OPERATE_H_

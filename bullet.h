@@ -22,11 +22,13 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	// セッター
+	// Setter
 	void SetTeam(const CCharacter::TEAM inTeam);
 	bool SetBlockIndex(const int count, std::vector<int> inIndex);
 
+	// Getter
 	CCharacter::TEAM GetTeam() { return m_team; }
+	std::vector<std::vector<int>> GetOfBlock() { return m_ofBlockIndex; }
 
 	static CBullet* Create(const D3DXVECTOR3& inPos, const D3DXVECTOR3& inMove , const CCharacter::TEAM inTeam);
 private: // プライベート関数

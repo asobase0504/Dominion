@@ -148,7 +148,25 @@ CBullet* CBullet::Create(const D3DXVECTOR3& inPos, const D3DXVECTOR3& inMove, co
 //-----------------------------------------
 void CBullet::Collision()
 {
+	// 乗ってるブロックをリセットする
 	m_ofBlockCount = 0;
+
+	// 自陣のブロックに当たった場合そのブロックの番号を保存するラムダ式関数
+	auto HitBlock = [this](int x, int y)
+	{
+		CMap* pMap = CApplication::GetInstance()->GetGame()->GetMap();
+
+		// 当たったか否か
+		bool isHit = HitWithBlock(pMap->GetBlock(x, y));
+
+		if (isHit)
+		{ // 当たった場合
+			if (SetBlockIndex(m_ofBlockCount, { x, y }))
+			{ // 設定出来た場合
+				m_ofBlockCount++;
+			}
+		}
+	};
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -157,13 +175,13 @@ void CBullet::Collision()
 			continue;
 		}
 
-		int CenterX = m_ofBlockIndex[i][0];
-		int LeftX = m_ofBlockIndex[i][0] - 1;
-		int RightX = m_ofBlockIndex[i][0] + 1;
+		int CenterX = m_ofBlockIndex[i][0];		// X軸の実際値
+		int LeftX = m_ofBlockIndex[i][0] - 1;	// X軸の左側
+		int RightX = m_ofBlockIndex[i][0] + 1;	// X軸の右側
 
-		int CenterY = m_ofBlockIndex[i][1];
-		int TopY = m_ofBlockIndex[i][1] - 1;
-		int BottomY = m_ofBlockIndex[i][1] + 1;
+		int CenterY = m_ofBlockIndex[i][1];		// Y軸の実際値
+		int TopY = m_ofBlockIndex[i][1] - 1;	// Y軸の上側
+		int BottomY = m_ofBlockIndex[i][1] + 1;	// Y軸の下側
 
 		// ブロック端の場合の処理
 		if (LeftX < 0)
@@ -184,17 +202,18 @@ void CBullet::Collision()
 		}
 
 		// ブロックの当たり判定
-		SetHitBlock(LeftX, TopY);			// 左上
-		SetHitBlock(CenterX, TopY);			// 上
-		SetHitBlock(RightX, TopY);			// 右上
-		SetHitBlock(LeftX, CenterY);		// 左真ん中
-		SetHitBlock(CenterX, CenterY);		// 真ん中
-		SetHitBlock(RightX, CenterY);		// 右真ん中
-		SetHitBlock(LeftX, BottomY);		// 左下
-		SetHitBlock(CenterX, BottomY);		// 下
-		SetHitBlock(RightX, BottomY);		// 右下
+		HitBlock(LeftX, TopY);			// 左上
+		HitBlock(CenterX, TopY);			// 上
+		HitBlock(RightX, TopY);			// 右上
+		HitBlock(LeftX, CenterY);		// 左真ん中
+		HitBlock(CenterX, CenterY);		// 真ん中
+		HitBlock(RightX, CenterY);		// 右真ん中
+		HitBlock(LeftX, BottomY);		// 左下
+		HitBlock(CenterX, BottomY);		// 下
+		HitBlock(RightX, BottomY);		// 右下
 	}
 
+	// オブジェクト全体を取得
 	for (auto it = GetMyObject()->begin(); it != GetMyObject()->end(); it++)
 	{
 		if ((*it)->GetIsDeleted())
@@ -214,17 +233,6 @@ void CBullet::Collision()
 //------------------------------------------------------------------
 void CBullet::SetHitBlock(int x, int y)
 {
-	CMap* pMap = CApplication::GetInstance()->GetGame()->GetMap();
-
-	bool isHit = HitWithBlock(pMap->GetBlock(x, y));	// 当たったか否か
-
-	if (isHit)
-	{ // 当たった場合
-		if (SetBlockIndex(m_ofBlockCount, { x, y }))
-		{ // 設定出来た場合
-			m_ofBlockCount++;
-		}
-	}
 }
 
 //-----------------------------------------
