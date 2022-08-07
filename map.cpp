@@ -91,12 +91,11 @@ void CMap::Draw()
 void CMap::Set()
 {
 	int index;
-	BLOCK_SIZE = CApplication::GetInstance()->SCREEN_HEIGHT / m_blockIdx.size();
+	BLOCK_SIZE = (float)CApplication::GetInstance()->SCREEN_HEIGHT / m_blockIdx.size();
 	for (int y = 0; y < m_blockIdx.size(); y++)
 	{
 		std::vector<CBlock*> a;
 		m_block.push_back(a);
-		//m_block.resize(y);
 		for (int x = 0; x < m_blockIdx[y].size(); x++)
 		{
 			index = y * MAX_X_BLOCK + x;

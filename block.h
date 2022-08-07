@@ -11,6 +11,7 @@
 // include
 //--------------------------------------------------
 #include "object2d.h"
+#include <vector>
 
 //--------------------------------------------------
 // ブロッククラス
@@ -44,7 +45,16 @@ public:
 	void ChangeType();
 	BLOCK_TYPE GetType();
 
+	void ResurveyRidingObject();
+
+	// Setter
+	void SetRidingObject(CObject* inObject);
+
+	// Getter
+	std::vector<CObject*> GetRidingObject() { return ridingObject; }
+
 private:
 	BLOCK_TYPE m_team;	// 状態
+	std::vector<CObject*> ridingObject;
 };
 #endif // !_BLOCK_H_

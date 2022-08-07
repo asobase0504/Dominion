@@ -55,11 +55,12 @@ public:
 
 	static CCharacter* Create(TEAM inTeam);
 
+	bool HitWithBlock(CBlock* inBlock);
+
 private: // プライベート関数
 	void ScreenFromOutTime();
 
 	void Collision();
-	bool HitWithBlock(CBlock* inBlock);
 	void HitWithBullet(CBullet* inBullet);
 
 private:

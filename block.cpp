@@ -8,6 +8,7 @@
 // include
 //--------------------------------------------------
 #include "block.h"
+#include "character.h"
 // デバッグ
 #include <assert.h>
 
@@ -50,6 +51,7 @@ void CBlock::Uninit()
 //--------------------------------------------------
 void CBlock::Update()
 {
+	ResurveyRidingObject();
 }
 
 //--------------------------------------------------
@@ -79,7 +81,7 @@ CBlock* CBlock::Create(CBlock::BLOCK_TYPE type)
 	switch (type)
 	{
 	case BLOCK_TYPE::NONE:
-		block->SetCol(D3DXCOLOR(1.0f,1.0f,1.0f,0.0f));
+		block->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 		break;
 	case BLOCK_TYPE::BLOCK_01:
 		block->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
@@ -124,4 +126,55 @@ void CBlock::ChangeType()
 CBlock::BLOCK_TYPE CBlock::GetType()
 {
 	return m_team;
+}
+
+//--------------------------------------------------
+// 乗ってるオブジェクトがまだ乗ってるか再検査する
+//--------------------------------------------------
+void CBlock::ResurveyRidingObject()
+{
+	for (auto it = ridingObject.begin(); it != ridingObject.end();)
+	{
+		CObject::TYPE type = (*it)->GetType();
+
+		switch (type)
+		{
+		case CObject::TYPE::CHARACTER:
+		{
+			CCharacter* character = (CCharacter*)(*it);	// イテレータをキャラクターに変換。
+
+			if (!character->HitWithBlock(this))
+			{ // 当たってない場合
+				// 乗ってるオブジェクトを動的配列から削除
+				it = ridingObject.erase(it);
+				continue;
+			}
+			break;
+		}
+		case CObject::TYPE::BULLET:
+			break;
+		default:
+			break;
+		}
+
+		// 一度も削除されなければ、
+		it++;
+	}
+}
+
+//--------------------------------------------------
+// 乗ってるオブジェクトを設定する
+//--------------------------------------------------
+void CBlock::SetRidingObject(CObject * inObject)
+{
+	for (const auto& it : ridingObject)
+	{
+		// 同じオブジェクトがあった場合は弾く。
+		if (it == inObject)
+		{
+			return;
+		}
+	}
+	// 乗ってるオブジェクトを保存する
+	ridingObject.push_back(inObject);
 }

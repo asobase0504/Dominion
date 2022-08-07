@@ -23,13 +23,13 @@ class CBlock;
 //--------------------------------------------------
 class CMap
 {
-private:
-	static const int MAX_X_BLOCK = 40;	// X軸の最大数
-	static const int MAX_Y_BLOCK = 17;	// Y軸の最大数
+public:
+	int MAX_X_BLOCK;	// X軸の最大数
+	int MAX_Y_BLOCK;	// Y軸の最大数
 	static float BLOCK_SIZE;		// ブロックのサイズ
-	static const char* FILE_NAME;		// マップファイル名
-	static const float X_CENTER;		// マップを中央に配置するため(X軸)
-	static const float Y_CENTER;		// マップを中央に配置するため(Y軸)
+	static const char* FILE_NAME;	// マップファイル名
+	static const float X_CENTER;	// マップを中央に配置するため(X軸)
+	static const float Y_CENTER;	// マップを中央に配置するため(Y軸)
 
 public:
 	CMap();

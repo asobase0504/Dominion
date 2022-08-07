@@ -31,12 +31,13 @@ public:
 	std::vector<std::vector<int>> GetOfBlock() { return m_ofBlockIndex; }
 
 	static CBullet* Create(const D3DXVECTOR3& inPos, const D3DXVECTOR3& inMove , const CCharacter::TEAM inTeam);
+
+	bool HitWithBlock(CBlock* inBlock);
 private: // プライベート関数
 	void Collision();
 	void SetHitBlock(int x, int y);
 	void ScreenFromOutTime();
 	void HitWithBullet(CBullet* inBullet);
-	bool HitWithBlock(CBlock* inBlock);
 private:
 	D3DXVECTOR3 m_move;			// 移動量
 	CCharacter::TEAM m_team;	// 所属チーム

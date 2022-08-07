@@ -270,6 +270,8 @@ void CCharacter::Collision()
 
 		if (isHit)
 		{ // 当たった場合
+
+			pMap->GetBlock(x, y)->SetRidingObject(this);	// ブロック側に自身を保存する
 			if (SetBlockIndex(m_ofBlockCount, { x, y }))
 			{ // 設定出来た場合
 				m_ofBlockCount++;
@@ -311,15 +313,15 @@ void CCharacter::Collision()
 		}
 
 		// ブロックの当たり判定
-		HitBlock(LeftX, TopY);			// 左上
-		HitBlock(CenterX, TopY);			// 上
-		HitBlock(RightX, TopY);			// 右上
-		HitBlock(LeftX, CenterY);		// 左真ん中
-		HitBlock(CenterX, CenterY);		// 真ん中
-		HitBlock(RightX, CenterY);		// 右真ん中
-		HitBlock(LeftX, BottomY);		// 左下
-		HitBlock(CenterX, BottomY);		// 下
-		HitBlock(RightX, BottomY);		// 右下
+		HitBlock(LeftX, TopY);		// 左上
+		HitBlock(CenterX, TopY);	// 上
+		HitBlock(RightX, TopY);		// 右上
+		HitBlock(LeftX, CenterY);	// 左真ん中
+		HitBlock(CenterX, CenterY);	// 真ん中
+		HitBlock(RightX, CenterY);	// 右真ん中
+		HitBlock(LeftX, BottomY);	// 左下
+		HitBlock(CenterX, BottomY);	// 下
+		HitBlock(RightX, BottomY);	// 右下
 	}
 
 	for (auto it = GetMyObject()->begin(); it != GetMyObject()->end(); it++)
@@ -371,6 +373,7 @@ bool CCharacter::HitWithBlock(CBlock* inBlock)
 	}
 	if (m_move.x > 0.0f)
 	{
+		// プレイヤー右、ブロック左の当たり判定
 		if (Collision::RectangleLeft(block->GetPos(), D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f) * 0.5f, m_pos, D3DXVECTOR3(size.x, size.y, 0.0f) * 0.5f, &outpos, NULL, NULL))
 		{
 			vec.x += 1.0f;
@@ -381,6 +384,7 @@ bool CCharacter::HitWithBlock(CBlock* inBlock)
 	}
 	if (m_move.x < 0.0f)
 	{
+		// プレイヤー左、ブロック右の当たり判定
 		if (Collision::RectangleRight(block->GetPos(), D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f) * 0.5f, m_pos, D3DXVECTOR3(size.x, size.y, 0.0f) * 0.5f, &outpos, NULL, NULL))
 		{
 			vec.x += -1.0f;
@@ -391,6 +395,7 @@ bool CCharacter::HitWithBlock(CBlock* inBlock)
 	}
 	if (m_move.y < 0.0f)
 	{
+		// プレイヤー下、ブロック上の当たり判定
 		if (Collision::RectangleDown(block->GetPos(), D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f) * 0.5f, m_pos, D3DXVECTOR3(size.x, size.y, 0.0f) * 0.5f, &outpos, NULL, NULL))
 		{
 			vec.y = -1.0f;
