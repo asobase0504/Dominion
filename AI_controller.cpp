@@ -76,74 +76,79 @@ CController::SHOT_TYPE CAIController::BulletShot()
 
 		/* ↓オブジェクトが死ぬ予定がない場合↓ */
 
-		if ((*it)->CObject::GetType() == CObject::TYPE::BULLET)
+		if (!((*it)->CObject::GetType() == CObject::TYPE::BULLET))
 		{
-			CBullet* bullet = (CBullet*)(*it);
+			continue;
+		}
 
-			if (isBulletShot)
+		CBullet* bullet = (CBullet*)(*it);
+
+		if ((int)bullet->GetTeam() == (int)charcter->GetType())
+		{
+			continue;
+		}
+
+		if (isBulletShot)
+		{
+			count++;
+			if (count >= 15)
 			{
-				count++;
-				if (count >= 15)
-				{
-					isBulletShot = false;
-					count = 0;
-				}
+				isBulletShot = false;
+				count = 0;
+			}
+			continue;
+		}
+
+		// 対象所属のブロック取得
+		std::vector<std::vector<int>> ofBlockTarget = bullet->GetOfBlock();
+
+		// 自身が所属しているブロックを全部チェックする
+		for (int i = 0; i < 4; i++)
+		{
+			if (ofBlockCharcter[i].empty())
+			{
 				continue;
 			}
 
-			if ((int)bullet->GetTeam() == (int)charcter->GetType())
+			/* ↓所属ブロックがあった場合↓ */
+
+			// 対象が所属しているブロックを全部チェックする
+			for (int j = 0; j < 4; j++)
 			{
-				continue;
-			}
-
-			// 対象所属のブロック取得
-			std::vector<std::vector<int>> ofBlockTarget = bullet->GetOfBlock();
-
-			// 自身が所属しているブロックを全部チェックする
-			for (int i = 0; i < 4; i++)
-			{ 
-				if (ofBlockCharcter[i].empty())
+				if (ofBlockTarget[j].empty())
 				{
 					continue;
 				}
 
 				/* ↓所属ブロックがあった場合↓ */
 
-				// 対象が所属しているブロックを全部チェックする
-				for (int j = 0; j < 4; j++)
+				bool isXAxisMatched = ofBlockCharcter[i][0] == ofBlockTarget[j][0];	// X軸の一致
+				bool isYAxisMatched = ofBlockCharcter[i][1] == ofBlockTarget[j][1];	// Y軸の一致
+
+				if (isXAxisMatched)
 				{
-					if (ofBlockTarget[j].empty())
+					if ((ofBlockCharcter[i][1] - 5 < ofBlockTarget[j][1]) && (ofBlockCharcter[i][1] > ofBlockTarget[j][1]))
 					{
-						continue;
+						isBulletShot = true;
+						return UP_SHOT;
 					}
-
-					/* ↓所属ブロックがあった場合↓ */
-
-					if (ofBlockCharcter[i][0] == ofBlockTarget[j][0])
+					else if ((ofBlockCharcter[i][1] + 5 > ofBlockTarget[j][1]) && (ofBlockCharcter[i][1] < ofBlockTarget[j][1]))
 					{
-						if ((ofBlockCharcter[i][1] - 5 < ofBlockTarget[j][1]) && (ofBlockCharcter[i][1] > ofBlockTarget[j][1]))
-						{
-							isBulletShot = true;
-							return UP_SHOT;
-						}
-						else if ((ofBlockCharcter[i][1] + 5 > ofBlockTarget[j][1]) && (ofBlockCharcter[i][1] < ofBlockTarget[j][1]))
-						{
-							isBulletShot = true;
-							return DOWN_SHOT;
-						}
+						isBulletShot = true;
+						return DOWN_SHOT;
 					}
-					else if (ofBlockCharcter[i][1] == ofBlockTarget[j][1])
+				}
+				else if (isYAxisMatched)
+				{
+					if ((ofBlockCharcter[i][0] - 5 < ofBlockTarget[j][0]) && (ofBlockCharcter[i][0] > ofBlockTarget[j][0]))
 					{
-						if ((ofBlockCharcter[i][0] - 5 < ofBlockTarget[j][0]) && (ofBlockCharcter[i][0] > ofBlockTarget[j][0]))
-						{
-							isBulletShot = true;
-							return LEFT_SHOT;
-						}
-						else if ((ofBlockCharcter[i][0] + 5 > ofBlockTarget[j][0]) && (ofBlockCharcter[i][0] < ofBlockTarget[j][0]))
-						{
-							isBulletShot = true;
-							return RIGHT_SHOT;
-						}
+						isBulletShot = true;
+						return LEFT_SHOT;
+					}
+					else if ((ofBlockCharcter[i][0] + 5 > ofBlockTarget[j][0]) && (ofBlockCharcter[i][0] < ofBlockTarget[j][0]))
+					{
+						isBulletShot = true;
+						return RIGHT_SHOT;
 					}
 				}
 			}
