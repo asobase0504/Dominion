@@ -14,6 +14,7 @@
 #include "renderer.h"
 #include "texture.h"
 #include "object2d.h"
+#include "title.h"
 #include "game.h"
 
 //-----------------------------------------------------------------------------
@@ -38,6 +39,7 @@ CApplication* CApplication::GetInstance()
 // コンストラクタ
 //=============================================================================
 CApplication::CApplication() :
+	mode(nullptr),
 	renderer(nullptr),
 	input(nullptr),
 	directInput(nullptr),
@@ -51,6 +53,7 @@ CApplication::CApplication() :
 //=============================================================================
 CApplication::~CApplication()
 {
+	assert(mode == nullptr);
 	assert(renderer == nullptr);
 	assert(input == nullptr);
 	assert(directInput == nullptr);
@@ -88,11 +91,7 @@ HRESULT CApplication::Init(HWND hWnd, HINSTANCE hInstance)
 	texture->LoadAll();
 
 	// ゲームモード
-	game = new CGame;
-	if (FAILED(game->Init()))
-	{
-		return E_FAIL;
-	}
+	SetMode(MODE_TYPE::TITLE);
 
 	return S_OK;
 }
@@ -106,9 +105,12 @@ void CApplication::Uninit()
 	CObject::ReleaseAll();
 
 	// ゲームのクリア
-	if (game != nullptr)
+	if (mode != nullptr)
 	{
-		game = nullptr;
+		mode->Uninit();
+
+		delete mode;
+		mode = nullptr;
 	}
 
 	// テクスチャの解放
@@ -163,6 +165,7 @@ void CApplication::Update()
 	input->Update();
 	//directInput->Update();
 	renderer->Update();
+	mode->Update();
 }
 
 //=============================================================================
@@ -171,4 +174,34 @@ void CApplication::Update()
 void CApplication::Draw()
 {
 	renderer->Draw();
+}
+
+void CApplication::SetMode(MODE_TYPE inType)
+{
+	if (mode != nullptr)
+	{
+		CObject::ReleaseAll();
+		mode->Uninit();
+		delete mode;
+		mode = nullptr;
+	}
+
+	switch (inType)
+	{
+	case CApplication::MODE_TYPE::TITLE:
+		mode = new CTitle;
+		break;
+	case CApplication::MODE_TYPE::GAME:
+		mode = new CGame;
+		break;
+	case CApplication::MODE_TYPE::RESULT:
+		break;
+	default:
+		break;
+	}
+
+	if (FAILED(mode->Init()))
+	{
+		assert(false);
+	}
 }

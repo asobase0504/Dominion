@@ -10,6 +10,7 @@
 #include "character.h"
 #include "application.h"
 #include "game.h"
+#include "mode.h"
 #include "map.h"
 #include "input_keybord.h"
 #include "bullet.h"
@@ -264,7 +265,8 @@ void CCharacter::Collision()
 
 	auto HitBlock = [this](int x, int y)
 	{
-		CMap* pMap = CApplication::GetInstance()->GetGame()->GetMap();
+		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
+		CMap* pMap = game->GetMap();
 
 		bool isHit = HitWithBlock(pMap->GetBlock(x, y));	// “–‚½‚Á‚½‚©”Û‚©
 

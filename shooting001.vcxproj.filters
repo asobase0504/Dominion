@@ -30,6 +30,12 @@
     <Filter Include="ソース ファイル\04_Mode\01_Game">
       <UniqueIdentifier>{4c881af5-b061-444d-9fb7-b7421a8acc50}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\04_Mode\02_Title">
+      <UniqueIdentifier>{5948040f-2933-4137-9606-0409f344630f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\04_Mode\03_Result">
+      <UniqueIdentifier>{104c158d-21c7-4f09-a2f8-c232e9da0e0d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bullet.cpp">
@@ -95,6 +101,12 @@
     <ClCompile Include="game.cpp">
       <Filter>ソース ファイル\04_Mode\01_Game</Filter>
     </ClCompile>
+    <ClCompile Include="mode.cpp">
+      <Filter>ソース ファイル\04_Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="title.cpp">
+      <Filter>ソース ファイル\04_Mode\02_Title</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h">
@@ -156,6 +168,12 @@
     </ClInclude>
     <ClInclude Include="game.h">
       <Filter>ソース ファイル\04_Mode\01_Game</Filter>
+    </ClInclude>
+    <ClInclude Include="mode.h">
+      <Filter>ソース ファイル\04_Mode</Filter>
+    </ClInclude>
+    <ClInclude Include="title.h">
+      <Filter>ソース ファイル\04_Mode\02_Title</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

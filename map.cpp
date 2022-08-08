@@ -52,7 +52,6 @@ void CMap::Uninit()
 	{
 		for (CBlock* block_X : block_Y)
 		{
-			block_X->Uninit();
 			block_X = nullptr;
 		}
 	}

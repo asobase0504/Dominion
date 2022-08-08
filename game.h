@@ -7,6 +7,7 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
+#include "mode.h"
 #include <d3dx9.h>
 #include <vector>
 
@@ -19,16 +20,16 @@ class CMap;
 //-----------------------------------------
 // アプリケーションクラス
 //-----------------------------------------
-class CGame
+class CGame : public CMode
 {
 public:	// メンバー関数
 	CGame();
-	~CGame();
+	~CGame() override;
 
-	HRESULT Init();
-	void Uninit();
-	void Update();
-	void Draw();
+	HRESULT Init() override;
+	void Uninit() override;
+	void Update() override;
+	void Draw() override;
 
 	// ゲッタ―
 	CMap* GetMap() { return map; }

@@ -154,7 +154,8 @@ void CBullet::Collision()
 	// 自陣のブロックに当たった場合そのブロックの番号を保存するラムダ式関数
 	auto HitBlock = [this](int x, int y)
 	{
-		CMap* pMap = CApplication::GetInstance()->GetGame()->GetMap();
+		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
+		CMap* pMap = game->GetMap();
 
 		// 当たったか否か
 		bool isHit = HitWithBlock(pMap->GetBlock(x, y));

@@ -20,13 +20,22 @@ class CInputKeybord;
 class CDirectInput;
 class CTexture;
 class CMap;
-class CGame;
+class CMode;
 
 //-----------------------------------------
 // アプリケーションクラス
 //-----------------------------------------
 class CApplication
 {
+public:
+	enum class MODE_TYPE
+	{
+		TITLE = 0,
+		GAME,
+		RESULT,
+		MAX
+	};
+
 public: // 定数
 	const int SCREEN_WIDTH = 1280;	// スクリーンの幅
 	const int SCREEN_HEIGHT = 720;	// スクリーンの高さ
@@ -46,15 +55,19 @@ public:	// メンバー関数
 	void Update();
 	void Draw();
 
+	// Getter
 	CRenderer* GetRenderer() { return renderer; }
 	CObject** GetMyObject() { return &object; }
 	CInputKeybord* GetInput() { return input; }
 	CDirectInput* GetDirectInput() { return directInput; }
 	CTexture* GetTextureClass() { return texture; }
-	CGame* GetGame() { return game; }
+	CMode* GetMode() { return mode; }
+
+	// Setter
+	void SetMode(MODE_TYPE inType);
 
 private: // 動的メンバー変数
-	CGame* game;
+	CMode* mode;
 	CRenderer* renderer;
 	CInputKeybord* input;
 	CDirectInput* directInput;

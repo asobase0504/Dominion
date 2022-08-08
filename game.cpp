@@ -15,6 +15,10 @@
 #include "AI_controller.h"
 #include <assert.h>
 
+#include "application.h"
+#include "input.h"
+#include "input_keybord.h"
+
 #include "file.h"
 
 //-----------------------------------------------------------------------------
@@ -85,7 +89,16 @@ void CGame::Uninit()
 {
 	for (auto it = character.begin(); it != character.end();)
 	{
-		(*it)->Uninit();
+		it = character.erase(it);
+	}
+
+	// ƒ}ƒbƒv‚Ì‰ð•ú
+	if (map != nullptr)
+	{
+		map->Uninit();
+
+		delete map;
+		map = nullptr;
 	}
 }
 
@@ -94,6 +107,12 @@ void CGame::Uninit()
 //-----------------------------------------------------------------------------
 void CGame::Update()
 {
+	CInputKeybord* input = CApplication::GetInstance()->GetInput();
+
+	if (input->GetTrigger(DIK_RETURN))
+	{
+		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::TITLE);
+	}
 }
 
 //-----------------------------------------------------------------------------
