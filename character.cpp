@@ -137,36 +137,30 @@ void CCharacter::BulletShot()
 		return;
 	}
 
-	CBullet* bullet;
+	auto Shot = [this](const D3DXVECTOR3& inMove)
+	{
+		CBullet* bullet = CBullet::Create(m_pos, inMove, m_team);
+		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
+		m_remainsBulletDisplay[m_remainsBulletCount - 1]->SetColorAlpha(0.0f);
+		m_remainsBulletCount--;
+
+	};
 
 	// ’e‚Ì”­ŽË
 	switch (m_controller->BulletShot())
 	{
 	case CController::UP_SHOT:
-		bullet = CBullet::Create(m_pos, D3DXVECTOR3(0.0f, -10.0f, 0.0f),m_team);
-		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
-		m_remainsBulletDisplay[m_remainsBulletCount - 1]->SetColorAlpha(0.0f);
-		m_remainsBulletCount--;
+		Shot(D3DXVECTOR3(0.0f, -10.0f, 0.0f));
 		break;
 	case CController::DOWN_SHOT:
-		bullet = CBullet::Create(m_pos, D3DXVECTOR3(0.0f, 10.0f, 0.0f), m_team);
-		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
-		m_remainsBulletDisplay[m_remainsBulletCount - 1]->SetColorAlpha(0.0f);
-		m_remainsBulletCount--;
+		Shot(D3DXVECTOR3(0.0f, 10.0f, 0.0f));
 		break;
 	case CController::LEFT_SHOT:
-		bullet = CBullet::Create(m_pos, D3DXVECTOR3(-10.0f, 0.0f, 0.0f), m_team);
-		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
-		m_remainsBulletDisplay[m_remainsBulletCount - 1]->SetColorAlpha(0.0f);
-		m_remainsBulletCount--;
+		Shot(D3DXVECTOR3(-10.0f, 0.0f, 0.0f));
 		break;
 	case CController::RIGHT_SHOT:
-		bullet = CBullet::Create(m_pos, D3DXVECTOR3(10.0f, 0.0f, 0.0f), m_team);
-		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
-		m_remainsBulletDisplay[m_remainsBulletCount - 1]->SetColorAlpha(0.0f);
-		m_remainsBulletCount--;
+		Shot(D3DXVECTOR3(10.0f, 0.0f, 0.0f));
 		break;
-
 	default:
 		break;
 	}
