@@ -21,7 +21,9 @@ public: /* 定義 */
 	enum TEXTURE
 	{
 		TEXTURE_PLAYER = 0,	// プレイヤーテクスチャ
-		TEXTURE_BLOCK,		// 仮画像2
+		TEXTURE_BLOCK,		// ブロック
+		TEXTURE_BULLET,		// 残弾
+		TEXTERE_BG,			// 背景
 		TEXTURE_MAX,
 		TEXTURE_NONE,	// 使用しない
 	};

@@ -16,6 +16,7 @@
 class CController;
 class CBullet;
 class CBlock;
+class CRemaubsBullet;
 
 //-----------------------------------------
 // プレイヤークラス
@@ -52,6 +53,7 @@ public:
 
 	// Getter
 	std::vector<std::vector<int>> GetOfBlock() { return m_ofBlockIndex; }
+	TEAM GetTeam() { return m_team; }
 
 	static CCharacter* Create(TEAM inTeam);
 
@@ -67,6 +69,7 @@ private:
 	CController* m_controller;	// 命令を出す人
 	TEAM m_team;				// 所属してるチーム
 	D3DXVECTOR3 m_move;			// 移動量
+	std::vector<CRemaubsBullet*> m_remainsBulletDisplay;	// 表示数
 	int m_remainsBulletCount;	// 残りの弾数
 	int m_reloadCount;			// リロードカウント
 	std::vector<std::vector<int>> m_ofBlockIndex;			// 乗ってるブロックの番号

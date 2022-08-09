@@ -99,10 +99,10 @@ void CBullet::SetTeam(const CCharacter::TEAM inTeam)
 	switch (m_team)
 	{
 	case CCharacter::TEAM_00:
-		CObject2D::SetCol(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));		// 位置の設定
+		CObject2D::SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));		// 位置の設定
 		break;
 	case CCharacter::TEAM_01:
-		CObject2D::SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));		// 位置の設定
+		CObject2D::SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));		// 位置の設定
 		break;
 	default:
 		break;

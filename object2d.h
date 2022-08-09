@@ -42,7 +42,8 @@ public:
 
 	void SetPos(const D3DXVECTOR3& inPos) override;
 	void SetSize(const D3DXVECTOR2& inSize);
-	void SetCol(const D3DXCOLOR& inColor);
+	void SetColor(const D3DXCOLOR& inColor);
+	void SetColorAlpha(const float inAlpha);
 	void SetTexture(CTexture::TEXTURE inTex) { m_texture = inTex; }
 
 	const D3DXVECTOR2 GetSize() { return size; }

@@ -182,7 +182,7 @@ void CObject2D::SetSize(const D3DXVECTOR2 & inSize)
 	SetPos(m_pos);
 }
 
-void CObject2D::SetCol(const D3DXCOLOR & inColor)
+void CObject2D::SetColor(const D3DXCOLOR & inColor)
 {
 	col = inColor;
 
@@ -196,6 +196,28 @@ void CObject2D::SetCol(const D3DXCOLOR & inColor)
 	pVtx[1].col = inColor;
 	pVtx[2].col = inColor;
 	pVtx[3].col = inColor;
+
+	// 頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
+}
+
+//=============================================================================
+// 透明色のみの設定
+//=============================================================================
+void CObject2D::SetColorAlpha(const float inAlpha)
+{
+	col.a = inAlpha;
+
+	VERTEX_2D *pVtx = NULL;		// 頂点情報へのポインタ
+
+	// 頂点情報をロックし、頂点情報へのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	// 頂点カラーの設定
+	pVtx[0].col = col;
+	pVtx[1].col = col;
+	pVtx[2].col = col;
+	pVtx[3].col = col;
 
 	// 頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();

@@ -14,12 +14,11 @@
 #include "player_controller.h"
 #include "AI_controller.h"
 #include <assert.h>
+#include <functional>
 
 #include "application.h"
 #include "input.h"
 #include "input_keybord.h"
-
-#include "file.h"
 
 //-----------------------------------------------------------------------------
 // コンストラクタ
@@ -44,7 +43,17 @@ CGame::~CGame()
 //-----------------------------------------------------------------------------
 HRESULT CGame::Init()
 {
-	nlohmann::json stage = LoadJsonStage(L"data/FILE/STAGE/stage01.json");
+	stage = LoadJsonStage(L"data/FILE/STAGE/stage01.json");
+
+	// 背景の設定
+	{
+		CObject2D* bg = CObject2D::Create();
+		bg->SetSize(D3DXVECTOR2(CApplication::GetInstance()->SCREEN_WIDTH, CApplication::GetInstance()->SCREEN_HEIGHT));
+		D3DXVECTOR3 pos(CApplication::GetInstance()->SCREEN_WIDTH * 0.5f, CApplication::GetInstance()->SCREEN_HEIGHT * 0.5f, 0.0f);	// 位置の取得
+		bg->SetTexture(CTexture::TEXTURE::TEXTERE_BG);
+		bg->SetPos(pos);
+		bg->SetColor(D3DXCOLOR(0.45f, 0.45f, 0.9f, 1.0f));
+	}
 
 	// マップクラス
 	map = new CMap;
@@ -55,29 +64,25 @@ HRESULT CGame::Init()
 	map->SetMap(stage["MAP"]);
 	map->Set();
 
-	// キャラクターの設定
+	// プレイヤーをラムダ式でクリエイト
+	std::function<void(int, CController*)> playerSet;
+
+	playerSet = [this](int inIdx, CController* inController)->void
 	{
-		int x = stage["PLAYERS"].at(0)["SPAWN"].at(0);							// Xの位置番号を取得
-		int y = stage["PLAYERS"].at(0)["SPAWN"].at(1);							// Yの位置番号を取得
-		character.push_back(CCharacter::Create(stage["PLAYERS"].at(0)["TYPE"]));// 生成
-		character.at(0)->SetSize(D3DXVECTOR2(25.0f, 25.0f));					// 大きさの設定
-		D3DXVECTOR3 pos = map->GetBlock(x, y)->GetPos();						// 位置の取得
-		character.at(0)->SetPos(pos);											// 位置の設定
-		character.at(0)->SetBlockIndex(0, { x,y });								// 所属ブロックを設定
-		character.at(0)->SetController(new CAIController);						// 命令者の設定
-	}
+		int x = stage["PLAYERS"].at(inIdx)["SPAWN"].at(0);				// Xの位置番号を取得
+		int y = stage["PLAYERS"].at(inIdx)["SPAWN"].at(1);				// Yの位置番号を取得
+		CCharacter::TEAM inTeam = stage["PLAYERS"].at(inIdx)["TYPE"];	// チームの作成
+		character.push_back(CCharacter::Create(inTeam));				// 生成
+		character.at(inIdx)->SetSize(D3DXVECTOR2(25.0f, 25.0f));		// 大きさの設定
+		D3DXVECTOR3 pos = map->GetBlock(x, y)->GetPos();				// 位置の取得
+		character.at(inIdx)->SetPos(pos);								// 位置の設定
+		character.at(inIdx)->SetBlockIndex(0, { x,y });					// 所属ブロックを設定
+		character.at(inIdx)->SetController(inController);				// 命令者の設定
+	};
 
 	// キャラクターの設定
-	{
-		int x = stage["PLAYERS"].at(1)["SPAWN"].at(0);							// Xの位置番号を取得
-		int y = stage["PLAYERS"].at(1)["SPAWN"].at(1);							// Yの位置番号を取得
-		character.push_back(CCharacter::Create(stage["PLAYERS"].at(1)["TYPE"]));// 生成
-		character.at(1)->SetSize(D3DXVECTOR2(25.0f, 25.0f));					// 大きさの設定
-		D3DXVECTOR3 pos = map->GetBlock(x, y)->GetPos();						// 位置の取得
-		character.at(1)->SetPos(pos);											// 位置の設定
-		character.at(1)->SetBlockIndex(0, { x,y });								// 所属ブロックを設定
-		character.at(1)->SetController(new CPlayerController);					// 命令者の設定
-	}
+	playerSet(0, new CAIController);
+	playerSet(1, new CPlayerController);
 
 	return S_OK;
 }
@@ -109,6 +114,7 @@ void CGame::Update()
 {
 	CInputKeybord* input = CApplication::GetInstance()->GetInput();
 
+	//	画面の遷移
 	if (input->GetTrigger(DIK_RETURN))
 	{
 		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::TITLE);

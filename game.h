@@ -8,6 +8,7 @@
 #define _GAME_H_
 
 #include "mode.h"
+#include "file.h"
 #include <d3dx9.h>
 #include <vector>
 
@@ -37,6 +38,7 @@ public:	// メンバー関数
 
 private: // 動的メンバー変数
 	std::vector<CCharacter*> character;
+	nlohmann::json stage;
 	CMap* map;
 };
 

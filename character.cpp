@@ -15,7 +15,7 @@
 #include "input_keybord.h"
 #include "bullet.h"
 #include "controller.h"
-
+#include "remains_bullet.h"
 #include "collision.h"
 #include "block.h"
 #include <assert.h>
@@ -24,7 +24,7 @@
 // 定義
 //-----------------------------------------
 const int CCharacter::LIMIT_BULLET_COUNT = 5;
-const int CCharacter::RELOAD_TIME = 30;
+const int CCharacter::RELOAD_TIME = 100;
 
 //-----------------------------------------
 // コンストラクタ
@@ -53,6 +53,7 @@ HRESULT CCharacter::Init()
 	CObject2D::Init();
 	m_remainsBulletCount = LIMIT_BULLET_COUNT;
 	m_ofBlockIndex.resize(4);
+	SetPos(D3DXVECTOR3(0.0f,0.0f,0.0f));
 	SetTexture(CTexture::TEXTURE::TEXTURE_PLAYER);
 	return S_OK;
 }
@@ -89,6 +90,7 @@ void CCharacter::Update()
 		{
 			m_reloadCount = 0;
 			m_remainsBulletCount++;
+			m_remainsBulletDisplay[m_remainsBulletCount - 1]->SetColorAlpha(1.0f);
 		}
 	}
 }
@@ -143,21 +145,25 @@ void CCharacter::BulletShot()
 	case CController::UP_SHOT:
 		bullet = CBullet::Create(m_pos, D3DXVECTOR3(0.0f, -10.0f, 0.0f),m_team);
 		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
+		m_remainsBulletDisplay[m_remainsBulletCount - 1]->SetColorAlpha(0.0f);
 		m_remainsBulletCount--;
 		break;
 	case CController::DOWN_SHOT:
 		bullet = CBullet::Create(m_pos, D3DXVECTOR3(0.0f, 10.0f, 0.0f), m_team);
 		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
+		m_remainsBulletDisplay[m_remainsBulletCount - 1]->SetColorAlpha(0.0f);
 		m_remainsBulletCount--;
 		break;
 	case CController::LEFT_SHOT:
 		bullet = CBullet::Create(m_pos, D3DXVECTOR3(-10.0f, 0.0f, 0.0f), m_team);
 		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
+		m_remainsBulletDisplay[m_remainsBulletCount - 1]->SetColorAlpha(0.0f);
 		m_remainsBulletCount--;
 		break;
 	case CController::RIGHT_SHOT:
 		bullet = CBullet::Create(m_pos, D3DXVECTOR3(10.0f, 0.0f, 0.0f), m_team);
 		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
+		m_remainsBulletDisplay[m_remainsBulletCount - 1]->SetColorAlpha(0.0f);
 		m_remainsBulletCount--;
 		break;
 
@@ -185,10 +191,10 @@ void CCharacter::SetTeam(const TEAM inTeam)
 	switch (m_team)
 	{
 	case TEAM_00:
-		CObject2D::SetCol(D3DXCOLOR(0.0f,0.0f,0.0f,1.0f));		// 位置の設定
+		CObject2D::SetColor(D3DXCOLOR(0.0f,0.0f,0.0f,1.0f));		// 位置の設定
 		break;
 	case TEAM_01:
-		CObject2D::SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));		// 位置の設定
+		CObject2D::SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));		// 位置の設定
 		break;
 	default:
 		break;
@@ -225,7 +231,11 @@ CCharacter* CCharacter::Create(TEAM team)
 
 	player->Init();
 	player->SetTeam(team);
-
+	float rot = D3DX_PI * 2.0f / LIMIT_BULLET_COUNT;
+	for (int i = 0; i < LIMIT_BULLET_COUNT; i++)
+	{
+		player->m_remainsBulletDisplay.push_back(CRemaubsBullet::Create(player, rot * i));
+	}
 	return player;
 }
 

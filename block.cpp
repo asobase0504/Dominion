@@ -81,13 +81,13 @@ CBlock* CBlock::Create(CBlock::BLOCK_TYPE type)
 	switch (type)
 	{
 	case BLOCK_TYPE::NONE:
-		block->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+		block->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 		break;
 	case BLOCK_TYPE::BLOCK_01:
-		block->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		block->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 		break;
 	case BLOCK_TYPE::BLOCK_02:
-		block->SetCol(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+		block->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 		break;
 	default:
 		break;
@@ -107,11 +107,11 @@ void CBlock::ChangeType()
 		break;
 	case BLOCK_TYPE::BLOCK_01:
 		m_team = BLOCK_TYPE::BLOCK_02;
-		SetCol(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+		SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
 		break;
 	case BLOCK_TYPE::BLOCK_02:
 		m_team = BLOCK_TYPE::BLOCK_01;
-		SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 		break;
 	default:
 		MessageBox(NULL, TEXT("想定外の列挙型を検出。"), TEXT("swith文の条件式"), MB_ICONHAND);

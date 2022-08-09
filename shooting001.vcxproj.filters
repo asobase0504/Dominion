@@ -12,6 +12,9 @@
     <Filter Include="ソース ファイル\00_Main">
       <UniqueIdentifier>{f0159098-cbfd-4731-868c-14285ecad14f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Stage">
+      <UniqueIdentifier>{d34f2a52-70b7-4c95-bb42-419947bb7574}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ソース ファイル\01_Input">
       <UniqueIdentifier>{4942f64e-ad04-4398-ad40-a9631d9e2e18}</UniqueIdentifier>
     </Filter>
@@ -20,9 +23,6 @@
     </Filter>
     <Filter Include="ソース ファイル\03_Cpntroller">
       <UniqueIdentifier>{0d4dda8f-550b-4600-8408-706d6820c1bc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Stage">
-      <UniqueIdentifier>{d34f2a52-70b7-4c95-bb42-419947bb7574}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\04_Mode">
       <UniqueIdentifier>{48f00a93-53ea-4db8-9029-d9913dbc6a89}</UniqueIdentifier>
@@ -38,53 +38,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="bullet.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="block.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="map.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="renderer.cpp">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClCompile>
-    <ClCompile Include="texture.cpp">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClCompile>
-    <ClCompile Include="application.cpp">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClCompile>
     <ClCompile Include="input_keybord.cpp">
       <Filter>ソース ファイル\01_Input</Filter>
     </ClCompile>
     <ClCompile Include="input.cpp">
       <Filter>ソース ファイル\01_Input</Filter>
-    </ClCompile>
-    <ClCompile Include="object.cpp">
-      <Filter>ソース ファイル\02_Object</Filter>
-    </ClCompile>
-    <ClCompile Include="object2d.cpp">
-      <Filter>ソース ファイル\02_Object</Filter>
-    </ClCompile>
-    <ClCompile Include="character.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClCompile>
-    <ClCompile Include="controller.cpp">
-      <Filter>ソース ファイル\03_Cpntroller</Filter>
-    </ClCompile>
-    <ClCompile Include="player_controller.cpp">
-      <Filter>ソース ファイル\03_Cpntroller</Filter>
-    </ClCompile>
-    <ClCompile Include="AI_controller.cpp">
-      <Filter>ソース ファイル\03_Cpntroller</Filter>
-    </ClCompile>
-    <ClCompile Include="collision.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="input_xinput.cpp">
       <Filter>ソース ファイル\01_Input</Filter>
@@ -92,67 +50,73 @@
     <ClCompile Include="input_directinput.cpp">
       <Filter>ソース ファイル\01_Input</Filter>
     </ClCompile>
+    <ClCompile Include="application.cpp">
+      <Filter>ソース ファイル\00_Main</Filter>
+    </ClCompile>
     <ClCompile Include="error_warning.cpp">
       <Filter>ソース ファイル\00_Main</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>ソース ファイル\00_Main</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer.cpp">
+      <Filter>ソース ファイル\00_Main</Filter>
+    </ClCompile>
+    <ClCompile Include="texture.cpp">
+      <Filter>ソース ファイル\00_Main</Filter>
+    </ClCompile>
+    <ClCompile Include="controller.cpp">
+      <Filter>ソース ファイル\00_Main</Filter>
+    </ClCompile>
+    <ClCompile Include="collision.cpp">
+      <Filter>ソース ファイル\00_Main</Filter>
+    </ClCompile>
     <ClCompile Include="file.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="game.cpp">
-      <Filter>ソース ファイル\04_Mode\01_Game</Filter>
-    </ClCompile>
-    <ClCompile Include="mode.cpp">
-      <Filter>ソース ファイル\04_Mode</Filter>
+      <Filter>ソース ファイル\00_Main</Filter>
     </ClCompile>
     <ClCompile Include="title.cpp">
       <Filter>ソース ファイル\04_Mode\02_Title</Filter>
     </ClCompile>
+    <ClCompile Include="player_controller.cpp">
+      <Filter>ソース ファイル\03_Cpntroller</Filter>
+    </ClCompile>
+    <ClCompile Include="object.cpp">
+      <Filter>ソース ファイル\02_Object</Filter>
+    </ClCompile>
+    <ClCompile Include="object2d.cpp">
+      <Filter>ソース ファイル\02_Object</Filter>
+    </ClCompile>
+    <ClCompile Include="AI_controller.cpp">
+      <Filter>ソース ファイル\03_Cpntroller</Filter>
+    </ClCompile>
+    <ClCompile Include="mode.cpp">
+      <Filter>ソース ファイル\04_Mode</Filter>
+    </ClCompile>
+    <ClCompile Include="game.cpp">
+      <Filter>ソース ファイル\04_Mode\01_Game</Filter>
+    </ClCompile>
+    <ClCompile Include="block.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="character.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="map.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="remains_bullet.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="bullet.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="block.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="map.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="renderer.h">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClInclude>
-    <ClInclude Include="texture.h">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClInclude>
-    <ClInclude Include="application.h">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClInclude>
     <ClInclude Include="input.h">
       <Filter>ソース ファイル\01_Input</Filter>
     </ClInclude>
     <ClInclude Include="input_keybord.h">
       <Filter>ソース ファイル\01_Input</Filter>
-    </ClInclude>
-    <ClInclude Include="object2d.h">
-      <Filter>ソース ファイル\02_Object</Filter>
-    </ClInclude>
-    <ClInclude Include="object.h">
-      <Filter>ソース ファイル\02_Object</Filter>
-    </ClInclude>
-    <ClInclude Include="character.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="controller.h">
-      <Filter>ソース ファイル\03_Cpntroller</Filter>
-    </ClInclude>
-    <ClInclude Include="player_controller.h">
-      <Filter>ソース ファイル\03_Cpntroller</Filter>
-    </ClInclude>
-    <ClInclude Include="AI_controller.h">
-      <Filter>ソース ファイル\03_Cpntroller</Filter>
-    </ClInclude>
-    <ClInclude Include="collision.h">
-      <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="input_xinput.h">
       <Filter>ソース ファイル\01_Input</Filter>
@@ -160,20 +124,62 @@
     <ClInclude Include="input_directinput.h">
       <Filter>ソース ファイル\01_Input</Filter>
     </ClInclude>
+    <ClInclude Include="application.h">
+      <Filter>ソース ファイル\00_Main</Filter>
+    </ClInclude>
     <ClInclude Include="error_warning.h">
       <Filter>ソース ファイル\00_Main</Filter>
     </ClInclude>
-    <ClInclude Include="file.h">
-      <Filter>ソース ファイル</Filter>
+    <ClInclude Include="renderer.h">
+      <Filter>ソース ファイル\00_Main</Filter>
     </ClInclude>
-    <ClInclude Include="game.h">
-      <Filter>ソース ファイル\04_Mode\01_Game</Filter>
+    <ClInclude Include="texture.h">
+      <Filter>ソース ファイル\00_Main</Filter>
+    </ClInclude>
+    <ClInclude Include="controller.h">
+      <Filter>ソース ファイル\00_Main</Filter>
+    </ClInclude>
+    <ClInclude Include="collision.h">
+      <Filter>ソース ファイル\00_Main</Filter>
+    </ClInclude>
+    <ClInclude Include="file.h">
+      <Filter>ソース ファイル\00_Main</Filter>
+    </ClInclude>
+    <ClInclude Include="title.h">
+      <Filter>ソース ファイル\04_Mode\02_Title</Filter>
+    </ClInclude>
+    <ClInclude Include="player_controller.h">
+      <Filter>ソース ファイル\03_Cpntroller</Filter>
+    </ClInclude>
+    <ClInclude Include="object.h">
+      <Filter>ソース ファイル\02_Object</Filter>
+    </ClInclude>
+    <ClInclude Include="object2d.h">
+      <Filter>ソース ファイル\02_Object</Filter>
+    </ClInclude>
+    <ClInclude Include="AI_controller.h">
+      <Filter>ソース ファイル\03_Cpntroller</Filter>
     </ClInclude>
     <ClInclude Include="mode.h">
       <Filter>ソース ファイル\04_Mode</Filter>
     </ClInclude>
-    <ClInclude Include="title.h">
-      <Filter>ソース ファイル\04_Mode\02_Title</Filter>
+    <ClInclude Include="game.h">
+      <Filter>ソース ファイル\04_Mode\01_Game</Filter>
+    </ClInclude>
+    <ClInclude Include="block.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="character.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="map.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="remains_bullet.h">
+      <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
