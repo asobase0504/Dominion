@@ -121,3 +121,13 @@ CBlock* CMap::GetBlock(int indexX, int indexY)
 {
 	return m_block[indexY][indexX];
 }
+
+//--------------------------------------------------
+// ƒuƒƒbƒN”Ô†î•ñ‚Ìİ’è
+//--------------------------------------------------
+void CMap::SetMap(std::vector<std::vector<CBlock::BLOCK_TYPE>> inBlockIdx)
+{
+	m_blockIdx = inBlockIdx;
+	MAX_Y_BLOCK = (int)m_blockIdx.size();
+	MAX_X_BLOCK = (int)m_blockIdx[0].size();
+}

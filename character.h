@@ -70,10 +70,11 @@ private:
 	TEAM m_team;				// 所属してるチーム
 	D3DXVECTOR3 m_move;			// 移動量
 	std::vector<CRemaubsBullet*> m_remainsBulletDisplay;	// 表示数
-	int m_remainsBulletCount;	// 残りの弾数
-	int m_reloadCount;			// リロードカウント
+	int m_remainsBulletCount;								// 残りの弾数
+	int m_reloadCount;										// リロードカウント
 	std::vector<std::vector<int>> m_ofBlockIndex;			// 乗ってるブロックの番号
-	int m_ofBlockCount;			// 乗ってるブロックの個数
+	std::vector<int> m_ofBlockIndexCenter;					// 中心が乗ってるブロックの番号
+	int m_ofBlockCount;										// 乗ってるブロックの個数
 };
 
 #endif // !_CHARACTER_H_

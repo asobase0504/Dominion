@@ -86,6 +86,11 @@ void CCharacter::Update()
 	{
 		m_reloadCount++;
 
+		if (m_reloadCount % (int)(RELOAD_TIME * 0.5f) == 0)
+		{
+			m_remainsBulletDisplay[m_remainsBulletCount]->SetColorAlpha(0.5f);
+		}
+
 		if (m_reloadCount % RELOAD_TIME == 0)
 		{
 			m_reloadCount = 0;
@@ -200,7 +205,7 @@ void CCharacter::SetTeam(const TEAM inTeam)
 //-----------------------------------------
 bool CCharacter::SetBlockIndex(const int count, std::vector<int> inIndex)
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < count; i++)
 	{
 		if(m_ofBlockIndex[i] == inIndex)
 		{
@@ -208,6 +213,7 @@ bool CCharacter::SetBlockIndex(const int count, std::vector<int> inIndex)
 		}
 	}
 	m_ofBlockIndex[count] = inIndex;
+	m_ofBlockCount++;
 	return true;
 }
 
@@ -276,12 +282,8 @@ void CCharacter::Collision()
 
 		if (isHit)
 		{ // 当たった場合
-
 			pMap->GetBlock(x, y)->SetRidingObject(this);	// ブロック側に自身を保存する
-			if (SetBlockIndex(m_ofBlockCount, { x, y }))
-			{ // 設定出来た場合
-				m_ofBlockCount++;
-			}
+			SetBlockIndex(m_ofBlockCount, { x, y });
 		}
 	};
 
@@ -420,25 +422,37 @@ void CCharacter::HitWithBullet(CBullet* inBullet)
 {
 	CBullet* pBullet = inBullet;
 
+	// 同じ所属なら弾く
 	if ((int)m_team == (int)pBullet->CBullet::GetTeam())
 	{
 		return;
 	}
 
-	D3DXVECTOR3 outpos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	std::vector<std::vector<int>> bulletOfBlock = pBullet->GetOfBlock();
 
-	// 弾のサイズ
-	D3DXVECTOR3 bulletSize = D3DXVECTOR3(pBullet->GetSize().x, pBullet->GetSize().y, 0.0f) * 0.5f;
-
-	// 自分のサイズ
-	D3DXVECTOR3 mySize = D3DXVECTOR3(size.x, size.y, 0.0f) * 0.5f;
-
-	// プレイヤー上、ブロック下の当たり判定
-	if (Collision::RectangleTop(pBullet->GetPos(), bulletSize, m_pos, mySize, &outpos, NULL, NULL)
-		|| Collision::RectangleLeft(pBullet->GetPos(), bulletSize, m_pos, mySize, &outpos, NULL, NULL)
-		|| Collision::RectangleRight(pBullet->GetPos(), bulletSize, m_pos, mySize, &outpos, NULL, NULL)
-		|| Collision::RectangleDown(pBullet->GetPos(), bulletSize, m_pos, mySize, &outpos, NULL, NULL))
+	for (int i = 0; i < m_ofBlockIndex.size(); i++)
 	{
-		m_isDeleted = true;
+		if (m_ofBlockIndex[i].empty())
+		{
+			continue;
+		}
+
+		/* ↓プレイヤーの所属ブロックが空ではなかった場合↓ */
+
+		for (int j = 0; j < bulletOfBlock.size(); j++)
+		{
+			if (bulletOfBlock[j].empty())
+			{
+				continue;
+			}
+
+			/* ↓弾の所属ブロックが空ではなかった場合↓ */
+
+			if (m_ofBlockIndex[i] == bulletOfBlock[j])
+			{
+				m_isDeleted = true;
+				return;
+			}
+		}
 	}
 }

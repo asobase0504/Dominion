@@ -24,8 +24,6 @@ class CBlock;
 class CMap
 {
 public:
-	int MAX_X_BLOCK;	// X軸の最大数
-	int MAX_Y_BLOCK;	// Y軸の最大数
 	static float BLOCK_SIZE;		// ブロックのサイズ
 	static const char* FILE_NAME;	// マップファイル名
 	static const float X_CENTER;	// マップを中央に配置するため(X軸)
@@ -44,11 +42,15 @@ public:
 
 	// Getter
 	CBlock* GetBlock(int indexX, int indexY);
+	int GetMaxXBlock() { return MAX_X_BLOCK; }
+	int GetMaxYBlock() { return MAX_Y_BLOCK; }
 
 	// Setter
-	void SetMap(std::vector<std::vector<CBlock::BLOCK_TYPE>> inBlockIdx) { m_blockIdx = inBlockIdx; }
+	void SetMap(std::vector<std::vector<CBlock::BLOCK_TYPE>> inBlockIdx);
 
 private:
+	int MAX_X_BLOCK;	// X軸の最大数
+	int MAX_Y_BLOCK;	// Y軸の最大数
 	std::vector<std::vector<CBlock*>> m_block;
 	std::vector<std::vector<CBlock::BLOCK_TYPE>> m_blockIdx;
 };
