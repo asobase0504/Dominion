@@ -136,7 +136,6 @@ void CCharacter::BulletShot()
 		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
 		m_remainsBulletDisplay[m_remainsBulletCount - 1]->SetColorAlpha(0.0f);
 		m_remainsBulletCount--;
-
 	};
 
 	// 弾の発射
@@ -274,30 +273,37 @@ void CCharacter::ScreenFromOutTime()
 		CCharacter* character = Create(m_team);
 		character->SetPos(inPos);
 		character->SetSize(D3DXVECTOR2(25.0f, 25.0f));		// 大きさの設定
-		character->SetBlockIndex(0, m_ofBlockIndex[0]);
-		character->SetBlockIndex(1, m_ofBlockIndex[1]);
-		character->SetBlockIndex(2, m_ofBlockIndex[2]);
-		character->SetBlockIndex(3, m_ofBlockIndex[3]);
-		character->SetController(m_controller);
-		character->isCopied = true;
-		isCopied = true;
+
+		// ブロックの番号登録
+		for (int i = 0; i < m_ofBlockIndex.size();i++)
+		{
+			character->SetBlockIndex(i, m_ofBlockIndex[i]);
+		}
+
+		character->SetController(m_controller);	// 命令者の設定
+		character->isCopied = true;	// コピー済みにする
+		isCopied = true;	// コピー済みにする
 	};
 
 	if (m_pos.x - size.x <= 0.0f)
 	{
-		Copy(D3DXVECTOR3(CApplication::GetInstance()->SCREEN_WIDTH + size.x, m_pos.y, m_pos.z));
+		D3DXVECTOR3 pos(CApplication::GetInstance()->SCREEN_WIDTH + size.x, m_pos.y, m_pos.z);
+		Copy(pos);
 	}
 	else if (m_pos.x + size.x >= CApplication::GetInstance()->SCREEN_WIDTH)
 	{
-		Copy(D3DXVECTOR3(0.0f - size.x, m_pos.y, m_pos.z));
+		D3DXVECTOR3 pos(0.0f - size.x, m_pos.y, m_pos.z);
+		Copy(pos);
 	}
 	else if (m_pos.y - size.y <= 0.0f)
 	{
-		Copy(D3DXVECTOR3(m_pos.x, CApplication::GetInstance()->SCREEN_HEIGHT + size.y, m_pos.z));
+		D3DXVECTOR3 pos(m_pos.x, CApplication::GetInstance()->SCREEN_HEIGHT + size.y, m_pos.z);
+		Copy(pos);
 	}
 	else if (m_pos.y + size.y >= CApplication::GetInstance()->SCREEN_HEIGHT)
 	{
-		Copy(D3DXVECTOR3(m_pos.x, 0.0f - size.y, m_pos.z));
+		D3DXVECTOR3 pos(m_pos.x, 0.0f - size.y, m_pos.z);
+		Copy(pos);
 	}
 	else
 	{
@@ -305,7 +311,7 @@ void CCharacter::ScreenFromOutTime()
 	}
 
 	// 自身の削除
-	float dist = 0.1f;
+	float dist = 0.001f;
 	if (m_pos.x + size.x + dist <= 0.0f - size.x ||
 		m_pos.y + size.y + dist <= 0.0f - size.y ||
 		m_pos.x - size.x - dist >= CApplication::GetInstance()->SCREEN_WIDTH + size.x ||
