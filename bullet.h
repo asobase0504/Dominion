@@ -14,6 +14,8 @@
 class CBullet : public CObject2D
 {
 public:
+	static const float MOVE_SPEAD;
+public:
 	CBullet(CObject::TYPE type = CObject::TYPE::BULLET);
 	~CBullet() override;
 

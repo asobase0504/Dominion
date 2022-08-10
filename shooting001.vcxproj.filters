@@ -65,9 +65,6 @@
     <ClCompile Include="texture.cpp">
       <Filter>ソース ファイル\00_Main</Filter>
     </ClCompile>
-    <ClCompile Include="controller.cpp">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClCompile>
     <ClCompile Include="collision.cpp">
       <Filter>ソース ファイル\00_Main</Filter>
     </ClCompile>
@@ -110,6 +107,9 @@
     <ClCompile Include="remains_bullet.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="controller.cpp">
+      <Filter>ソース ファイル\03_Cpntroller</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="input.h">
@@ -134,9 +134,6 @@
       <Filter>ソース ファイル\00_Main</Filter>
     </ClInclude>
     <ClInclude Include="texture.h">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClInclude>
-    <ClInclude Include="controller.h">
       <Filter>ソース ファイル\00_Main</Filter>
     </ClInclude>
     <ClInclude Include="collision.h">
@@ -180,6 +177,9 @@
     </ClInclude>
     <ClInclude Include="remains_bullet.h">
       <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="controller.h">
+      <Filter>ソース ファイル\03_Cpntroller</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

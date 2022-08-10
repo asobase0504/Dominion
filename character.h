@@ -26,6 +26,7 @@ class CCharacter : public CObject2D
 public: // 定義
 	static const int LIMIT_BULLET_COUNT;	// 弾の最大数
 	static const int RELOAD_TIME;			// リロード時間
+	static const float MOVE_SPEAD;			// 移動速度
 
 public: // 列挙型
 	enum TEAM
@@ -60,7 +61,8 @@ public:
 	bool HitWithBlock(CBlock* inBlock);
 
 private: // プライベート関数
-	void ScreenFromOutTime();
+	void BulletReload();		// 弾をリロードする処理
+	void ScreenFromOutTime();	// 画面外に行く場合の処理
 
 	void Collision();
 	void HitWithBullet(CBullet* inBullet);

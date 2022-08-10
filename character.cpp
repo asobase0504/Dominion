@@ -9,10 +9,9 @@
 //-----------------------------------------
 #include "character.h"
 #include "application.h"
-#include "game.h"
 #include "mode.h"
+#include "game.h"
 #include "map.h"
-#include "input_keybord.h"
 #include "bullet.h"
 #include "controller.h"
 #include "remains_bullet.h"
@@ -23,8 +22,9 @@
 //-----------------------------------------
 // 定義
 //-----------------------------------------
-const int CCharacter::LIMIT_BULLET_COUNT = 5;
-const int CCharacter::RELOAD_TIME = 100;
+const int CCharacter::LIMIT_BULLET_COUNT = 5;	// 弾の最大数
+const int CCharacter::RELOAD_TIME = 100;		// 一発の弾が回復する時間
+const float CCharacter::MOVE_SPEAD = 4.0f;		// 移動速度
 
 //-----------------------------------------
 // コンストラクタ
@@ -64,7 +64,6 @@ HRESULT CCharacter::Init()
 void CCharacter::Uninit()
 {
 	CObject2D::Uninit();
-
 }
 
 //-----------------------------------------
@@ -72,32 +71,20 @@ void CCharacter::Uninit()
 //-----------------------------------------
 void CCharacter::Update()
 {
-	Move();	// 移動
+	// 移動
+	Move();
 
-	BulletShot();	// 弾の発射
+	// 弾の発射
+	BulletShot();
 
-	ScreenFromOutTime();	// スクリーン外に出た時
+	// 弾数の回復
+	BulletReload();
+
+	// スクリーン外に出た時
+	ScreenFromOutTime();
 
 	// ブロックとの当たり判定
 	Collision();
-
-	// 弾数の回復
-	if (m_remainsBulletCount < LIMIT_BULLET_COUNT)
-	{
-		m_reloadCount++;
-
-		if (m_reloadCount % (int)(RELOAD_TIME * 0.5f) == 0)
-		{
-			m_remainsBulletDisplay[m_remainsBulletCount]->SetColorAlpha(0.5f);
-		}
-
-		if (m_reloadCount % RELOAD_TIME == 0)
-		{
-			m_reloadCount = 0;
-			m_remainsBulletCount++;
-			m_remainsBulletDisplay[m_remainsBulletCount - 1]->SetColorAlpha(1.0f);
-		}
-	}
 }
 
 //-----------------------------------------
@@ -120,7 +107,7 @@ void CCharacter::Move()
 	}
 
 	// 方向ベクトル掛ける移動量
-	m_move = m_controller->Move() * 4.0f;
+	m_move = m_controller->Move() * MOVE_SPEAD;
 	m_pos += m_move;
 	CObject2D::SetPos(m_pos);		// 位置の設定
 }
@@ -155,16 +142,16 @@ void CCharacter::BulletShot()
 	switch (m_controller->BulletShot())
 	{
 	case CController::UP_SHOT:
-		Shot(D3DXVECTOR3(0.0f, -10.0f, 0.0f));
+		Shot(D3DXVECTOR3(0.0f, -(CBullet::MOVE_SPEAD), 0.0f));
 		break;
 	case CController::DOWN_SHOT:
-		Shot(D3DXVECTOR3(0.0f, 10.0f, 0.0f));
+		Shot(D3DXVECTOR3(0.0f, CBullet::MOVE_SPEAD, 0.0f));
 		break;
 	case CController::LEFT_SHOT:
-		Shot(D3DXVECTOR3(-10.0f, 0.0f, 0.0f));
+		Shot(D3DXVECTOR3(-(CBullet::MOVE_SPEAD), 0.0f, 0.0f));
 		break;
 	case CController::RIGHT_SHOT:
-		Shot(D3DXVECTOR3(10.0f, 0.0f, 0.0f));
+		Shot(D3DXVECTOR3(CBullet::MOVE_SPEAD, 0.0f, 0.0f));
 		break;
 	default:
 		break;
@@ -237,6 +224,29 @@ CCharacter* CCharacter::Create(TEAM team)
 		player->m_remainsBulletDisplay.push_back(CRemaubsBullet::Create(player, rot * i));
 	}
 	return player;
+}
+
+//-----------------------------------------
+// 弾のリロード処理
+//-----------------------------------------
+void CCharacter::BulletReload()
+{
+	if (m_remainsBulletCount < LIMIT_BULLET_COUNT)
+	{
+		m_reloadCount++;
+
+		if (m_reloadCount % (int)(RELOAD_TIME * 0.5f) == 0)
+		{
+			m_remainsBulletDisplay[m_remainsBulletCount]->SetColorAlpha(0.5f);
+		}
+
+		if (m_reloadCount % RELOAD_TIME == 0)
+		{
+			m_reloadCount = 0;
+			m_remainsBulletCount++;
+			m_remainsBulletDisplay[m_remainsBulletCount - 1]->SetColorAlpha(1.0f);
+		}
+	}
 }
 
 //-----------------------------------------
