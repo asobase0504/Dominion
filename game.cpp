@@ -48,8 +48,8 @@ HRESULT CGame::Init()
 	// ”wŒi‚ÌÝ’è
 	{
 		CObject2D* bg = CObject2D::Create();
-		bg->SetSize(D3DXVECTOR2(CApplication::GetInstance()->SCREEN_WIDTH, CApplication::GetInstance()->SCREEN_HEIGHT));
-		D3DXVECTOR3 pos(CApplication::GetInstance()->SCREEN_WIDTH * 0.5f, CApplication::GetInstance()->SCREEN_HEIGHT * 0.5f, 0.0f);	// ˆÊ’u‚ÌŽæ“¾
+		bg->SetSize(D3DXVECTOR2((float)CApplication::GetInstance()->SCREEN_WIDTH, (float)CApplication::GetInstance()->SCREEN_HEIGHT));
+		D3DXVECTOR3 pos(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y, 0.0f);	// ˆÊ’u‚ÌŽæ“¾
 		bg->SetTexture(CTexture::TEXTURE::TEXTERE_BG);
 		bg->SetPos(pos);
 		bg->SetColor(D3DXCOLOR(0.45f, 0.45f, 0.9f, 1.0f));

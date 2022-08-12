@@ -37,8 +37,10 @@ public:
 	};
 
 public: // 定数
-	const int SCREEN_WIDTH = 1280;	// スクリーンの幅
-	const int SCREEN_HEIGHT = 720;	// スクリーンの高さ
+	const int SCREEN_WIDTH;		// スクリーンの幅
+	const int SCREEN_HEIGHT;	// スクリーンの高さ
+	const float CENTER_X;			// スクリーン中心座標のX座標
+	const float CENTER_Y;			// スクリーン中心座標のY座標
 
 public: // 静的メンバー変数
 	static CApplication* application;

@@ -52,20 +52,20 @@ HRESULT CObject2D::Init()
 	// 頂点情報をロックし、頂点情報へのポインタを取得
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-	pVtx[0].pos.x = CApplication::GetInstance()->SCREEN_WIDTH * 0.5f + sinf(rotY + fAngle + -D3DX_PI) * fLength;
-	pVtx[0].pos.y = CApplication::GetInstance()->SCREEN_HEIGHT * 0.5f + cosf(rotY + fAngle + -D3DX_PI) * fLength;
+	pVtx[0].pos.x = CApplication::GetInstance()->CENTER_X + sinf(rotY + fAngle + -D3DX_PI) * fLength;
+	pVtx[0].pos.y = CApplication::GetInstance()->CENTER_Y + cosf(rotY + fAngle + -D3DX_PI) * fLength;
 	pVtx[0].pos.z = 0.0f;
 
-	pVtx[1].pos.x = CApplication::GetInstance()->SCREEN_WIDTH * 0.5f + sinf(rotY + -fAngle + D3DX_PI) * fLength;
-	pVtx[1].pos.y = CApplication::GetInstance()->SCREEN_HEIGHT * 0.5f + cosf(rotY + -fAngle + D3DX_PI) * fLength;
+	pVtx[1].pos.x = CApplication::GetInstance()->CENTER_X + sinf(rotY + -fAngle + D3DX_PI) * fLength;
+	pVtx[1].pos.y = CApplication::GetInstance()->CENTER_Y + cosf(rotY + -fAngle + D3DX_PI) * fLength;
 	pVtx[1].pos.z = 0.0f;
 
-	pVtx[2].pos.x = CApplication::GetInstance()->SCREEN_WIDTH * 0.5f + sinf(rotY + fAngle * -1.0f) * fLength;
-	pVtx[2].pos.y = CApplication::GetInstance()->SCREEN_HEIGHT * 0.5f + cosf(rotY + fAngle * -1.0f) * fLength;
+	pVtx[2].pos.x = CApplication::GetInstance()->CENTER_X + sinf(rotY + fAngle * -1.0f) * fLength;
+	pVtx[2].pos.y = CApplication::GetInstance()->CENTER_Y + cosf(rotY + fAngle * -1.0f) * fLength;
 	pVtx[2].pos.z = 0.0f;
 
-	pVtx[3].pos.x = CApplication::GetInstance()->SCREEN_WIDTH * 0.5f + sinf(rotY + fAngle) * fLength;
-	pVtx[3].pos.y = CApplication::GetInstance()->SCREEN_HEIGHT * 0.5f + cosf(rotY + fAngle) * fLength;
+	pVtx[3].pos.x = CApplication::GetInstance()->CENTER_X + sinf(rotY + fAngle) * fLength;
+	pVtx[3].pos.y = CApplication::GetInstance()->CENTER_Y + cosf(rotY + fAngle) * fLength;
 	pVtx[3].pos.z = 0.0f;
 
 	// texの設定

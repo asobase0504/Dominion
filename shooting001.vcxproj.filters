@@ -12,9 +12,6 @@
     <Filter Include="ソース ファイル\00_Main">
       <UniqueIdentifier>{f0159098-cbfd-4731-868c-14285ecad14f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Stage">
-      <UniqueIdentifier>{d34f2a52-70b7-4c95-bb42-419947bb7574}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\01_Input">
       <UniqueIdentifier>{4942f64e-ad04-4398-ad40-a9631d9e2e18}</UniqueIdentifier>
     </Filter>
@@ -35,6 +32,9 @@
     </Filter>
     <Filter Include="ソース ファイル\04_Mode\03_Result">
       <UniqueIdentifier>{104c158d-21c7-4f09-a2f8-c232e9da0e0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FIle">
+      <UniqueIdentifier>{d34f2a52-70b7-4c95-bb42-419947bb7574}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -181,10 +181,13 @@
     <ClInclude Include="controller.h">
       <Filter>ソース ファイル\03_Cpntroller</Filter>
     </ClInclude>
+    <ClInclude Include="color.h">
+      <Filter>ソース ファイル\00_Main</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\FILE\STAGE\stage01.json">
-      <Filter>Stage</Filter>
+      <Filter>FIle</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -88,6 +88,7 @@ void CObject::UpdateAll()
 	{
 		if ((*it)->m_isDeleted)
 		{
+			(*it)->Uninit();
 			it = (*it)->Release();
 			continue;
 		}

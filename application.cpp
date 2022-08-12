@@ -39,6 +39,10 @@ CApplication* CApplication::GetInstance()
 // コンストラクタ
 //=============================================================================
 CApplication::CApplication() :
+	SCREEN_WIDTH(1280),
+	SCREEN_HEIGHT(720),
+	CENTER_X(SCREEN_WIDTH * 0.5f),
+	CENTER_Y(SCREEN_HEIGHT * 0.5f),
 	mode(nullptr),
 	renderer(nullptr),
 	input(nullptr),

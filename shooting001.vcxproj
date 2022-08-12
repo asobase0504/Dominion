@@ -184,6 +184,7 @@
     <ClInclude Include="bullet.h" />
     <ClInclude Include="character.h" />
     <ClInclude Include="collision.h" />
+    <ClInclude Include="color.h" />
     <ClInclude Include="remains_bullet.h" />
     <ClInclude Include="error_warning.h" />
     <ClInclude Include="file.h" />

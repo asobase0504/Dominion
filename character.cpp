@@ -43,7 +43,6 @@ CCharacter::CCharacter(CObject::TYPE type) :
 //-----------------------------------------
 CCharacter::~CCharacter()
 {
-
 }
 
 //-----------------------------------------

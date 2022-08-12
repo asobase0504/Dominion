@@ -146,7 +146,7 @@ void CRenderer::Update()
 void CRenderer::Draw()
 {
 	// バックバッファ＆Ｚバッファのクリア
-	pD3DDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(100, 100, 255, 255), 1.0f, 0);
+	pD3DDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(0, 0, 0, 255), 1.0f, 0);
 
 	// Direct3Dによる描画の開始
 	if (SUCCEEDED(pD3DDevice->BeginScene()))
