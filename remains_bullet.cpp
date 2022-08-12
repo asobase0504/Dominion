@@ -17,6 +17,7 @@
 // コンストラクタ
 //-----------------------------------------
 CRemaubsBullet::CRemaubsBullet() : 
+	CObject2D(),
 	Parent(nullptr),
 	rotY(0.0f)
 {
@@ -37,7 +38,6 @@ HRESULT CRemaubsBullet::Init()
 {
 	CObject2D::Init();
 	SetTexture(CTexture::TEXTURE::TEXTURE_BULLET);
-	SetPos(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 	SetSize(D3DXVECTOR2(6.0f, 6.0f));
 	return S_OK;
 }
