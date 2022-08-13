@@ -40,9 +40,12 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 
-	// 外部アクセス用
-	const D3DXVECTOR3& GetPos() { return m_pos; }	// 位置の取得
+	// Setter
+	void SetIsDeleted(bool inDeleted) { m_isDeleted = inDeleted; }
 	virtual void SetPos(const D3DXVECTOR3& inPos) { m_pos = inPos; }	// 位置の設定
+
+	// Getter
+	const D3DXVECTOR3& GetPos() { return m_pos; }	// 位置の取得
 	const TYPE GetType() { return m_type; }
 	const bool GetIsDeleted() { return m_isDeleted; }
 

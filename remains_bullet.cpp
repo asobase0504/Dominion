@@ -47,6 +47,7 @@ HRESULT CRemaubsBullet::Init()
 //-----------------------------------------
 void CRemaubsBullet::Uninit()
 {
+	CObject2D::Uninit();
 }
 
 //-----------------------------------------

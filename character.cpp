@@ -62,6 +62,11 @@ HRESULT CCharacter::Init()
 //-----------------------------------------
 void CCharacter::Uninit()
 {
+	for (auto it = m_remainsBulletDisplay.begin(); it != m_remainsBulletDisplay.end(); it++)
+	{
+		(*it)->SetIsDeleted(true);
+	}
+
 	CObject2D::Uninit();
 }
 
@@ -130,7 +135,11 @@ void CCharacter::BulletShot()
 
 	auto Shot = [this](const D3DXVECTOR3& inMove)
 	{
-		CBullet* bullet = CBullet::Create(m_pos, inMove, m_team);
+		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
+		CMap* pMap = game->GetMap();
+		CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
+
+		CBullet* bullet = CBullet::Create(pBlock->GetPos(), inMove, m_team);
 		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
 		m_remainsBulletDisplay[m_remainsBulletCount - 1]->SetColorAlpha(0.0f);
 		m_remainsBulletCount--;
@@ -278,9 +287,31 @@ void CCharacter::ScreenFromOutTime()
 			character->SetBlockIndex(i, m_ofBlockIndex[i]);
 		}
 
+		// 中心の位置がどのブロックに所属しているかチェックする
+		for (int i = 0; i < character->m_ofBlockIndex.size(); i++)
+		{
+			if (character->m_ofBlockIndex[i].empty())
+			{
+				continue;
+			}
+
+			int x = character->m_ofBlockIndex[i][0];
+			int y = character->m_ofBlockIndex[i][1];
+
+			// そのブロックがキャラクターの中心が所属してるブロックがチェック
+			CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
+			CBlock* block = game->GetMap()->GetBlock(x, y);
+			D3DXVECTOR3 blockSize = D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f);	// ブロックの大きさ
+
+			if (Collision::RectangleAndRectangle(m_pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), block->GetPos(), blockSize))
+			{
+				character->m_ofBlockIndexCenter = { x, y };
+			}
+		}
+
 		character->SetController(m_controller);	// 命令者の設定
-		character->isCopied = true;	// コピー済みにする
-		isCopied = true;	// コピー済みにする
+		isCopied = true;			// コピー済みにする
+		character->isCopied = true;	// コピー先をコピー済みにする
 	};
 
 	if (m_pos.x - size.x <= 0.0f)
@@ -345,7 +376,7 @@ void CCharacter::Collision()
 
 		// そのブロックがキャラクターの中心が所属してるブロックがチェック
 		CBlock* block = pMap->GetBlock(x, y);
-		D3DXVECTOR3 blockSize = D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f) * 0.5f;	// ブロックの大きさ
+		D3DXVECTOR3 blockSize = D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f);	// ブロックの大きさ
 
 		if (Collision::RectangleAndRectangle(m_pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), block->GetPos(), blockSize))
 		{

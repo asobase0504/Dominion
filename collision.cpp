@@ -10,16 +10,16 @@ bool Segment(const D3DXVECTOR3& start1, const D3DXVECTOR3& vec1, const D3DXVECTO
 bool RectangleAndRectangle(const D3DXVECTOR3 & pos1, const D3DXVECTOR3 & size1, const D3DXVECTOR3 & pos2, const D3DXVECTOR3 & size2)
 {
 	/* 自身の判定用 */
-	float fLeft = (pos1.x - (size1.x * 0.5f));		//左端
-	float fRight = (pos1.x + (size1.x * 0.5f));		//右端
-	float fTop = (pos1.y + (size1.y * 0.5f));		//上端
-	float fBottom = (pos1.y - (size1.y * 0.5f));	//下端
+	float fLeft = pos1.x - (size1.x * 0.5f);		//左端
+	float fRight = pos1.x + (size1.x * 0.5f);		//右端
+	float fTop = pos1.y + (size1.y * 0.5f);			//上端
+	float fBottom = pos1.y - (size1.y * 0.5f);		//下端
 
 	/* 対象の判定用 */
-	float fLeftTarget = (pos2.x - (size2.x * 0.5f));	//左端
-	float fRightTarget = (pos2.x + (size2.x * 0.5f));	//右端
-	float fTopTarget = (pos2.y + (size2.y * 0.5f));		//上端
-	float fBottomTarget = (pos2.y - (size2.y * 0.5f));	//下端
+	float fLeftTarget = pos2.x - (size2.x * 0.5f);	//左端
+	float fRightTarget = pos2.x + (size2.x * 0.5f);	//右端
+	float fTopTarget = pos2.y + (size2.y * 0.5f);	//上端
+	float fBottomTarget = pos2.y - (size2.y * 0.5f);//下端
 
 	if (fLeft < fRightTarget
 		&& fRight > fLeftTarget
