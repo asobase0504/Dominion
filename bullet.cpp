@@ -246,22 +246,22 @@ void CBullet::SetHitBlock(int x, int y)
 //-----------------------------------------
 void CBullet::ScreenFromOutTime()
 {
-	if (m_pos.x + size.x <= 0.0f - size.x)
+	if (m_pos.x + m_size.x <= 0.0f - m_size.x)
 	{
 		m_pos.x = static_cast<float>(CApplication::GetInstance()->SCREEN_WIDTH);
 		SetPos(m_pos);
 	}
-	if (m_pos.x - size.x >= CApplication::GetInstance()->SCREEN_WIDTH + size.x)
+	if (m_pos.x - m_size.x >= CApplication::GetInstance()->SCREEN_WIDTH + m_size.x)
 	{
 		m_pos.x = 0.0f;
 		SetPos(m_pos);
 	}
-	if (m_pos.y + size.y <= 0.0f - size.y)
+	if (m_pos.y + m_size.y <= 0.0f - m_size.y)
 	{
 		m_pos.y = static_cast<float>(CApplication::GetInstance()->SCREEN_HEIGHT);
 		SetPos(m_pos);
 	}
-	if (m_pos.y - size.y >= CApplication::GetInstance()->SCREEN_HEIGHT + size.y)
+	if (m_pos.y - m_size.y >= CApplication::GetInstance()->SCREEN_HEIGHT + m_size.y)
 	{
 		m_pos.y = 0.0f;
 		SetPos(m_pos);
@@ -286,7 +286,7 @@ void CBullet::HitWithBullet(CBullet* inBullet)
 	D3DXVECTOR3 bulletSize = D3DXVECTOR3(pBullet->GetSize().x, pBullet->GetSize().y, 0.0f) * 0.5f;
 
 	// 自分のサイズ
-	D3DXVECTOR3 mySize = D3DXVECTOR3(size.x, size.y, 0.0f) * 0.5f;
+	D3DXVECTOR3 mySize = D3DXVECTOR3(m_size.x, m_size.y, 0.0f) * 0.5f;
 
 	// プレイヤー上、ブロック下の当たり判定
 	if (Collision::CircleAndCircle(pBullet->GetPos(), D3DXVec3Length(&bulletSize), m_pos, D3DXVec3Length(&mySize)))
@@ -307,7 +307,7 @@ bool CBullet::HitWithBlock(CBlock * inBlock)
 
 	if ((int)m_team == blockType)
 	{
-		if (Collision::RectangleAndRectangle(m_pos, D3DXVECTOR3(size.x, size.y, 0.0f), block->GetPos(), D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f) * 0.5f))
+		if (Collision::RectangleAndRectangle(m_pos, D3DXVECTOR3(m_size.x, m_size.y, 0.0f), block->GetPos(), D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f) * 0.5f))
 		{
 			return true;
 		}
@@ -318,7 +318,7 @@ bool CBullet::HitWithBlock(CBlock * inBlock)
 	D3DXVECTOR3 vec = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	D3DXVECTOR3 pairSize = D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f) * 0.5f;
-	D3DXVECTOR3 mySize = D3DXVECTOR3(size.x, size.y, 0.0f) * 0.5f;
+	D3DXVECTOR3 mySize = D3DXVECTOR3(m_size.x, m_size.y, 0.0f) * 0.5f;
 
 	if (Collision::RectangleTop(block->GetPos(), pairSize, m_pos, mySize, &outpos, NULL, NULL)
 		|| Collision::RectangleLeft(block->GetPos(), pairSize, m_pos, mySize, &outpos, NULL, NULL)

@@ -46,8 +46,8 @@ HRESULT CObject2D::Init()
 
 	VERTEX_2D *pVtx = NULL;		// 頂点情報へのポインタ
 
-	fLength = sqrtf(size.x * size.x + size.y * size.y) * 0.5f;
-	fAngle = atan2f(size.x, size.y);
+	fLength = sqrtf(m_size.x * m_size.x + m_size.y * m_size.y) * 0.5f;
+	fAngle = atan2f(m_size.x, m_size.y);
 
 	// 頂点情報をロックし、頂点情報へのポインタを取得
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
@@ -175,13 +175,16 @@ void CObject2D::SetPos(const D3DXVECTOR3 & inPos)
 //=============================================================================
 void CObject2D::SetSize(const D3DXVECTOR2 & inSize)
 {
-	size = inSize;
-	fLength = sqrtf(size.x * size.x + size.y * size.y) * 0.5f;
-	fAngle = atan2f(size.x, size.y);
+	m_size = inSize;
+	fLength = sqrtf(m_size.x * m_size.x + m_size.y * m_size.y) * 0.5f;
+	fAngle = atan2f(m_size.x, m_size.y);
 
 	SetPos(m_pos);
 }
 
+//=============================================================================
+// 色の設定
+//=============================================================================
 void CObject2D::SetColor(const D3DXCOLOR & inColor)
 {
 	col = inColor;

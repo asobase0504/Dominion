@@ -46,7 +46,7 @@ public:
 	void SetColorAlpha(const float inAlpha);
 	void SetTexture(CTexture::TEXTURE inTex) { m_texture = inTex; }
 
-	const D3DXVECTOR2 GetSize() { return size; }
+	const D3DXVECTOR2 GetSize() { return m_size; }
 private:
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	// VtxBuff
 	CTexture::TEXTURE m_texture;	// テクスチャ
@@ -55,7 +55,7 @@ private:
 	float fAngle;		// 角度
 
 protected:
-	D3DXVECTOR2 size;	// 大きさ
+	D3DXVECTOR2 m_size;	// 大きさ
 	D3DXCOLOR col;		// 色
 };
 

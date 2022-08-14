@@ -133,6 +133,7 @@ void CCharacter::BulletShot()
 		return;
 	}
 
+	// 弾を撃ちだすラムダ式
 	auto Shot = [this](const D3DXVECTOR3& inMove)
 	{
 		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
@@ -279,7 +280,7 @@ void CCharacter::ScreenFromOutTime()
 
 		CCharacter* character = Create(m_team);
 		character->SetPos(inPos);
-		character->SetSize(D3DXVECTOR2(25.0f, 25.0f));		// 大きさの設定
+		character->SetSize(m_size);		// 大きさの設定
 
 		// ブロックの番号登録
 		for (int i = 0; i < m_ofBlockIndex.size();i++)
@@ -314,24 +315,24 @@ void CCharacter::ScreenFromOutTime()
 		character->isCopied = true;	// コピー先をコピー済みにする
 	};
 
-	if (m_pos.x - size.x <= 0.0f)
+	if (m_pos.x - m_size.x <= 0.0f)
 	{
-		D3DXVECTOR3 pos(CApplication::GetInstance()->SCREEN_WIDTH + size.x, m_pos.y, m_pos.z);
+		D3DXVECTOR3 pos(CApplication::GetInstance()->SCREEN_WIDTH + m_size.x, m_pos.y, m_pos.z);
 		Copy(pos);
 	}
-	else if (m_pos.x + size.x >= CApplication::GetInstance()->SCREEN_WIDTH)
+	else if (m_pos.x + m_size.x >= CApplication::GetInstance()->SCREEN_WIDTH)
 	{
-		D3DXVECTOR3 pos(0.0f - size.x, m_pos.y, m_pos.z);
+		D3DXVECTOR3 pos(0.0f - m_size.x, m_pos.y, m_pos.z);
 		Copy(pos);
 	}
-	else if (m_pos.y - size.y <= 0.0f)
+	else if (m_pos.y - m_size.y <= 0.0f)
 	{
-		D3DXVECTOR3 pos(m_pos.x, CApplication::GetInstance()->SCREEN_HEIGHT + size.y, m_pos.z);
+		D3DXVECTOR3 pos(m_pos.x, CApplication::GetInstance()->SCREEN_HEIGHT + m_size.y, m_pos.z);
 		Copy(pos);
 	}
-	else if (m_pos.y + size.y >= CApplication::GetInstance()->SCREEN_HEIGHT)
+	else if (m_pos.y + m_size.y >= CApplication::GetInstance()->SCREEN_HEIGHT)
 	{
-		D3DXVECTOR3 pos(m_pos.x, 0.0f - size.y, m_pos.z);
+		D3DXVECTOR3 pos(m_pos.x, 0.0f - m_size.y, m_pos.z);
 		Copy(pos);
 	}
 	else
@@ -340,10 +341,10 @@ void CCharacter::ScreenFromOutTime()
 	}
 
 	float dist = 0.001f;	// 消える場所と出現位置をずらすための値
-	if (m_pos.x + size.x + dist <= 0.0f - size.x ||
-		m_pos.y + size.y + dist <= 0.0f - size.y ||
-		m_pos.x - size.x - dist >= CApplication::GetInstance()->SCREEN_WIDTH + size.x ||
-		m_pos.y - size.y - dist >= CApplication::GetInstance()->SCREEN_HEIGHT + size.y)
+	if (m_pos.x + m_size.x + dist <= 0.0f - m_size.x ||
+		m_pos.y + m_size.y + dist <= 0.0f - m_size.y ||
+		m_pos.x - m_size.x - dist >= CApplication::GetInstance()->SCREEN_WIDTH + m_size.x ||
+		m_pos.y - m_size.y - dist >= CApplication::GetInstance()->SCREEN_HEIGHT + m_size.y)
 	{
 		// 自身の削除
 		m_isDeleted = true;
@@ -459,7 +460,7 @@ bool CCharacter::HitWithBlock(CBlock* inBlock)
 	// 自分と同じ所属だった場合
 	if ((int)m_team == blockType)
 	{
-		if (Collision::RectangleAndRectangle(m_pos, D3DXVECTOR3(size.x, size.y, 0.0f), block->GetPos(), blockSize))
+		if (Collision::RectangleAndRectangle(m_pos, D3DXVECTOR3(m_size.x, m_size.y, 0.0f), block->GetPos(), blockSize))
 		{
 			return true;
 		}
@@ -474,9 +475,9 @@ bool CCharacter::HitWithBlock(CBlock* inBlock)
 	if (m_move.y > 0.0f)
 	{
 		// プレイヤー上、ブロック下の当たり判定
-		if (Collision::RectangleTop(block->GetPos(), blockSize, m_pos, D3DXVECTOR3(size.x, size.y, 0.0f) * 0.5f, &outpos, NULL, NULL))
+		if (Collision::RectangleTop(block->GetPos(), blockSize, m_pos, D3DXVECTOR3(m_size.x, m_size.y, 0.0f) * 0.5f, &outpos, NULL, NULL))
 		{
-			dist = (size.y) * 0.5f + (m_pos.y - outpos.y);	// 差分
+			dist = (m_size.y) * 0.5f + (m_pos.y - outpos.y);	// 差分
 			m_pos.y -= dist + dist * 0.0001f;	// 位置の設定
 			CObject2D::SetPos(m_pos);		// 位置の反映
 		}
@@ -484,9 +485,9 @@ bool CCharacter::HitWithBlock(CBlock* inBlock)
 	if (m_move.x > 0.0f)
 	{
 		// プレイヤー右、ブロック左の当たり判定
-		if (Collision::RectangleLeft(block->GetPos(), blockSize, m_pos, D3DXVECTOR3(size.x, size.y, 0.0f) * 0.5f, &outpos, NULL, NULL))
+		if (Collision::RectangleLeft(block->GetPos(), blockSize, m_pos, D3DXVECTOR3(m_size.x, m_size.y, 0.0f) * 0.5f, &outpos, NULL, NULL))
 		{
-			dist = (size.x) * 0.5f + (m_pos.x - outpos.x);	// 差分
+			dist = (m_size.x) * 0.5f + (m_pos.x - outpos.x);	// 差分
 			m_pos.x -= dist + dist * 0.0001f;	// 位置の設定
 			CObject2D::SetPos(m_pos);		// 位置の反映
 		}
@@ -494,9 +495,9 @@ bool CCharacter::HitWithBlock(CBlock* inBlock)
 	if (m_move.x < 0.0f)
 	{
 		// プレイヤー左、ブロック右の当たり判定
-		if (Collision::RectangleRight(block->GetPos(), blockSize, m_pos, D3DXVECTOR3(size.x, size.y, 0.0f) * 0.5f, &outpos, NULL, NULL))
+		if (Collision::RectangleRight(block->GetPos(), blockSize, m_pos, D3DXVECTOR3(m_size.x, m_size.y, 0.0f) * 0.5f, &outpos, NULL, NULL))
 		{
-			dist = (-size.x) * 0.5f + (m_pos.x - outpos.x);	// 差分
+			dist = (-m_size.x) * 0.5f + (m_pos.x - outpos.x);	// 差分
 			m_pos.x -= dist + dist * 0.0001f;	// 位置の設定
 			CObject2D::SetPos(m_pos);		// 位置の反映
 		}
@@ -504,9 +505,9 @@ bool CCharacter::HitWithBlock(CBlock* inBlock)
 	if (m_move.y < 0.0f)
 	{
 		// プレイヤー下、ブロック上の当たり判定
-		if (Collision::RectangleDown(block->GetPos(), blockSize, m_pos, D3DXVECTOR3(size.x, size.y, 0.0f) * 0.5f, &outpos, NULL, NULL))
+		if (Collision::RectangleDown(block->GetPos(), blockSize, m_pos, D3DXVECTOR3(m_size.x, m_size.y, 0.0f) * 0.5f, &outpos, NULL, NULL))
 		{
-			dist = (-size.y) * 0.5f + (m_pos.y - outpos.y);	// 差分
+			dist = (-m_size.y) * 0.5f + (m_pos.y - outpos.y);	// 差分
 			m_pos.y -= dist + dist * 0.0001f;	// 位置の設定
 			CObject2D::SetPos(m_pos);		// 位置の反映
 		}
