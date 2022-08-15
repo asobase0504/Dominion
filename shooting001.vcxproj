@@ -205,6 +205,7 @@
     <ClInclude Include="title.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="data\FILE\color.json" />
     <None Include="data\FILE\STAGE\stage01.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -90,10 +90,10 @@ CRemaubsBullet* CRemaubsBullet::Create(CCharacter* inPerent, float inRotY)
 	switch (renaubsBullet->Parent->GetTeam())
 	{
 	case TEAM_00:
-		renaubsBullet->SetColor(CApplication::GetInstance()->GetColor(1));
+		renaubsBullet->SetColor(CApplication::GetInstance()->GetColor(0));
 		break;
 	case TEAM_01:
-		renaubsBullet->SetColor(CApplication::GetInstance()->GetColor(2));
+		renaubsBullet->SetColor(CApplication::GetInstance()->GetColor(1));
 		break;
 	default:
 		break;

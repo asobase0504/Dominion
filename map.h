@@ -25,7 +25,6 @@ class CMap
 {
 public:
 	static float BLOCK_SIZE;		// ブロックのサイズ
-	static const char* FILE_NAME;	// マップファイル名
 	static const float X_CENTER;	// マップを中央に配置するため(X軸)
 	static const float Y_CENTER;	// マップを中央に配置するため(Y軸)
 

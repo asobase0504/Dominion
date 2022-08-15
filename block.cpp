@@ -9,6 +9,7 @@
 //--------------------------------------------------
 #include "block.h"
 #include "character.h"
+#include "bullet.h"
 #include "application.h"
 // デバッグ
 #include <assert.h>
@@ -85,10 +86,10 @@ CBlock* CBlock::Create(CBlock::BLOCK_TYPE type)
 		block->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
 		break;
 	case BLOCK_TYPE::BLOCK_01:
-		block->SetColor(CApplication::GetInstance()->GetColor(1));
+		block->SetColor(CApplication::GetInstance()->GetColor(0));
 		break;
 	case BLOCK_TYPE::BLOCK_02:
-		block->SetColor(CApplication::GetInstance()->GetColor(2));
+		block->SetColor(CApplication::GetInstance()->GetColor(1));
 		break;
 	default:
 		break;
@@ -108,11 +109,11 @@ void CBlock::ChangeType()
 		break;
 	case BLOCK_TYPE::BLOCK_01:
 		m_team = BLOCK_TYPE::BLOCK_02;
-		SetColor(CApplication::GetInstance()->GetColor(2));
+		SetColor(CApplication::GetInstance()->GetColor(1));
 		break;
 	case BLOCK_TYPE::BLOCK_02:
 		m_team = BLOCK_TYPE::BLOCK_01;
-		SetColor(CApplication::GetInstance()->GetColor(1));
+		SetColor(CApplication::GetInstance()->GetColor(0));
 		break;
 	default:
 		MessageBox(NULL, TEXT("想定外の列挙型を検出。"), TEXT("swith文の条件式"), MB_ICONHAND);
@@ -150,15 +151,25 @@ void CBlock::ResurveyRidingObject()
 				it = ridingObject.erase(it);
 				continue;
 			}
-			break;
 		}
+		break;
 		case CObject::TYPE::BULLET:
+		{
+			CBullet* bullet = (CBullet*)(*it);	// イテレータを弾に変換。
+
+			if (!bullet->HitWithBlock(this))
+			{ // 当たってない場合
+			  // 乗ってるオブジェクトを動的配列から削除
+				it = ridingObject.erase(it);
+				continue;
+			}
+		}
 			break;
 		default:
 			break;
 		}
 
-		// 一度も削除されなければ、
+		// 削除しない場合
 		it++;
 	}
 }

@@ -37,7 +37,6 @@ public:
 	bool HitWithBlock(CBlock* inBlock);
 private: // プライベート関数
 	void Collision();
-	void SetHitBlock(int x, int y);
 	void ScreenFromOutTime();
 	void HitWithBullet(CBullet* inBullet);
 private:

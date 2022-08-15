@@ -104,10 +104,10 @@ void CBullet::SetTeam(const CCharacter::TEAM inTeam)
 	switch (m_team)
 	{
 	case CCharacter::TEAM_00:
-		CObject2D::SetColor(CApplication::GetInstance()->GetColor(2));	// 色の設定
+		CObject2D::SetColor(CApplication::GetInstance()->GetColor(1));	// 色の設定
 		break;
 	case CCharacter::TEAM_01:
-		CObject2D::SetColor(CApplication::GetInstance()->GetColor(1));	// 色の設定
+		CObject2D::SetColor(CApplication::GetInstance()->GetColor(0));	// 色の設定
 		break;
 	default:
 		break;
@@ -235,13 +235,6 @@ void CBullet::Collision()
 			HitWithBullet((CBullet*)(*it));
 		}
 	}
-}
-
-//------------------------------------------------------------------
-// ブロックとの当たり判定呼び出しと、乗ってるブロックの設定
-//------------------------------------------------------------------
-void CBullet::SetHitBlock(int x, int y)
-{
 }
 
 //-----------------------------------------

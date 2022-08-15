@@ -8,6 +8,7 @@
 // include
 //-----------------------------------------------------------------------------
 #include "color.h"
+#include "file.h"
 
 //-----------------------------------------------------------------------------
 // コンストラクタ
@@ -28,20 +29,35 @@ CColor::~CColor()
 //-----------------------------------------------------------------------------
 HRESULT CColor::Init()
 {
-	//m_color.insert(std::make_pair(1, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)));
-	//m_color.insert(std::make_pair(2, D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f)));
-	//m_color.insert(std::make_pair(3, D3DXCOLOR(0.45f, 0.45f, 0.9f, 1.0f)));
-	//m_color.insert(std::make_pair(4, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)));
+	nlohmann::json colorFile = LoadJsonStage(L"data/FILE/color.json");
 
-	m_color.insert(std::make_pair(1, D3DXCOLOR(1.0f, 0.9f, 0.2f, 1.0f)));
-	m_color.insert(std::make_pair(2, D3DXCOLOR(0.8f, 0.2f, 1.0f, 1.0f)));
-	m_color.insert(std::make_pair(3, D3DXCOLOR(0.1f, 0.3f, 0.3f, 1.0f)));
-	m_color.insert(std::make_pair(4, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)));
+	// jsonのコンテナをD3DXCOLORに変換する
+	auto VectorToD3DXCOLOR = [this, &colorFile](int inIndex, int inColor)
+	{
+		// 指定番号に値が存在しているか否か
+		if (colorFile["TYPE"].size() < inIndex || 0 > inIndex)
+		{ // 指定番号に値が存在しない
+			return D3DXCOLOR(1.0f,1.0f,1.0f,1.0f);
+		}
 
-	//m_color.insert(std::make_pair(1, D3DXCOLOR(1.0f, 0.9f, 0.9f, 1.0f)));
-	//m_color.insert(std::make_pair(2, D3DXCOLOR(0.0f, 0.0f, 0.1f, 1.0f)));
-	//m_color.insert(std::make_pair(3, D3DXCOLOR(0.45f, 0.45f, 0.9f, 1.0f)));
-	//m_color.insert(std::make_pair(4, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)));
+		D3DXCOLOR color;
+
+		color.r = colorFile["TYPE"].at(inIndex)["COLOR"].at(inColor)[0];	// 赤色の設定
+		color.g = colorFile["TYPE"].at(inIndex)["COLOR"].at(inColor)[1];	// 緑色の設定
+		color.b = colorFile["TYPE"].at(inIndex)["COLOR"].at(inColor)[2];	// 青色の設定
+		color.a = colorFile["TYPE"].at(inIndex)["COLOR"].at(inColor)[3];	// 透明色の設定
+		return color;
+	};
+
+	
+	int index = -1;
+
+	// 色の代入
+	m_color.insert(std::make_pair(0, VectorToD3DXCOLOR(index,0)));	// メイン色1
+	m_color.insert(std::make_pair(1, VectorToD3DXCOLOR(index,1)));	// メイン色2
+	m_color.insert(std::make_pair(2, VectorToD3DXCOLOR(index,2)));	// 背景色
+	m_color.insert(std::make_pair(3, VectorToD3DXCOLOR(index,3)));	// サブ色
+
 	return S_OK;
 }
 
