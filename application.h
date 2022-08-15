@@ -9,7 +9,6 @@
 
 #include <d3dx9.h>
 #include <vector>
-#include <string>
 
 //-----------------------------------------
 // ‘O•ûéŒ¾
@@ -64,7 +63,7 @@ public:	// ƒƒ“ƒo[ŠÖ”
 	CDirectInput* GetDirectInput() { return directInput; }
 	CTexture* GetTextureClass() { return texture; }
 	CMode* GetMode() { return mode; }
-	D3DXCOLOR GetColor(std::string inKey);
+	D3DXCOLOR GetColor(int inKey);
 
 	// Setter
 	void SetMode(MODE_TYPE inType);

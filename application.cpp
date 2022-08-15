@@ -197,7 +197,10 @@ void CApplication::Draw()
 	renderer->Draw();
 }
 
-D3DXCOLOR CApplication::GetColor(std::string inKey)
+//-----------------------------------------------------------------------------
+// F‚ÌŽæ“¾
+//-----------------------------------------------------------------------------
+D3DXCOLOR CApplication::GetColor(int inKey)
 {
 	return color->GetColor(inKey);
 }
