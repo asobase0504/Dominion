@@ -4,25 +4,18 @@
 // Author YudaKaito
 // 
 //=========================================
-#ifndef _APPLICATION_H_
-#define _APPLICATION_H_
+#ifndef _COLOR_H_
+#define _COLOR_H_
 
 #include <d3dx9.h>
+#include <map>
+#include <string>
 
 //-----------------------------------------
 // 色管理クラス
 //-----------------------------------------
 class CColor
 {
-public:
-	enum class COLOR_CONFIG
-	{
-		COLOR_0 = 0,
-		COLOR_1,
-		COLOR_2,
-		MAX
-	};
-
 public:	// メンバー関数
 	CColor();
 	~CColor();
@@ -33,12 +26,12 @@ public:	// メンバー関数
 	void Draw();
 
 	// Getter
-	D3DXCOLOR GetColor(COLOR_CONFIG inConfig);
+	D3DXCOLOR GetColor(std::string inConfig);
 
 	// Setter
 
 private: // 動的メンバー変数
-	D3DXCOLOR color;
+	std::map<std::string, D3DXCOLOR> m_color;
 };
 
-#endif // !_APPLICATION_H_
+#endif // !_COLOR_H_

@@ -104,10 +104,10 @@ void CBullet::SetTeam(const CCharacter::TEAM inTeam)
 	switch (m_team)
 	{
 	case CCharacter::TEAM_00:
-		CObject2D::SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));		// 位置の設定
+		CObject2D::SetColor(CApplication::GetInstance()->GetColor("COLOR2"));	// 色の設定
 		break;
 	case CCharacter::TEAM_01:
-		CObject2D::SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));		// 位置の設定
+		CObject2D::SetColor(CApplication::GetInstance()->GetColor("COLOR1"));	// 色の設定
 		break;
 	default:
 		break;
@@ -174,7 +174,7 @@ void CBullet::Collision()
 		}
 	};
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < m_ofBlockIndex.size(); i++)
 	{
 		if (m_ofBlockIndex[i].empty())
 		{
@@ -189,34 +189,37 @@ void CBullet::Collision()
 		int TopY = m_ofBlockIndex[i][1] - 1;	// Y軸の上側
 		int BottomY = m_ofBlockIndex[i][1] + 1;	// Y軸の下側
 
+		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
+		CMap* pMap = game->GetMap();
+
 		// ブロック端の場合の処理
 		if (LeftX < 0)
 		{
-			LeftX = 31;
+			LeftX = pMap->GetMaxXBlock() - 1;
 		}
-		if (RightX > 31)
+		if (RightX > pMap->GetMaxXBlock() - 1)
 		{
 			RightX = 0;
 		}
 		if (TopY < 0)
 		{
-			TopY = 17;
+			TopY = pMap->GetMaxYBlock() - 1;
 		}
-		if (BottomY > 17)
+		if (BottomY > pMap->GetMaxYBlock() - 1)
 		{
 			BottomY = 0;
 		}
 
 		// ブロックの当たり判定
-		HitBlock(LeftX, TopY);			// 左上
-		HitBlock(CenterX, TopY);			// 上
-		HitBlock(RightX, TopY);			// 右上
-		HitBlock(LeftX, CenterY);		// 左真ん中
-		HitBlock(CenterX, CenterY);		// 真ん中
-		HitBlock(RightX, CenterY);		// 右真ん中
-		HitBlock(LeftX, BottomY);		// 左下
-		HitBlock(CenterX, BottomY);		// 下
-		HitBlock(RightX, BottomY);		// 右下
+		HitBlock(LeftX, TopY);		// 左上
+		HitBlock(CenterX, TopY);	// 上
+		HitBlock(RightX, TopY);		// 右上
+		HitBlock(LeftX, CenterY);	// 左真ん中
+		HitBlock(CenterX, CenterY);	// 真ん中
+		HitBlock(RightX, CenterY);	// 右真ん中
+		HitBlock(LeftX, BottomY);	// 左下
+		HitBlock(CenterX, BottomY);	// 下
+		HitBlock(RightX, BottomY);	// 右下
 	}
 
 	// オブジェクト全体を取得

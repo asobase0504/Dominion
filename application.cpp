@@ -12,6 +12,7 @@
 #include "input_keybord.h"
 #include "input_directinput.h"
 #include "renderer.h"
+#include "color.h"
 #include "texture.h"
 #include "object2d.h"
 #include "title.h"
@@ -48,7 +49,8 @@ CApplication::CApplication() :
 	input(nullptr),
 	directInput(nullptr),
 	texture(nullptr),
-	object(nullptr)
+	object(nullptr),
+	color(nullptr)
 {
 }
 
@@ -63,6 +65,7 @@ CApplication::~CApplication()
 	assert(directInput == nullptr);
 	assert(texture == nullptr);
 	assert(object == nullptr);
+	assert(color == nullptr);
 }
 
 //=============================================================================
@@ -82,6 +85,13 @@ HRESULT CApplication::Init(HWND hWnd, HINSTANCE hInstance)
 	//{
 	//	return E_FAIL;
 	//}
+
+	// 色管理クラス
+	color = new CColor;
+	if (FAILED(color->Init()))
+	{
+		return E_FAIL;
+	}
 
 	// レンダリングクラス
 	renderer = new CRenderer;
@@ -123,6 +133,13 @@ void CApplication::Uninit()
 	{
 		delete texture;
 		texture = nullptr;
+	}
+
+	// 色管理の解放
+	if (color != nullptr)
+	{
+		delete color;
+		color = nullptr;
 	}
 
 	// 入力処理の解放
@@ -178,6 +195,11 @@ void CApplication::Update()
 void CApplication::Draw()
 {
 	renderer->Draw();
+}
+
+D3DXCOLOR CApplication::GetColor(std::string inKey)
+{
+	return color->GetColor(inKey);
 }
 
 void CApplication::SetMode(MODE_TYPE inType)

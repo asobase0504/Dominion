@@ -52,7 +52,7 @@ HRESULT CGame::Init()
 		D3DXVECTOR3 pos(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y, 0.0f);	// 位置の取得
 		bg->SetTexture(CTexture::TEXTURE::TEXTERE_BG);
 		bg->SetPos(pos);
-		bg->SetColor(D3DXCOLOR(0.45f, 0.45f, 0.9f, 1.0f));
+		bg->SetColor(CApplication::GetInstance()->GetColor("COLOR3"));
 	}
 
 	// マップクラス

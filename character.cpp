@@ -185,10 +185,10 @@ void CCharacter::SetTeam(const TEAM inTeam)
 	switch (m_team)
 	{
 	case TEAM_00:
-		CObject2D::SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));	// 色の設定
+		CObject2D::SetColor(CApplication::GetInstance()->GetColor("COLOR2"));	// 色の設定
 		break;
 	case TEAM_01:
-		CObject2D::SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));	// 色の設定
+		CObject2D::SetColor(CApplication::GetInstance()->GetColor("COLOR1"));	// 色の設定
 		break;
 	default:
 		break;

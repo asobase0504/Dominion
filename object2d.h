@@ -54,9 +54,10 @@ private:
 	float fLength;		// í∑Ç≥
 	float fAngle;		// äpìx
 
+
 protected:
 	D3DXVECTOR2 m_size;	// ëÂÇ´Ç≥
-	D3DXCOLOR col;		// êF
+	D3DXCOLOR m_col;		// êF
 };
 
 #endif // !_OBJECT2D_H_

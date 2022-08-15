@@ -9,18 +9,18 @@
 
 #include <d3dx9.h>
 #include <vector>
+#include <string>
 
 //-----------------------------------------
 // 前方宣言
 //-----------------------------------------
 class CRenderer;
 class CObject;
-class CCharacter;
 class CInputKeybord;
 class CDirectInput;
 class CTexture;
-class CMap;
 class CMode;
+class CColor;
 
 //-----------------------------------------
 // アプリケーションクラス
@@ -64,6 +64,7 @@ public:	// メンバー関数
 	CDirectInput* GetDirectInput() { return directInput; }
 	CTexture* GetTextureClass() { return texture; }
 	CMode* GetMode() { return mode; }
+	D3DXCOLOR GetColor(std::string inKey);
 
 	// Setter
 	void SetMode(MODE_TYPE inType);
@@ -75,6 +76,7 @@ private: // 動的メンバー変数
 	CDirectInput* directInput;
 	CTexture* texture;
 	CObject* object;
+	CColor* color;
 };
 
 #endif // !_APPLICATION_H_

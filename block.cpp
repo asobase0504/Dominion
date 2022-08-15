@@ -9,6 +9,7 @@
 //--------------------------------------------------
 #include "block.h"
 #include "character.h"
+#include "application.h"
 // デバッグ
 #include <assert.h>
 
@@ -81,13 +82,13 @@ CBlock* CBlock::Create(CBlock::BLOCK_TYPE type)
 	switch (type)
 	{
 	case BLOCK_TYPE::NONE:
-		block->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+		block->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
 		break;
 	case BLOCK_TYPE::BLOCK_01:
-		block->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		block->SetColor(CApplication::GetInstance()->GetColor("COLOR1"));
 		break;
 	case BLOCK_TYPE::BLOCK_02:
-		block->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+		block->SetColor(CApplication::GetInstance()->GetColor("COLOR2"));
 		break;
 	default:
 		break;
@@ -107,11 +108,11 @@ void CBlock::ChangeType()
 		break;
 	case BLOCK_TYPE::BLOCK_01:
 		m_team = BLOCK_TYPE::BLOCK_02;
-		SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f));
+		SetColor(CApplication::GetInstance()->GetColor("COLOR2"));
 		break;
 	case BLOCK_TYPE::BLOCK_02:
 		m_team = BLOCK_TYPE::BLOCK_01;
-		SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		SetColor(CApplication::GetInstance()->GetColor("COLOR1"));
 		break;
 	default:
 		MessageBox(NULL, TEXT("想定外の列挙型を検出。"), TEXT("swith文の条件式"), MB_ICONHAND);

@@ -158,6 +158,7 @@
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="character.cpp" />
     <ClCompile Include="collision.cpp" />
+    <ClCompile Include="color.cpp" />
     <ClCompile Include="remains_bullet.cpp" />
     <ClCompile Include="error_warning.cpp" />
     <ClCompile Include="file.cpp" />
