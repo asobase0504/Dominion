@@ -73,7 +73,8 @@ HRESULT CGame::Init()
 		int y = stage["PLAYERS"].at(inIdx)["SPAWN"].at(1);				// Yの位置番号を取得
 		CCharacter::TEAM inTeam = stage["PLAYERS"].at(inIdx)["TYPE"];	// チームの作成
 		character.push_back(CCharacter::Create(inTeam));				// 生成
-		character.at(inIdx)->SetSize(D3DXVECTOR2(25.0f, 25.0f));		// 大きさの設定
+		float size = map->GetBlockSize() * 0.70f;
+		character.at(inIdx)->SetSize(D3DXVECTOR2(size, size));			// 大きさの設定
 		D3DXVECTOR3 pos = map->GetBlock(x, y)->GetPos();				// 位置の取得
 		character.at(inIdx)->SetPos(pos);								// 位置の設定
 		character.at(inIdx)->SetBlockIndex(0, { x,y });					// 所属ブロックを設定
