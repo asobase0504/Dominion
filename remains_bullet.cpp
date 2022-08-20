@@ -61,7 +61,7 @@ void CRemaubsBullet::Update()
 		rotY = 0.0f;
 	}
 
-	SetPos(D3DXVECTOR3(Parent->GetPos().x + sinf(rotY) * 8.5f, Parent->GetPos().y + cosf(rotY) * 8.5f,0.0f));
+	SetPos(D3DXVECTOR3(Parent->GetPos().x + sinf(rotY) * 8.0f, Parent->GetPos().y + cosf(rotY) * 8.0f,0.0f));
 }
 
 //-----------------------------------------

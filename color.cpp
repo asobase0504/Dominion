@@ -54,10 +54,10 @@ HRESULT CColor::Init()
 	};
 
 	// 色の代入
-	m_color.insert(std::make_pair(0, VectorToD3DXCOLOR(0,0)));	// メイン色1
-	m_color.insert(std::make_pair(1, VectorToD3DXCOLOR(0,1)));	// メイン色2
-	m_color.insert(std::make_pair(2, VectorToD3DXCOLOR(0,2)));	// 背景色
-	m_color.insert(std::make_pair(3, VectorToD3DXCOLOR(0,3)));	// サブ色
+	m_color.insert(std::make_pair(0, VectorToD3DXCOLOR(2,0)));	// メイン色1
+	m_color.insert(std::make_pair(1, VectorToD3DXCOLOR(2,1)));	// メイン色2
+	m_color.insert(std::make_pair(2, VectorToD3DXCOLOR(2,2)));	// 背景色
+	m_color.insert(std::make_pair(3, VectorToD3DXCOLOR(2,3)));	// サブ色
 
 	return S_OK;
 }
