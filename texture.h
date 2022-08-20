@@ -11,6 +11,8 @@
 // インクルード
 //==================================================
 #include <d3dx9.h>
+#include <map>
+#include <string>
 
 //==================================================
 // 定義
@@ -43,6 +45,7 @@ public: /* メンバ関数 */
 	LPDIRECT3DTEXTURE9 GetTexture(TEXTURE inTexture);	// 情報の取得
 
 private: /* メンバ変数 */
+	std::map<std::string, LPDIRECT3DTEXTURE9, std::less<>> m_texture;
 	LPDIRECT3DTEXTURE9 s_pTexture[TEXTURE_MAX];	// テクスチャの情報
 };
 

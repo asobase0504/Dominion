@@ -113,6 +113,9 @@
     <ClCompile Include="color.cpp">
       <Filter>ソース ファイル\00_Main</Filter>
     </ClCompile>
+    <ClCompile Include="A-Star.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="input.h">
@@ -187,12 +190,18 @@
     <ClInclude Include="color.h">
       <Filter>ソース ファイル\00_Main</Filter>
     </ClInclude>
+    <ClInclude Include="A-Star.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\FILE\STAGE\stage01.json">
       <Filter>FIle</Filter>
     </None>
     <None Include="data\FILE\color.json">
+      <Filter>FIle</Filter>
+    </None>
+    <None Include="data\FILE\texture.json">
       <Filter>FIle</Filter>
     </None>
   </ItemGroup>

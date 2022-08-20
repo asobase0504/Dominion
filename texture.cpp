@@ -11,6 +11,7 @@
 #include "application.h"
 #include "renderer.h"
 #include "texture.h"
+#include "file.h"
 
 #include <assert.h>
 
@@ -47,6 +48,8 @@ CTexture::~CTexture()
 //--------------------------------------------------
 void CTexture::LoadAll()
 {
+	LoadJsonStage(L"data/FILE/");
+
 	// デバイスへのポインタの取得
 	LPDIRECT3DDEVICE9 pDevice = CApplication::GetInstance()->GetRenderer()->GetDevice();
 	

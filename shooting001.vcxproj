@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="A-Star.cpp" />
     <ClCompile Include="AI_controller.cpp" />
     <ClCompile Include="application.cpp" />
     <ClCompile Include="block.cpp" />
@@ -179,6 +180,7 @@
     <ClCompile Include="title.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="A-Star.h" />
     <ClInclude Include="AI_controller.h" />
     <ClInclude Include="application.h" />
     <ClInclude Include="block.h" />
@@ -207,6 +209,7 @@
   <ItemGroup>
     <None Include="data\FILE\color.json" />
     <None Include="data\FILE\STAGE\stage01.json" />
+    <None Include="data\FILE\texture.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
