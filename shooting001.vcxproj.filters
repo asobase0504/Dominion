@@ -110,11 +110,11 @@
     <ClCompile Include="controller.cpp">
       <Filter>ソース ファイル\03_Cpntroller</Filter>
     </ClCompile>
-    <ClCompile Include="color.cpp">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClCompile>
     <ClCompile Include="A-Star.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="theme_color.cpp">
+      <Filter>ソース ファイル\00_Main</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -187,11 +187,11 @@
     <ClInclude Include="controller.h">
       <Filter>ソース ファイル\03_Cpntroller</Filter>
     </ClInclude>
-    <ClInclude Include="color.h">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClInclude>
     <ClInclude Include="A-Star.h">
       <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="theme_color.h">
+      <Filter>ソース ファイル\00_Main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

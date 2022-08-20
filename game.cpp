@@ -43,6 +43,8 @@ CGame::~CGame()
 //-----------------------------------------------------------------------------
 HRESULT CGame::Init()
 {
+	CApplication::GetInstance()->SetThemeColor(2);
+
 	stage = LoadJsonStage(L"data/FILE/STAGE/stage01.json");
 
 	// ”wŒi‚Ìİ’è

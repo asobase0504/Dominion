@@ -4,8 +4,8 @@
 // Author YudaKaito
 // 
 //=============================================================================
-#ifndef _COLOR_H_
-#define _COLOR_H_
+#ifndef _THEME_COLOR_H_
+#define _THEME_COLOR_H_
 
 #include <d3dx9.h>
 #include <map>
@@ -14,11 +14,11 @@
 //-----------------------------------------------------------------------------
 // 色管理クラス
 //-----------------------------------------------------------------------------
-class CColor
+class CThemeColor
 {
 public:	// メンバー関数
-	CColor();
-	~CColor();
+	CThemeColor();
+	~CThemeColor();
 
 	HRESULT Init();
 	void Uninit();
@@ -29,6 +29,7 @@ public:	// メンバー関数
 	D3DXCOLOR GetColor(int inConfig);
 
 	// Setter
+	void SetTheme(int idx);
 
 private: // 動的メンバー変数
 	std::map<int, D3DXCOLOR> m_color;

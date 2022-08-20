@@ -19,7 +19,7 @@ class CInputKeybord;
 class CDirectInput;
 class CTexture;
 class CMode;
-class CColor;
+class CThemeColor;
 
 //-----------------------------------------
 // アプリケーションクラス
@@ -67,6 +67,7 @@ public:	// メンバー関数
 
 	// Setter
 	void SetMode(MODE_TYPE inType);
+	void SetThemeColor(int idx);
 
 private: // 動的メンバー変数
 	CMode* mode;
@@ -75,7 +76,7 @@ private: // 動的メンバー変数
 	CDirectInput* directInput;
 	CTexture* texture;
 	CObject* object;
-	CColor* color;
+	CThemeColor* color;
 };
 
 #endif // !_APPLICATION_H_

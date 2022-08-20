@@ -2,6 +2,7 @@
 // 
 // texture.cpp
 // Author  : katsuki mizuki
+// Author  : Yuda Kaito
 // 
 //**************************************************
 
@@ -15,25 +16,11 @@
 
 #include <assert.h>
 
-//==================================================
-// 定義
-//==================================================
-const char* CTexture::s_FileName[] =
-{// テクスチャのパス
-	"data/TEXTURE/player.png",	// プレイヤー
-	"data/TEXTURE/Block.png",	// ブロック
-	"data/TEXTURE/Bullet.png",	// 残弾
-	"data/TEXTURE/bg.png",	// 残弾
-};
-
-static_assert(sizeof(CTexture::s_FileName) / sizeof(CTexture::s_FileName[0]) == CTexture::TEXTURE_MAX, "aho");
-
 //--------------------------------------------------
 // デフォルトコンストラクタ
 //--------------------------------------------------
 CTexture::CTexture()
 {
-	memset(s_pTexture, 0, sizeof(s_pTexture));
 }
 
 //--------------------------------------------------
@@ -52,30 +39,52 @@ void CTexture::LoadAll()
 	
 	for (int i = 0; i < list["TEXTURE"].size(); ++i)
 	{
-		if (s_pTexture[i] != nullptr)
-		{// テクスチャの読み込みがされている
-			continue;
-		}
-
-		LoadInVector(list["TEXTURE"].at(i));
+		Load(list["TEXTURE"].at(i));
 	}
 }
 
 //--------------------------------------------------
 // 読み込み
 //--------------------------------------------------
-void CTexture::LoadInVector(std::vector<std::string> inTexture)
+void CTexture::Load(std::string inKey, std::string inFileName)
 {
 	LPDIRECT3DDEVICE9 pDevice = CApplication::GetInstance()->GetRenderer()->GetDevice();
-
-	std::string fileName = inTexture[1];
-
 	LPDIRECT3DTEXTURE9 texture;
+	std::string fileName = inFileName;
 
 	// テクスチャの読み込み
 	D3DXCreateTextureFromFile(pDevice, &fileName.front(), &texture);
 
-	m_texture.insert(std::make_pair(inTexture[0], texture));
+	if (!ExistsKey(inKey))
+	{
+		m_texture.insert(std::make_pair(inKey, texture));
+	}
+	else
+	{
+		m_texture[inKey] = texture;
+	}
+}
+
+//--------------------------------------------------
+// 読み込み
+//--------------------------------------------------
+void CTexture::Load(std::vector<std::string> inTexture)
+{
+	LPDIRECT3DDEVICE9 pDevice = CApplication::GetInstance()->GetRenderer()->GetDevice();
+	LPDIRECT3DTEXTURE9 texture;
+	std::string fileName = inTexture[1];
+
+	// テクスチャの読み込み
+	D3DXCreateTextureFromFile(pDevice, &fileName.front(), &texture);
+
+	if (!ExistsKey(inTexture[0]))
+	{
+		m_texture.insert(std::make_pair(inTexture[0], texture));
+	}
+	else
+	{
+		m_texture[inTexture[0]] = texture;
+	}
 }
 
 //--------------------------------------------------
@@ -83,34 +92,30 @@ void CTexture::LoadInVector(std::vector<std::string> inTexture)
 //--------------------------------------------------
 void CTexture::UnloadAll(void)
 {
-	for (int i = 0; i < TEXTURE_MAX; ++i)
-	{
-		if (s_pTexture[i] != nullptr)
-		{// テクスチャの解放
-			s_pTexture[i]->Release();
-			s_pTexture[i] = nullptr;
-		}
-	}
+	m_texture.clear();
 }
 
 //--------------------------------------------------
 // 解放
 //--------------------------------------------------
-void CTexture::Unload(TEXTURE inTexture)
+void CTexture::Unload(std::string inKey)
 {
-	assert(inTexture >= 0 && inTexture < TEXTURE_MAX);
-
-	if (s_pTexture[inTexture] != nullptr)
-	{// テクスチャの解放
-		s_pTexture[inTexture]->Release();
-		s_pTexture[inTexture] = nullptr;
-	}
+	m_texture.erase(inKey);
 }
 
 //--------------------------------------------------
 // 取得
 //--------------------------------------------------
-LPDIRECT3DTEXTURE9 CTexture::GetTexture(std::string inTexture)
+LPDIRECT3DTEXTURE9 CTexture::GetTexture(std::string inKey)
 {
-	return m_texture[inTexture];
+	// Keyが存在するか否か。
+	if (!ExistsKey(inKey))
+	{
+		// Keyがなかった場合
+		return nullptr;
+	}
+
+	/* ↓Keyがあった場合↓ */
+
+	return m_texture[inKey];
 }
