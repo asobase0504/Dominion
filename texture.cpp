@@ -48,44 +48,34 @@ CTexture::~CTexture()
 //--------------------------------------------------
 void CTexture::LoadAll()
 {
-	LoadJsonStage(L"data/FILE/");
-
-	// デバイスへのポインタの取得
-	LPDIRECT3DDEVICE9 pDevice = CApplication::GetInstance()->GetRenderer()->GetDevice();
+	nlohmann::json list = LoadJsonStage(L"data/FILE/texture.json");
 	
-	for (int i = 0; i < TEXTURE_MAX; ++i)
+	for (int i = 0; i < list["TEXTURE"].size(); ++i)
 	{
 		if (s_pTexture[i] != nullptr)
 		{// テクスチャの読み込みがされている
 			continue;
 		}
 
-		// テクスチャの読み込み
-		D3DXCreateTextureFromFile(pDevice,
-			s_FileName[i],
-			&s_pTexture[i]);
+		LoadInVector(list["TEXTURE"].at(i));
 	}
 }
 
 //--------------------------------------------------
 // 読み込み
 //--------------------------------------------------
-void CTexture::Load(TEXTURE inTexture)
+void CTexture::LoadInVector(std::vector<std::string> inTexture)
 {
-	assert(inTexture >= 0 && inTexture < TEXTURE_MAX);
-
-	if (s_pTexture[inTexture] != nullptr)
-	{// テクスチャの読み込みがされている
-		return;
-	}
-
-	// デバイスへのポインタの取得
 	LPDIRECT3DDEVICE9 pDevice = CApplication::GetInstance()->GetRenderer()->GetDevice();
 
+	std::string fileName = inTexture[1];
+
+	LPDIRECT3DTEXTURE9 texture;
+
 	// テクスチャの読み込み
-	D3DXCreateTextureFromFile(pDevice,
-		s_FileName[inTexture],
-		&s_pTexture[inTexture]);
+	D3DXCreateTextureFromFile(pDevice, &fileName.front(), &texture);
+
+	m_texture.insert(std::make_pair(inTexture[0], texture));
 }
 
 //--------------------------------------------------
@@ -119,40 +109,8 @@ void CTexture::Unload(TEXTURE inTexture)
 
 //--------------------------------------------------
 // 取得
-// 引数  : char* inFileName / 文字列 ファイル名
-// 返値  : TEXTURE / テクスチャの種類
 //--------------------------------------------------
-CTexture::TEXTURE CTexture::GetFileName(char* inFileName)
+LPDIRECT3DTEXTURE9 CTexture::GetTexture(std::string inTexture)
 {
-	for (int i = 0; i < TEXTURE_MAX; i++)
-	{
-		if (strcmp(inFileName, s_FileName[i]) == 0)
-		{// 文字列が同じ
-			// 読み込み
-			Load((TEXTURE)i);
-
-			return (TEXTURE)i;
-		}
-	}
-
-	assert(false);
-	return TEXTURE_NONE;
-}
-
-//--------------------------------------------------
-// 取得
-//--------------------------------------------------
-LPDIRECT3DTEXTURE9 CTexture::GetTexture(TEXTURE inTexture)
-{
-	if (inTexture == TEXTURE_NONE)
-	{// テクスチャを使用しない
-		return nullptr;
-	}
-
-	assert(inTexture >= 0 && inTexture < TEXTURE_MAX);
-
-	// 読み込み
-	Load(inTexture);
-
-	return s_pTexture[inTexture];
+	return m_texture[inTexture];
 }

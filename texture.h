@@ -11,6 +11,7 @@
 // インクルード
 //==================================================
 #include <d3dx9.h>
+#include <vector>
 #include <map>
 #include <string>
 
@@ -39,13 +40,12 @@ public:
 public: /* メンバ関数 */
 	void LoadAll();					// 全ての読み込み
 	void UnloadAll();				// 全ての破棄
-	void Load(TEXTURE inTexture);	// 指定の読み込み
+	void LoadInVector(std::vector<std::string> inTexture);	// 指定の読み込み
 	void Unload(TEXTURE inTexture);	// 指定の破棄
-	TEXTURE GetFileName(char* inFileName);				// 列挙の取得
-	LPDIRECT3DTEXTURE9 GetTexture(TEXTURE inTexture);	// 情報の取得
+	LPDIRECT3DTEXTURE9 GetTexture(std::string inTexture);	// 情報の取得
 
 private: /* メンバ変数 */
-	std::map<std::string, LPDIRECT3DTEXTURE9, std::less<>> m_texture;
+	std::map<std::string, LPDIRECT3DTEXTURE9, std::less<>> m_texture;	// テクスチャの情報
 	LPDIRECT3DTEXTURE9 s_pTexture[TEXTURE_MAX];	// テクスチャの情報
 };
 

@@ -13,10 +13,6 @@
 //=====================================
 // プロトタイプ宣言
 //=====================================
-// 制御関数
-void OutputStatus();
 nlohmann::json LoadJsonStage(const wchar_t* cUrl);
-void LoadJsonTex(const char* cUrl);
-void OutputStatusTex();
-void SetTex();
+
 #endif

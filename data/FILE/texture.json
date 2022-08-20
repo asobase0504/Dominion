@@ -1,21 +1,8 @@
 {
-  TEXTURE : 
-  [
-    {
-      "KEY": "PLAYER",
-      "FILE_NAME": "data\/TEXTURE\/player.png"
-    },
-    {
-      "KEY": "BLOCK",
-      "FILE_NAME": "data\/TEXTURE\/Block.png"
-    },
-    {
-      "KEY": "BULLET",
-      "FILE_NAME": "data\/TEXTURE\/Bullet.png"
-    },
-    {
-      "KEY": "BG",
-      "FILE_NAME": "data\/TEXTURE\/bg.png"
-    }
+  "TEXTURE": [
+    [ "PLAYER", "data\/TEXTURE\/player.png" ],
+    [ "BLOCK", "data\/TEXTURE\/Block.png" ],
+    [ "BULLET", "data\/TEXTURE\/Bullet.png" ],
+    [ "BG", "data\/TEXTURE\/bg.png" ]
   ]
 }

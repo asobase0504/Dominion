@@ -53,7 +53,7 @@ HRESULT CCharacter::Init()
 	CObject2D::Init();
 	m_remainsBulletCount = LIMIT_BULLET_COUNT;
 	m_ofBlockIndex.resize(4);
-	SetTexture(CTexture::TEXTURE::TEXTURE_PLAYER);	// テクスチャの指定
+	SetTexture("PLAYER");	// テクスチャの指定
 	return S_OK;
 }
 

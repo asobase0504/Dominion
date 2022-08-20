@@ -37,7 +37,7 @@ CRemaubsBullet::~CRemaubsBullet()
 HRESULT CRemaubsBullet::Init()
 {
 	CObject2D::Init();
-	SetTexture(CTexture::TEXTURE::TEXTURE_BULLET);
+	SetTexture("BULLET");
 	SetSize(D3DXVECTOR2(6.0f, 6.0f));
 	return S_OK;
 }

@@ -36,7 +36,7 @@ CBlock::~CBlock()
 HRESULT CBlock::Init()
 {
 	CObject2D::Init();
-	SetTexture(CTexture::TEXTURE::TEXTURE_BLOCK);
+	SetTexture("BLOCK");
 	return S_OK;
 }
 

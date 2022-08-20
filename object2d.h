@@ -9,6 +9,7 @@
 
 #include "object.h"
 #include "texture.h"
+#include <string>
 
 class CObject2D : public CObject
 {
@@ -44,12 +45,12 @@ public:
 	void SetSize(const D3DXVECTOR2& inSize);
 	void SetColor(const D3DXCOLOR& inColor);
 	void SetColorAlpha(const float inAlpha);
-	void SetTexture(CTexture::TEXTURE inTex) { m_texture = inTex; }
+	void SetTexture(std::string inTex) { m_texture = inTex; }	// テクスチャの設定
 
 	const D3DXVECTOR2 GetSize() { return m_size; }
 private:
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	// VtxBuff
-	CTexture::TEXTURE m_texture;	// テクスチャ
+	std::string m_texture;	// テクスチャ
 	float rotY;			// 回転
 	float fLength;		// 長さ
 	float fAngle;		// 角度

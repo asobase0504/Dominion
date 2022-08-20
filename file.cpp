@@ -7,8 +7,6 @@
 #include "file.h"
 #include <fstream>
 
-nlohmann::json stage;//リストの生成
-
 //============================
 // 読込み
 //============================
@@ -18,9 +16,13 @@ nlohmann::json LoadJsonStage(const wchar_t* cUrl)
 
 	if (ifs)
 	{
-		ifs >> stage;
+		nlohmann::json list;	// リストの作成
 
-		return stage;
+		ifs >> list;
+		return list;
 	}
+
+	/* ↓ファイルを開くのを失敗した場合↓ */
+
 	return nullptr;
 }
