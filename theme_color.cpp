@@ -79,6 +79,10 @@ D3DXCOLOR CThemeColor::GetColor(int inConfig)
 	return m_color[inConfig];
 }
 
+// 0 メイン色1
+// 1 メイン色2
+// 2 背景色
+// 3 サブ色
 //-----------------------------------------------------------------------------
 // テーマ色の決定
 //-----------------------------------------------------------------------------
@@ -104,10 +108,17 @@ void CThemeColor::SetTheme(int idx)
 	};
 
 	// 色の代入
-	m_color.insert(std::make_pair(0, VectorToD3DXCOLOR(idx, 0)));	// メイン色1
-	m_color.insert(std::make_pair(1, VectorToD3DXCOLOR(idx, 1)));	// メイン色2
-	m_color.insert(std::make_pair(2, VectorToD3DXCOLOR(idx, 2)));	// 背景色
-	m_color.insert(std::make_pair(3, VectorToD3DXCOLOR(idx, 3)));	// サブ色
+	for (int i = 0; i < 4; i++)
+	{
+		if (m_color.count(i) != 0)
+		{
+			m_color[i] = VectorToD3DXCOLOR(idx, i);
+		}
+		else
+		{
+			m_color.insert(std::make_pair(i, VectorToD3DXCOLOR(idx, i)));
+		}
+	}
 
 	if(colorFile["TYPE"].at(idx).count("BG") != 0)
 	{
