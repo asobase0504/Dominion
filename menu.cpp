@@ -12,8 +12,16 @@
 //-----------------------------------------
 // コンストラクタ
 //-----------------------------------------
-CMenu::CMenu()
+CMenu::CMenu() :
+	m_pos(D3DXVECTOR3(0.0f,0.0f,0.0f)),
+	m_Area(D3DXVECTOR2(0.0f, 0.0f)),
+	m_fream(nullptr),
+//	m_item(nullptr),
+	m_selectIdx(2,0),
+	m_fInterval(D3DXVECTOR2(0.0f, 0.0f)),
+	m_AroundWhitespace(D3DXVECTOR2(0.0f, 0.0f))
 {
+
 }
 
 //-----------------------------------------
@@ -98,6 +106,13 @@ CMenu * CMenu::Create(D3DXVECTOR2 inPos, D3DXVECTOR2 inArea, CMenuFream * inFrea
 	return menu;
 }
 
+//-----------------------------------------
+// 選択
+//-----------------------------------------
+void CMenu::Select()
+{
+}
+
 //=========================================
 // 
 // フレームクラス
@@ -133,6 +148,7 @@ HRESULT CMenuFream::Init()
 //-----------------------------------------
 void CMenuFream::Uninit()
 {
+	CObject2D::Uninit();
 }
 
 //-----------------------------------------
@@ -185,6 +201,7 @@ HRESULT CMenuItem::Init()
 //-----------------------------------------
 void CMenuItem::Uninit()
 {
+	CObject2D::Uninit();
 }
 
 //-----------------------------------------

@@ -34,15 +34,19 @@ public:	// パブリック関数
 	void Update();
 	void Draw();
 
+	// Setter
+	void SetSelectIdx(int Y, int X);
+	void SetSelectIdx(std::vector<int> inIdx);
+
 	static CMenu* Create(D3DXVECTOR2 inPos, D3DXVECTOR2 inArea,CMenuFream* inFream, std::vector<std::vector<CMenuItem*>> inItem);
 private: // プライベート関数
-
+	void Select();
 private: // メンバー変数
 	D3DXVECTOR2 m_pos;	// 位置
-	D3DXVECTOR2 m_Area;	// 位置
+	D3DXVECTOR2 m_Area;	// 範囲
 	CMenuFream* m_fream;	// フレーム
 	std::vector<std::vector<CMenuItem*>> m_item;	// 項目
-	int m_selectIdx;				// 現在選択中の番号
+	std::vector<int> m_selectIdx;				// 現在選択中の番号
 	D3DXVECTOR2 m_fInterval;		// 項目の間隔
 	D3DXVECTOR2 m_AroundWhitespace;	// 周りの余白
 };
