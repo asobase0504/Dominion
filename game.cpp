@@ -71,6 +71,7 @@ HRESULT CGame::Init()
 
 	playerSet = [this](int inIdx, CController* inController)->void
 	{
+		controller.push_back(inController);
 		int x = stage["PLAYERS"].at(inIdx)["SPAWN"].at(0);				// Xの位置番号を取得
 		int y = stage["PLAYERS"].at(inIdx)["SPAWN"].at(1);				// Yの位置番号を取得
 		CCharacter::TEAM inTeam = stage["PLAYERS"].at(inIdx)["TYPE"];	// チームの作成
@@ -98,6 +99,16 @@ void CGame::Uninit()
 	for (auto it = character.begin(); it != character.end();)
 	{
 		it = character.erase(it);
+	}
+
+	for (auto it = controller.begin(); it != controller.end();)
+	{
+		// コントローラーの削除
+		(*it)->Uninit();
+		delete (*it);
+		(*it) = nullptr;
+
+		it = controller.erase(it);
 	}
 
 	// マップの解放

@@ -43,6 +43,7 @@ CCharacter::CCharacter(CObject::TYPE type) :
 //-----------------------------------------
 CCharacter::~CCharacter()
 {
+	//assert(m_controller == nullptr);
 }
 
 //-----------------------------------------

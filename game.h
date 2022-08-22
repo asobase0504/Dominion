@@ -16,6 +16,7 @@
 // 前方宣言
 //-----------------------------------------
 class CCharacter;
+class CController;
 class CMap;
 
 //-----------------------------------------
@@ -38,6 +39,7 @@ public:	// メンバー関数
 
 private: // 動的メンバー変数
 	std::vector<CCharacter*> character;
+	std::vector<CController*> controller;
 	nlohmann::json stage;
 	CMap* map;
 };
