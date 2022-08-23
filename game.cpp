@@ -43,7 +43,7 @@ CGame::~CGame()
 //-----------------------------------------------------------------------------
 HRESULT CGame::Init()
 {
-	CApplication::GetInstance()->SetThemeColor(2);
+	CApplication::GetInstance()->SetThemeColor(0);
 
 	stage = LoadJsonStage(L"data/FILE/STAGE/stage01.json");
 
@@ -80,6 +80,7 @@ HRESULT CGame::Init()
 		character.at(inIdx)->SetSize(D3DXVECTOR2(size, size));			// 大きさの設定
 		D3DXVECTOR3 pos = map->GetBlock(x, y)->GetPos();				// 位置の取得
 		character.at(inIdx)->SetPos(pos);								// 位置の設定
+		character.at(inIdx)->SetCenterBlockIndex({ x,y });				// 中央位置の設定
 		character.at(inIdx)->SetBlockIndex(0, { x,y });					// 所属ブロックを設定
 		character.at(inIdx)->SetController(inController);				// 命令者の設定
 	};
@@ -132,6 +133,14 @@ void CGame::Update()
 	if (input->GetTrigger(DIK_RETURN))
 	{
 		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::TITLE);
+	}
+
+	for (int i = 0; i < character.size(); i++)
+	{
+		if (character[i]->GetIsDeleted())
+		{
+			CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::TITLE);
+		}
 	}
 }
 

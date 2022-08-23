@@ -4,6 +4,28 @@ namespace Collision
 {
 bool Segment(const D3DXVECTOR3& start1, const D3DXVECTOR3& vec1, const D3DXVECTOR3& start2, const D3DXVECTOR3& vec2, D3DXVECTOR3* OutPos, float* t1, float* t2);
 
+bool RectangleSegment(const RECTANGLE_DIRECTION direction, const D3DXVECTOR3 & pos1, const D3DXVECTOR3 & size1, const D3DXVECTOR3 & pos2, const D3DXVECTOR3 & size2, D3DXVECTOR3* outPos, float* t1, float* t2)
+{
+	switch (direction)
+	{
+	case RECTANGLE_DIRECTION::TOP:
+		return RectangleTop(pos1, size1, pos2, size2, outPos,t1,t2);
+		break;
+	case RECTANGLE_DIRECTION::DOWN:
+		return RectangleDown(pos1, size1, pos2, size2, outPos, t1, t2);
+		break;
+	case RECTANGLE_DIRECTION::LEFT:
+		return RectangleLeft(pos1, size1, pos2, size2, outPos, t1, t2);
+		break;
+	case RECTANGLE_DIRECTION::RIGHT:
+		return RectangleRight(pos1, size1, pos2, size2, outPos, t1, t2);
+		break;
+	default:
+		break;
+	}
+	return false;
+}
+
 //
 // ‹éŒ`‚Æ‹éŒ`‚Ì“–‚½‚è”»’è(‘S‘Ì)
 //

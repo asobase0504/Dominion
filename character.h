@@ -35,6 +35,20 @@ public: // 列挙型
 		TEAM_01
 	};
 
+private: // プライベート関数
+	enum DIRECTION
+	{
+		LeftTop = 0,	// 左上
+		CenterTop,		// 上
+		RightTop,		// 右上
+		LeftCenter,		// 左真ん中
+		CenterCenter,	// 真ん中
+		RightCenter,	// 右真ん中
+		LeftBottom,		// 左下
+		CenterBottom,	// 下
+		RightBottom		// 右下
+	};
+
 public:
 	CCharacter(CObject::TYPE type = CObject::TYPE::CHARACTER);
 	~CCharacter() override;
@@ -49,6 +63,7 @@ public:
 
 	// Setter
 	void SetController(CController* inOperate);
+	void SetCenterBlockIndex(std::vector<int> inIndex) { m_ofBlockIndexCenter = inIndex; }
 	void SetTeam(const TEAM inTeam);
 	bool SetBlockIndex(const int count,std::vector<int> inIndex);
 
@@ -66,6 +81,8 @@ private: // プライベート関数
 
 	void Collision();
 	void HitWithBullet(CBullet* inBullet);
+
+	void HitWithAnotherTeamBlock(CBlock* inBlock, DIRECTION inDirection, std::vector<DIRECTION> inAround);
 
 private:
 	CController* m_controller;	// 命令を出す人

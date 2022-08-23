@@ -85,11 +85,14 @@ void CCharacter::Update()
 	// 弾数の回復
 	BulletReload();
 
-	// スクリーン外に出た時
-	ScreenFromOutTime();
-
 	// ブロックとの当たり判定
 	Collision();
+
+	m_pos += m_move;
+	CObject2D::SetPos(m_pos);		// 位置の設定
+
+	// スクリーン外に出た時
+	ScreenFromOutTime();
 }
 
 //-----------------------------------------
@@ -113,8 +116,6 @@ void CCharacter::Move()
 
 	// 方向ベクトル掛ける移動量
 	m_move = m_controller->Move() * MOVE_SPEAD;
-	m_pos += m_move;
-	CObject2D::SetPos(m_pos);		// 位置の設定
 }
 
 //-----------------------------------------
@@ -316,24 +317,24 @@ void CCharacter::ScreenFromOutTime()
 		character->isCopied = true;	// コピー先をコピー済みにする
 	};
 
-	if (m_pos.x - m_size.x <= 0.0f)
+	if (m_pos.x - m_size.x * 0.5f <= 0.0f)
 	{
-		D3DXVECTOR3 pos(CApplication::GetInstance()->SCREEN_WIDTH + m_size.x, m_pos.y, m_pos.z);
+		D3DXVECTOR3 pos(CApplication::GetInstance()->SCREEN_WIDTH + m_size.x * 0.5f, m_pos.y, m_pos.z);
 		Copy(pos);
 	}
-	else if (m_pos.x + m_size.x >= CApplication::GetInstance()->SCREEN_WIDTH)
+	else if (m_pos.x + m_size.x * 0.5f >= CApplication::GetInstance()->SCREEN_WIDTH)
 	{
-		D3DXVECTOR3 pos(0.0f - m_size.x, m_pos.y, m_pos.z);
+		D3DXVECTOR3 pos(0.0f - m_size.x * 0.5f, m_pos.y, m_pos.z);
 		Copy(pos);
 	}
-	else if (m_pos.y - m_size.y <= 0.0f)
+	else if (m_pos.y - m_size.y * 0.5f <= 0.0f)
 	{
-		D3DXVECTOR3 pos(m_pos.x, CApplication::GetInstance()->SCREEN_HEIGHT + m_size.y, m_pos.z);
+		D3DXVECTOR3 pos(m_pos.x, CApplication::GetInstance()->SCREEN_HEIGHT + m_size.y * 0.5f, m_pos.z);
 		Copy(pos);
 	}
-	else if (m_pos.y + m_size.y >= CApplication::GetInstance()->SCREEN_HEIGHT)
+	else if (m_pos.y + m_size.y * 0.5f >= CApplication::GetInstance()->SCREEN_HEIGHT)
 	{
-		D3DXVECTOR3 pos(m_pos.x, 0.0f - m_size.y, m_pos.z);
+		D3DXVECTOR3 pos(m_pos.x, 0.0f - m_size.y * 0.5f, m_pos.z);
 		Copy(pos);
 	}
 	else
@@ -341,11 +342,11 @@ void CCharacter::ScreenFromOutTime()
 		isCopied = false;
 	}
 
-	float dist = 0.001f;	// 消える場所と出現位置をずらすための値
-	if (m_pos.x + m_size.x + dist <= 0.0f - m_size.x ||
-		m_pos.y + m_size.y + dist <= 0.0f - m_size.y ||
-		m_pos.x - m_size.x - dist >= CApplication::GetInstance()->SCREEN_WIDTH + m_size.x ||
-		m_pos.y - m_size.y - dist >= CApplication::GetInstance()->SCREEN_HEIGHT + m_size.y)
+	float dist = 0.00001f;	// 消える場所と出現位置をずらすための値
+	if (m_pos.x + m_size.x * 0.5f + dist <= 0.0f ||
+		m_pos.y + m_size.y * 0.5f + dist <= 0.0f ||
+		m_pos.x - m_size.x * 0.5f - dist >= CApplication::GetInstance()->SCREEN_WIDTH ||
+		m_pos.y - m_size.y * 0.5f - dist >= CApplication::GetInstance()->SCREEN_HEIGHT)
 	{
 		// 自身の削除
 		m_isDeleted = true;
@@ -360,46 +361,47 @@ void CCharacter::Collision()
 	m_ofBlockCount = 0;
 
 	// 一つのブロックとの当たり判定処理
-	auto HitBlock = [this](int x, int y)
+	auto HitBlock = [this](int x, int y, DIRECTION inDirection, std::vector<DIRECTION> inAround)
 	{
 		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
 		CMap* pMap = game->GetMap();
-
-		bool isHit = HitWithBlock(pMap->GetBlock(x, y));	// 当たったか否か
-
-		if (!isHit)
-		{ // 当たってない場合
-			return;
-		}
-
-		/* ↓当たった場合↓ */
-		pMap->GetBlock(x, y)->SetRidingObject(this);	// ブロック側に自身を保存する
-		SetBlockIndex(m_ofBlockCount, { x, y });
-
-		// そのブロックがキャラクターの中心が所属してるブロックがチェック
 		CBlock* block = pMap->GetBlock(x, y);
-		D3DXVECTOR3 blockSize = D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f);	// ブロックの大きさ
 
-		if (Collision::RectangleAndRectangle(m_pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), block->GetPos(), blockSize))
+		if ((int)m_team == (int)block->CBlock::GetType())
 		{
-			m_ofBlockIndexCenter = { x, y };
+			if (!HitWithBlock(block))
+			{
+				return;
+			}
+
+			pMap->GetBlock(x, y)->SetRidingObject(this);	// ブロック側に自身を保存する
+			SetBlockIndex(m_ofBlockCount, { x, y });
+
+			// そのブロックがキャラクターの中心が所属してるブロックがチェック
+			CBlock* block = pMap->GetBlock(x, y);
+			D3DXVECTOR3 blockSize = D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f);	// ブロックの大きさ
+
+			D3DXVECTOR3 movePlanPos = m_pos + m_move;
+			if (Collision::RectangleAndRectangle(movePlanPos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), block->GetPos(), blockSize))
+			{
+				m_ofBlockIndexCenter = { x, y };
+			}
+		}
+		else
+		{
+			// 別チームとの当たり判定
+			HitWithAnotherTeamBlock(block, inDirection, inAround);
 		}
 	};
 
-	for (int i = 0; i < m_ofBlockIndex.size();i++)
 	{
-		if (m_ofBlockIndex[i].empty())
-		{
-			continue;
-		}
+		int CenterX = m_ofBlockIndexCenter[0];
+		int LeftX = m_ofBlockIndexCenter[0] - 1;
+		int RightX = m_ofBlockIndexCenter[0] + 1;
 
-		int CenterX = m_ofBlockIndex[i][0];
-		int LeftX = m_ofBlockIndex[i][0] - 1;
-		int RightX = m_ofBlockIndex[i][0] + 1;
-
-		int CenterY = m_ofBlockIndex[i][1];
-		int TopY = m_ofBlockIndex[i][1] - 1;
-		int BottomY = m_ofBlockIndex[i][1] + 1;
+		int CenterY = m_ofBlockIndexCenter[1];
+		int TopY = m_ofBlockIndexCenter[1] - 1;
+		int BottomY = m_ofBlockIndexCenter[1] + 1;
 
 		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
 		CMap* pMap = game->GetMap();
@@ -423,17 +425,44 @@ void CCharacter::Collision()
 		}
 
 		// ブロックの当たり判定
-		HitBlock(LeftX, TopY);		// 左上
-		HitBlock(CenterX, TopY);	// 上
-		HitBlock(RightX, TopY);		// 右上
-		HitBlock(LeftX, CenterY);	// 左真ん中
-		HitBlock(CenterX, CenterY);	// 真ん中
-		HitBlock(RightX, CenterY);	// 右真ん中
-		HitBlock(LeftX, BottomY);	// 左下
-		HitBlock(CenterX, BottomY);	// 下
-		HitBlock(RightX, BottomY);	// 右下
+		std::vector<DIRECTION> inAround;
+
+		CBlock* block = pMap->GetBlock(CenterX, TopY);
+		if ((int)m_team != (int)block->CBlock::GetType())
+		{
+			inAround.push_back(CenterTop);
+		}
+		block = pMap->GetBlock(CenterX, BottomY);
+		if ((int)m_team != (int)block->CBlock::GetType())
+		{
+			inAround.push_back(CenterBottom);
+		}
+		block = pMap->GetBlock(LeftX, CenterY);
+		if ((int)m_team != (int)block->CBlock::GetType())
+		{
+			inAround.push_back(LeftCenter);
+		}
+		block = pMap->GetBlock(RightX, CenterY);
+		if ((int)m_team != (int)block->CBlock::GetType())
+		{
+			inAround.push_back(RightCenter);
+		}
+
+		HitBlock(CenterX, TopY, CenterTop, inAround);		// 上
+		HitBlock(CenterX, BottomY, CenterBottom, inAround);	// 下
+		HitBlock(LeftX, CenterY, LeftCenter, inAround);		// 左真ん中
+		HitBlock(RightX, CenterY, RightCenter, inAround);	// 右真ん中
+		HitBlock(LeftX, TopY, LeftTop, inAround);			// 左上
+		HitBlock(RightX, TopY, RightTop, inAround);			// 右上
+		HitBlock(LeftX, BottomY, LeftBottom, inAround);		// 左下
+		HitBlock(RightX, BottomY, RightBottom, inAround);	// 右下
+		HitBlock(CenterX, CenterY, CenterCenter, inAround);	// 真ん中
+
+		//D3DXVec3Normalize(&m_move, &m_move);
+		//m_move *= MOVE_SPEAD;
 	}
 
+	// 弾との当たり判定
 	for (auto it = GetMyObject()->begin(); it != GetMyObject()->end(); it++)
 	{
 		if ((*it)->GetIsDeleted())
@@ -453,65 +482,12 @@ void CCharacter::Collision()
 //-----------------------------------------
 bool CCharacter::HitWithBlock(CBlock* inBlock)
 {
-	CBlock* block = inBlock;
+	D3DXVECTOR3 movePlanPos = m_pos + m_move;
+	D3DXVECTOR3 blockSize = D3DXVECTOR3(inBlock->GetSize().x, inBlock->GetSize().y, 0.0f) * 0.5f;	// ブロックの大きさ
 
-	int blockType = (int)block->CBlock::GetType();
-	D3DXVECTOR3 blockSize = D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f) * 0.5f;	// ブロックの大きさ
-
-	// 自分と同じ所属だった場合
-	if ((int)m_team == blockType)
+	if (Collision::RectangleAndRectangle(movePlanPos, D3DXVECTOR3(m_size.x, m_size.y, 0.0f), inBlock->GetPos(), blockSize))
 	{
-		if (Collision::RectangleAndRectangle(m_pos, D3DXVECTOR3(m_size.x, m_size.y, 0.0f), block->GetPos(), blockSize))
-		{
-			return true;
-		}
-		return false;
-	}
-
-	/* ↓自分と違う所属だった場合↓ */
-
-	D3DXVECTOR3 outpos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	float dist;
-
-	if (m_move.y > 0.0f)
-	{
-		// プレイヤー上、ブロック下の当たり判定
-		if (Collision::RectangleTop(block->GetPos(), blockSize, m_pos, D3DXVECTOR3(m_size.x, m_size.y, 0.0f) * 0.5f, &outpos, NULL, NULL))
-		{
-			dist = (m_size.y) * 0.5f + (m_pos.y - outpos.y);	// 差分
-			m_pos.y -= dist + dist * 0.0001f;	// 位置の設定
-			CObject2D::SetPos(m_pos);		// 位置の反映
-		}
-	}
-	if (m_move.x > 0.0f)
-	{
-		// プレイヤー右、ブロック左の当たり判定
-		if (Collision::RectangleLeft(block->GetPos(), blockSize, m_pos, D3DXVECTOR3(m_size.x, m_size.y, 0.0f) * 0.5f, &outpos, NULL, NULL))
-		{
-			dist = (m_size.x) * 0.5f + (m_pos.x - outpos.x);	// 差分
-			m_pos.x -= dist + dist * 0.0001f;	// 位置の設定
-			CObject2D::SetPos(m_pos);		// 位置の反映
-		}
-	}
-	if (m_move.x < 0.0f)
-	{
-		// プレイヤー左、ブロック右の当たり判定
-		if (Collision::RectangleRight(block->GetPos(), blockSize, m_pos, D3DXVECTOR3(m_size.x, m_size.y, 0.0f) * 0.5f, &outpos, NULL, NULL))
-		{
-			dist = (-m_size.x) * 0.5f + (m_pos.x - outpos.x);	// 差分
-			m_pos.x -= dist + dist * 0.0001f;	// 位置の設定
-			CObject2D::SetPos(m_pos);		// 位置の反映
-		}
-	}
-	if (m_move.y < 0.0f)
-	{
-		// プレイヤー下、ブロック上の当たり判定
-		if (Collision::RectangleDown(block->GetPos(), blockSize, m_pos, D3DXVECTOR3(m_size.x, m_size.y, 0.0f) * 0.5f, &outpos, NULL, NULL))
-		{
-			dist = (-m_size.y) * 0.5f + (m_pos.y - outpos.y);	// 差分
-			m_pos.y -= dist + dist * 0.0001f;	// 位置の設定
-			CObject2D::SetPos(m_pos);		// 位置の反映
-		}
+		return true;
 	}
 	return false;
 }
@@ -556,5 +532,235 @@ void CCharacter::HitWithBullet(CBullet* inBullet)
 				return;
 			}
 		}
+	}
+}
+
+void CCharacter::HitWithAnotherTeamBlock(CBlock * inBlock, DIRECTION inDirection ,std::vector<DIRECTION> inAround)
+{
+	CBlock* block = inBlock;
+	D3DXVECTOR3 blockSize = D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f) * 0.5f;	// ブロックの大きさ
+
+	auto Collision = [this, block, blockSize, inDirection, inAround](Collision::RECTANGLE_DIRECTION inDirect)
+	{
+		D3DXVECTOR3 movePlanPos = m_pos + m_move;
+		D3DXVECTOR3 outpos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+		// プレイヤー上、ブロック下の当たり判定
+		if (!(Collision::RectangleSegment(inDirect,block->GetPos(), blockSize, movePlanPos, D3DXVECTOR3(m_size.x, m_size.y, 0.0f) * 0.5f, &outpos, NULL, NULL)))
+		{
+			return;
+		}
+
+		switch (inDirect)
+		{
+		case Collision::RECTANGLE_DIRECTION::TOP:
+			m_move.y *= 0.9f;
+			if (m_move.y < 1.0f)
+			{
+				m_move.y = 0.0f;
+				return;
+			}
+			break;
+		case Collision::RECTANGLE_DIRECTION::DOWN:
+			m_move.y *= 0.9f;
+			if (m_move.y > -1.0f)
+			{
+				m_move.y = 0.0f;
+				return;
+			}
+			break;
+		case Collision::RECTANGLE_DIRECTION::LEFT:
+			m_move.x *= 0.9f;
+			if (m_move.x < 1.0f)
+			{
+				m_move.x = 0.0f;
+				return;
+			}
+			break;
+		case Collision::RECTANGLE_DIRECTION::RIGHT:
+			m_move.x *= 0.9f;
+			if (m_move.x > -1.0f)
+			{
+				m_move.x = 0.0f;
+				return;
+			}
+			break;
+		default:
+			break;
+		}
+
+		HitWithAnotherTeamBlock(block, inDirection, inAround);
+	};
+
+	switch (inDirection)
+	{
+	case LeftTop:	// 左上
+	{
+		bool top = false;
+		bool left = false;
+		for (int i = 0; i < inAround.size(); i++)
+		{
+			if (inAround[i] == CenterTop)
+			{
+				top = true;
+			}
+			if (inAround[i] == LeftCenter)
+			{
+				left = true;
+			}
+		}
+		if (!top && !left && m_move.x < 0.0f && m_move.y < 0.0f)
+		{
+			Collision(Collision::RECTANGLE_DIRECTION::RIGHT);
+			Collision(Collision::RECTANGLE_DIRECTION::DOWN);
+		}
+		else if (!top && !left && m_move.x < 0.0f)
+		{
+			Collision(Collision::RECTANGLE_DIRECTION::RIGHT);
+		}
+		else if (!top && !left && m_move.y < 0.0f)
+		{
+			Collision(Collision::RECTANGLE_DIRECTION::DOWN);
+		}
+		else if (top && !left)
+		{
+			Collision(Collision::RECTANGLE_DIRECTION::DOWN);
+		}
+		else if (!top && left)
+		{
+			Collision(Collision::RECTANGLE_DIRECTION::RIGHT);
+		}
+	}
+		break;
+	case CenterTop:	// 上
+		Collision(Collision::RECTANGLE_DIRECTION::DOWN);
+		break;
+	case RightTop:	// 右上
+	{
+		bool top = false;
+		bool right = false;
+		for (int i = 0; i < inAround.size(); i++)
+		{
+			if (inAround[i] == CenterTop)
+			{
+				top = true;
+			}
+			if (inAround[i] == RightCenter)
+			{
+				right = true;
+			}
+		}
+		if (!top && !right && m_move.x > 0.0f && m_move.y < 0.0f)
+		{
+			Collision(Collision::RECTANGLE_DIRECTION::LEFT);
+			Collision(Collision::RECTANGLE_DIRECTION::DOWN);
+		}
+		else if (!top && !right && m_move.x > 0.0f)
+		{
+			Collision(Collision::RECTANGLE_DIRECTION::LEFT);
+		}
+		else if (!top && !right && m_move.y < 0.0f)
+		{
+			Collision(Collision::RECTANGLE_DIRECTION::DOWN);
+		}
+		else if (top && !right)
+		{
+			Collision(Collision::RECTANGLE_DIRECTION::DOWN);
+		}
+		else if (!top && right)
+		{
+			Collision(Collision::RECTANGLE_DIRECTION::LEFT);
+		}
+	}
+		break;
+	case LeftCenter:	// 左
+		Collision(Collision::RECTANGLE_DIRECTION::RIGHT);
+		break;
+	case CenterCenter:	// 真ん中
+		break;
+	case RightCenter:	// 右
+		Collision(Collision::RECTANGLE_DIRECTION::LEFT);
+		break;
+	case LeftBottom:	// 左下
+	{
+		bool bottom = false;
+		bool left = false;
+		for (int i = 0; i < inAround.size(); i++)
+		{
+			if (inAround[i] == CenterBottom)
+			{
+				bottom = true;
+			}
+			if (inAround[i] == LeftCenter)
+			{
+				left = true;
+			}
+		}
+		if (!bottom && !left && m_move.x < 0.0f && m_move.y > 0.0f)
+		{
+			Collision(Collision::RECTANGLE_DIRECTION::RIGHT);
+			Collision(Collision::RECTANGLE_DIRECTION::TOP);
+		}
+		else if (!bottom && !left && m_move.x < 0.0f)
+		{
+			Collision(Collision::RECTANGLE_DIRECTION::RIGHT);
+		}
+		else if (!bottom && !left && m_move.y > 0.0f)
+		{
+			Collision(Collision::RECTANGLE_DIRECTION::TOP);
+		}
+		else if (bottom && !left)
+		{
+			Collision(Collision::RECTANGLE_DIRECTION::TOP);
+		}
+		else if (!bottom && left)
+		{
+			Collision(Collision::RECTANGLE_DIRECTION::RIGHT);
+		}
+	}
+	break;
+	case CenterBottom:	// 下
+		Collision(Collision::RECTANGLE_DIRECTION::TOP);
+		break;
+	case RightBottom:	// 右下
+	{
+		bool bottom = false;
+		bool right = false;
+		for (int i = 0; i < inAround.size(); i++)
+		{
+			if (inAround[i] == CenterBottom)
+			{
+				bottom = true;
+			}
+			if (inAround[i] == RightCenter)
+			{
+				right = true;
+			}
+		}
+		if (!bottom && !right && m_move.x > 0.0f && m_move.y > 0.0f)
+		{
+			Collision(Collision::RECTANGLE_DIRECTION::LEFT);
+			Collision(Collision::RECTANGLE_DIRECTION::TOP);
+		}
+		else if (!bottom && !right && m_move.x > 0.0f)
+		{
+			Collision(Collision::RECTANGLE_DIRECTION::LEFT);
+		}
+		else if (!bottom && !right && m_move.y > 0.0f)
+		{
+			Collision(Collision::RECTANGLE_DIRECTION::TOP);
+		}
+		else if (bottom && !right)
+		{
+			Collision(Collision::RECTANGLE_DIRECTION::TOP);
+		}
+		else if (!bottom && right)
+		{
+			Collision(Collision::RECTANGLE_DIRECTION::LEFT);
+		}
+	}
+	break;
+	default:
+		break;
 	}
 }
