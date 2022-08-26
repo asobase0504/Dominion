@@ -12,6 +12,8 @@
 #include "bullet.h"
 #include "application.h"
 #include "block_scraped.h"
+#include "block_color_addition.h"
+
 // デバッグ
 #include <assert.h>
 
@@ -21,7 +23,8 @@
 CBlock::CBlock(CObject::TYPE type) :
 	CObject2D(type),
 	m_team(CBlock::BLOCK_TYPE::NONE),
-	m_scraped(nullptr)
+	m_scraped(nullptr),
+	m_colorAddition(nullptr)
 {
 }
 
@@ -47,6 +50,11 @@ HRESULT CBlock::Init()
 //--------------------------------------------------
 void CBlock::Uninit()
 {
+	if (m_colorAddition != nullptr)
+	{
+		m_colorAddition->Uninit();
+	}
+
 	CObject2D::Uninit();
 }
 
@@ -60,9 +68,15 @@ void CBlock::Update()
 		m_scraped->Update();
 		if (m_scraped->GetIsDeleted())
 		{
-			m_scraped->Uninit();
-			delete m_scraped;
 			m_scraped = nullptr;
+		}
+	}
+
+	if (m_colorAddition != nullptr)
+	{
+		if (m_colorAddition->GetIsDeleted())
+		{
+			m_colorAddition = nullptr;
 		}
 	}
 
@@ -217,4 +231,14 @@ void CBlock::SetRidingObject(CObject * inObject)
 	}
 	// 乗ってるオブジェクトを保存する
 	ridingObject.push_back(inObject);
+}
+
+void CBlock::SetAdditionColor()
+{
+	if (m_colorAddition != nullptr)
+	{
+		return;
+	}
+
+	m_colorAddition = CBlockColorAddition::Create(m_pos, this);
 }

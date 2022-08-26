@@ -42,6 +42,9 @@
     <Filter Include="ソース ファイル\06_Block">
       <UniqueIdentifier>{44d867a8-162d-4067-820f-adf507ea2048}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\07_UI">
+      <UniqueIdentifier>{a2ea58af-17b6-4e77-ac73-b31195417e8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="input_keybord.cpp">
@@ -104,12 +107,6 @@
     <ClCompile Include="theme_color.cpp">
       <Filter>ソース ファイル\00_Main</Filter>
     </ClCompile>
-    <ClCompile Include="menu.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="block_scraped.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="A-Star.cpp">
       <Filter>ソース ファイル\05_Cpntroller</Filter>
     </ClCompile>
@@ -126,6 +123,15 @@
       <Filter>ソース ファイル\06_Block</Filter>
     </ClCompile>
     <ClCompile Include="map.cpp">
+      <Filter>ソース ファイル\06_Block</Filter>
+    </ClCompile>
+    <ClCompile Include="menu.cpp">
+      <Filter>ソース ファイル\07_UI</Filter>
+    </ClCompile>
+    <ClCompile Include="block_scraped.cpp">
+      <Filter>ソース ファイル\06_Block</Filter>
+    </ClCompile>
+    <ClCompile Include="block_color_addition.cpp">
       <Filter>ソース ファイル\06_Block</Filter>
     </ClCompile>
   </ItemGroup>
@@ -187,12 +193,6 @@
     <ClInclude Include="theme_color.h">
       <Filter>ソース ファイル\00_Main</Filter>
     </ClInclude>
-    <ClInclude Include="menu.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="block_scraped.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="A-Star.h">
       <Filter>ソース ファイル\05_Cpntroller</Filter>
     </ClInclude>
@@ -209,6 +209,15 @@
       <Filter>ソース ファイル\06_Block</Filter>
     </ClInclude>
     <ClInclude Include="map.h">
+      <Filter>ソース ファイル\06_Block</Filter>
+    </ClInclude>
+    <ClInclude Include="block_scraped.h">
+      <Filter>ソース ファイル\06_Block</Filter>
+    </ClInclude>
+    <ClInclude Include="menu.h">
+      <Filter>ソース ファイル\06_Block</Filter>
+    </ClInclude>
+    <ClInclude Include="block_color_addition.h">
       <Filter>ソース ファイル\06_Block</Filter>
     </ClInclude>
   </ItemGroup>

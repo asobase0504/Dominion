@@ -14,6 +14,7 @@
 #include <vector>
 
 class CBlockScraped;
+class CBlockColorAddition;
 
 //--------------------------------------------------
 // ブロッククラス
@@ -57,8 +58,11 @@ public:
 
 	void ResurveyRidingObject();
 
+	void DeleteColorAddition() { m_colorAddition = nullptr; }
+
 	// Setter
 	void SetRidingObject(CObject* inObject);
+	void SetAdditionColor();
 
 	// Getter
 	std::vector<CObject*> GetRidingObject() { return ridingObject; }
@@ -66,6 +70,7 @@ public:
 private:
 	BLOCK_TYPE m_team;	// 状態
 	CBlockScraped* m_scraped;
+	CBlockColorAddition* m_colorAddition;
 	std::vector<CObject*> ridingObject;
 };
 #endif // !_BLOCK_H_

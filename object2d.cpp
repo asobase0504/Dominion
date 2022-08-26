@@ -171,72 +171,12 @@ void CObject2D::SetPos(const D3DXVECTOR3 & inPos)
 		pVtx[3].pos.z = 0.0f;
 		break;
 	case CObject2D::TOP:
-		pVtx[0].pos.x = m_pos.x;
-		pVtx[0].pos.y = m_pos.y;
-		pVtx[0].pos.z = 0.0f;
-
-		pVtx[1].pos.x = m_pos.x + m_size.x;
-		pVtx[1].pos.y = m_pos.y;
-		pVtx[1].pos.z = 0.0f;
-
-		pVtx[2].pos.x = m_pos.x;
-		pVtx[2].pos.y = m_pos.y + m_size.y;
-		pVtx[2].pos.z = 0.0f;
-
-		pVtx[3].pos.x = m_pos.x + m_size.x;
-		pVtx[3].pos.y = m_pos.y + m_size.y;
-		pVtx[3].pos.z = 0.0f;
 		break;
 	case CObject2D::DOWN:
-		pVtx[0].pos.x = m_pos.x + sinf(m_rotY + m_fAngle + -D3DX_PI) * m_fLength;
-		pVtx[0].pos.y = m_pos.y + cosf(m_rotY + m_fAngle + -D3DX_PI) * m_fLength;
-		pVtx[0].pos.z = 0.0f;
-
-		pVtx[1].pos.x = m_pos.x + sinf(m_rotY + -m_fAngle + D3DX_PI) * m_fLength;
-		pVtx[1].pos.y = m_pos.y + cosf(m_rotY + -m_fAngle + D3DX_PI) * m_fLength;
-		pVtx[1].pos.z = 0.0f;
-
-		pVtx[2].pos.x = m_pos.x + sinf(m_rotY + m_fAngle * -1.0f) * m_fLength;
-		pVtx[2].pos.y = m_pos.y + cosf(m_rotY + m_fAngle * -1.0f) * m_fLength;
-		pVtx[2].pos.z = 0.0f;
-
-		pVtx[3].pos.x = m_pos.x + sinf(m_rotY + m_fAngle) * m_fLength;
-		pVtx[3].pos.y = m_pos.y + cosf(m_rotY + m_fAngle) * m_fLength;
-		pVtx[3].pos.z = 0.0f;
 		break;
 	case CObject2D::LEFT:
-		pVtx[0].pos.x = m_pos.x + sinf(m_rotY + m_fAngle + -D3DX_PI) * m_fLength;
-		pVtx[0].pos.y = m_pos.y + cosf(m_rotY + m_fAngle + -D3DX_PI) * m_fLength;
-		pVtx[0].pos.z = 0.0f;
-
-		pVtx[1].pos.x = m_pos.x + sinf(m_rotY + -m_fAngle + D3DX_PI) * m_fLength;
-		pVtx[1].pos.y = m_pos.y + cosf(m_rotY + -m_fAngle + D3DX_PI) * m_fLength;
-		pVtx[1].pos.z = 0.0f;
-
-		pVtx[2].pos.x = m_pos.x + sinf(m_rotY + m_fAngle * -1.0f) * m_fLength;
-		pVtx[2].pos.y = m_pos.y + cosf(m_rotY + m_fAngle * -1.0f) * m_fLength;
-		pVtx[2].pos.z = 0.0f;
-
-		pVtx[3].pos.x = m_pos.x + sinf(m_rotY + m_fAngle) * m_fLength;
-		pVtx[3].pos.y = m_pos.y + cosf(m_rotY + m_fAngle) * m_fLength;
-		pVtx[3].pos.z = 0.0f;
 		break;
 	case CObject2D::RIGHT:
-		pVtx[0].pos.x = m_pos.x + sinf(m_rotY + m_fAngle + -D3DX_PI) * m_fLength;
-		pVtx[0].pos.y = m_pos.y + cosf(m_rotY + m_fAngle + -D3DX_PI) * m_fLength;
-		pVtx[0].pos.z = 0.0f;
-
-		pVtx[1].pos.x = m_pos.x + sinf(m_rotY + -m_fAngle + D3DX_PI) * m_fLength;
-		pVtx[1].pos.y = m_pos.y + cosf(m_rotY + -m_fAngle + D3DX_PI) * m_fLength;
-		pVtx[1].pos.z = 0.0f;
-
-		pVtx[2].pos.x = m_pos.x + sinf(m_rotY + m_fAngle * -1.0f) * m_fLength;
-		pVtx[2].pos.y = m_pos.y + cosf(m_rotY + m_fAngle * -1.0f) * m_fLength;
-		pVtx[2].pos.z = 0.0f;
-
-		pVtx[3].pos.x = m_pos.x + sinf(m_rotY + m_fAngle) * m_fLength;
-		pVtx[3].pos.y = m_pos.y + cosf(m_rotY + m_fAngle) * m_fLength;
-		pVtx[3].pos.z = 0.0f;
 		break;
 	case CObject2D::TOPLEFT:
 		pVtx[0].pos.x = m_pos.x - m_size.x;

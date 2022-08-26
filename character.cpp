@@ -93,6 +93,11 @@ void CCharacter::Update()
 	m_pos += m_move;
 	CObject2D::SetPos(m_pos);		// 位置の設定
 
+	CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
+	CMap* pMap = game->GetMap();
+	CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
+	pBlock->SetAdditionColor();
+
 	// スクリーン外に出た時
 	ScreenFromOutTime();
 }
