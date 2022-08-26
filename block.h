@@ -13,6 +13,8 @@
 #include "object2d.h"
 #include <vector>
 
+class CBlockScraped;
+
 //--------------------------------------------------
 // ブロッククラス
 //--------------------------------------------------
@@ -29,8 +31,16 @@ public:
 		BLOCK_02,
 		MAX
 	};
-
-	static const int MAX_BLOCK = 40 * 17;
+	//--------------------------------------------------
+	// ブロック状態の列挙型
+	//--------------------------------------------------
+	enum DIRECTION
+	{
+		TOP = 0,
+		DOWN,
+		LEFT,
+		RIGHT,
+	};
 
 public:
 	CBlock(CObject::TYPE type = CObject::TYPE::BLOCK);
@@ -42,7 +52,7 @@ public:
 	void Draw() override;
 
 	static CBlock* Create(BLOCK_TYPE type);
-	void ChangeType();
+	void ChangeType(DIRECTION inDirection);
 	BLOCK_TYPE GetType();
 
 	void ResurveyRidingObject();
@@ -55,6 +65,7 @@ public:
 
 private:
 	BLOCK_TYPE m_team;	// 状態
+	CBlockScraped* m_scraped;
 	std::vector<CObject*> ridingObject;
 };
 #endif // !_BLOCK_H_

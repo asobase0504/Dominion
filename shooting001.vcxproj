@@ -156,6 +156,7 @@
     <ClCompile Include="AI_controller.cpp" />
     <ClCompile Include="application.cpp" />
     <ClCompile Include="block.cpp" />
+    <ClCompile Include="block_scraped.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="character.cpp" />
     <ClCompile Include="collision.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="AI_controller.h" />
     <ClInclude Include="application.h" />
     <ClInclude Include="block.h" />
+    <ClInclude Include="block_scraped.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="character.h" />
     <ClInclude Include="collision.h" />

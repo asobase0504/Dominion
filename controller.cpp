@@ -12,7 +12,8 @@
 //-----------------------------------------
 // コンストラクタ
 //-----------------------------------------
-CController::CController()
+CController::CController() :
+	chargeCount(0)
 {
 }
 

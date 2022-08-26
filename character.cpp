@@ -18,6 +18,7 @@
 #include "collision.h"
 #include "block.h"
 #include <assert.h>
+#include <functional>
 
 //-----------------------------------------
 // 定義
@@ -76,6 +77,7 @@ void CCharacter::Uninit()
 //-----------------------------------------
 void CCharacter::Update()
 {
+	m_spead = MOVE_SPEAD;
 	// 移動
 	Move();
 
@@ -162,6 +164,117 @@ void CCharacter::BulletShot()
 		break;
 	case CController::RIGHT_SHOT:
 		Shot(D3DXVECTOR3(CBullet::MOVE_SPEAD, 0.0f, 0.0f));
+		break;
+	case CController::UP_CHARGE_SHOT:
+	{
+		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
+		CMap* pMap = game->GetMap();
+		CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
+		CBlock* pBlockUp = pMap->GetBlock(m_ofBlockIndexCenter[0] - 1, m_ofBlockIndexCenter[1]);
+		CBlock* pBlockDown = pMap->GetBlock(m_ofBlockIndexCenter[0] + 1, m_ofBlockIndexCenter[1]);
+		D3DXVECTOR3 move = D3DXVECTOR3(0.0f, -(CBullet::MOVE_SPEAD), 0.0f);
+
+		CBullet* bullet;
+		bullet = CBullet::Create(pBlock->GetPos(), move, m_team);
+		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
+		if (pBlockUp->GetType() != CBlock::BLOCK_TYPE::NONE)
+		{
+			bullet = CBullet::Create(pBlockUp->GetPos(), move, m_team);
+			bullet->SetBlockIndex(0, { m_ofBlockIndexCenter[0] - 1, m_ofBlockIndexCenter[1] });
+		}
+		if (pBlockDown->GetType() != CBlock::BLOCK_TYPE::NONE)
+		{
+			bullet = CBullet::Create(pBlockDown->GetPos(), move, m_team);
+			bullet->SetBlockIndex(0, { m_ofBlockIndexCenter[0] + 1, m_ofBlockIndexCenter[1] });
+		}
+
+		m_remainsBulletDisplay[m_remainsBulletCount - 1]->SetColorAlpha(0.0f);
+		m_remainsBulletCount--;
+	}
+		break;
+	case CController::DOWN_CHARGE_SHOT:
+	{
+		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
+		CMap* pMap = game->GetMap();
+		CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
+		CBlock* pBlockUp = pMap->GetBlock(m_ofBlockIndexCenter[0] - 1, m_ofBlockIndexCenter[1]);
+		CBlock* pBlockDown = pMap->GetBlock(m_ofBlockIndexCenter[0] + 1, m_ofBlockIndexCenter[1]);
+		D3DXVECTOR3 move = D3DXVECTOR3(0.0f, CBullet::MOVE_SPEAD, 0.0f);
+
+		CBullet* bullet;
+		bullet = CBullet::Create(pBlock->GetPos(), move, m_team);
+		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
+		if (pBlockUp->GetType() != CBlock::BLOCK_TYPE::NONE)
+		{
+			bullet = CBullet::Create(pBlockUp->GetPos(), move, m_team);
+			bullet->SetBlockIndex(0, { m_ofBlockIndexCenter[0] - 1, m_ofBlockIndexCenter[1] });
+		}
+		if (pBlockDown->GetType() != CBlock::BLOCK_TYPE::NONE)
+		{
+			bullet = CBullet::Create(pBlockDown->GetPos(), move, m_team);
+			bullet->SetBlockIndex(0, { m_ofBlockIndexCenter[0] + 1, m_ofBlockIndexCenter[1] });
+		}
+
+		m_remainsBulletDisplay[m_remainsBulletCount - 1]->SetColorAlpha(0.0f);
+		m_remainsBulletCount--;
+	}
+		break;
+	case CController::LEFT_CHARGE_SHOT:
+	{
+		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
+		CMap* pMap = game->GetMap();
+		CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
+		CBlock* pBlockUp = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1] - 1);
+		CBlock* pBlockDown = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1] + 1);
+		D3DXVECTOR3 move = D3DXVECTOR3(-CBullet::MOVE_SPEAD, 0.0f, 0.0f);
+
+		CBullet* bullet;
+		bullet = CBullet::Create(pBlock->GetPos(), move, m_team);
+		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
+		if (pBlockUp->GetType() != CBlock::BLOCK_TYPE::NONE)
+		{
+			bullet = CBullet::Create(pBlockUp->GetPos(), move, m_team);
+			bullet->SetBlockIndex(0, { m_ofBlockIndexCenter[0] - 1, m_ofBlockIndexCenter[1] });
+		}
+		if (pBlockDown->GetType() != CBlock::BLOCK_TYPE::NONE)
+		{
+			bullet = CBullet::Create(pBlockDown->GetPos(), move, m_team);
+			bullet->SetBlockIndex(0, { m_ofBlockIndexCenter[0] + 1, m_ofBlockIndexCenter[1] });
+		}
+
+		m_remainsBulletDisplay[m_remainsBulletCount - 1]->SetColorAlpha(0.0f);
+		m_remainsBulletCount--;
+	}
+	break;
+	case CController::RIGHT_CHARGE_SHOT:
+	{
+		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
+		CMap* pMap = game->GetMap();
+		CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
+		CBlock* pBlockUp = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1] - 1);
+		CBlock* pBlockDown = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1] + 1);
+		D3DXVECTOR3 move = D3DXVECTOR3(CBullet::MOVE_SPEAD, 0.0f, 0.0f);
+
+		CBullet* bullet;
+		bullet = CBullet::Create(pBlock->GetPos(), move, m_team);
+		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
+		if (pBlockUp->GetType() != CBlock::BLOCK_TYPE::NONE)
+		{
+			bullet = CBullet::Create(pBlockUp->GetPos(), move, m_team);
+			bullet->SetBlockIndex(0, { m_ofBlockIndexCenter[0] - 1, m_ofBlockIndexCenter[1] });
+		}
+		if (pBlockDown->GetType() != CBlock::BLOCK_TYPE::NONE)
+		{
+			bullet = CBullet::Create(pBlockDown->GetPos(), move, m_team);
+			bullet->SetBlockIndex(0, { m_ofBlockIndexCenter[0] + 1, m_ofBlockIndexCenter[1] });
+		}
+
+		m_remainsBulletDisplay[m_remainsBulletCount - 1]->SetColorAlpha(0.0f);
+		m_remainsBulletCount--;
+	}
+	break;
+	case CController::CHARGE_NOW:
+		m_spead *= 0.5f;
 		break;
 	default:
 		break;
@@ -456,10 +569,9 @@ void CCharacter::Collision()
 		HitBlock(RightX, TopY, RightTop, inAround);			// 右上
 		HitBlock(LeftX, BottomY, LeftBottom, inAround);		// 左下
 		HitBlock(RightX, BottomY, RightBottom, inAround);	// 右下
-		HitBlock(CenterX, CenterY, CenterCenter, inAround);	// 真ん中
 
-		//D3DXVec3Normalize(&m_move, &m_move);
-		//m_move *= MOVE_SPEAD;
+		D3DXVec3Normalize(&m_move, &m_move);
+		m_move *= m_spead;
 	}
 
 	// 弾との当たり判定
@@ -535,12 +647,17 @@ void CCharacter::HitWithBullet(CBullet* inBullet)
 	}
 }
 
+//-----------------------------------------
+// 別チームのブロックとの当たり判定
+//-----------------------------------------
 void CCharacter::HitWithAnotherTeamBlock(CBlock * inBlock, DIRECTION inDirection ,std::vector<DIRECTION> inAround)
 {
 	CBlock* block = inBlock;
 	D3DXVECTOR3 blockSize = D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f) * 0.5f;	// ブロックの大きさ
 
-	auto Collision = [this, block, blockSize, inDirection, inAround](Collision::RECTANGLE_DIRECTION inDirect)
+	std::function<bool(Collision::RECTANGLE_DIRECTION)> Collision;
+
+	Collision = [this, block, blockSize, inDirection, inAround](Collision::RECTANGLE_DIRECTION inDirect)->bool
 	{
 		D3DXVECTOR3 movePlanPos = m_pos + m_move;
 		D3DXVECTOR3 outpos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -548,7 +665,7 @@ void CCharacter::HitWithAnotherTeamBlock(CBlock * inBlock, DIRECTION inDirection
 		// プレイヤー上、ブロック下の当たり判定
 		if (!(Collision::RectangleSegment(inDirect,block->GetPos(), blockSize, movePlanPos, D3DXVECTOR3(m_size.x, m_size.y, 0.0f) * 0.5f, &outpos, NULL, NULL)))
 		{
-			return;
+			return false;
 		}
 
 		switch (inDirect)
@@ -558,7 +675,7 @@ void CCharacter::HitWithAnotherTeamBlock(CBlock * inBlock, DIRECTION inDirection
 			if (m_move.y < 1.0f)
 			{
 				m_move.y = 0.0f;
-				return;
+				return true;
 			}
 			break;
 		case Collision::RECTANGLE_DIRECTION::DOWN:
@@ -566,7 +683,7 @@ void CCharacter::HitWithAnotherTeamBlock(CBlock * inBlock, DIRECTION inDirection
 			if (m_move.y > -1.0f)
 			{
 				m_move.y = 0.0f;
-				return;
+				return true;
 			}
 			break;
 		case Collision::RECTANGLE_DIRECTION::LEFT:
@@ -574,7 +691,7 @@ void CCharacter::HitWithAnotherTeamBlock(CBlock * inBlock, DIRECTION inDirection
 			if (m_move.x < 1.0f)
 			{
 				m_move.x = 0.0f;
-				return;
+				return true;
 			}
 			break;
 		case Collision::RECTANGLE_DIRECTION::RIGHT:
@@ -582,7 +699,7 @@ void CCharacter::HitWithAnotherTeamBlock(CBlock * inBlock, DIRECTION inDirection
 			if (m_move.x > -1.0f)
 			{
 				m_move.x = 0.0f;
-				return;
+				return true;
 			}
 			break;
 		default:
@@ -590,6 +707,7 @@ void CCharacter::HitWithAnotherTeamBlock(CBlock * inBlock, DIRECTION inDirection
 		}
 
 		HitWithAnotherTeamBlock(block, inDirection, inAround);
+		return true;
 	};
 
 	switch (inDirection)

@@ -107,21 +107,58 @@ CController::SHOT_TYPE CPlayerController::BulletShot()
 		return NONE_SHOT;
 	}
 
-	if (input->GetRelease(DIK_UP))
+	if (input->GetPress(DIK_UP) ||
+		input->GetPress(DIK_DOWN) ||
+		input->GetPress(DIK_LEFT) ||
+		input->GetPress(DIK_RIGHT))
 	{
+		chargeCount++;
+	}
+
+	if (input->GetRelease(DIK_UP) && chargeCount < 50)
+	{
+		chargeCount = 0;
 		return UP_SHOT;
 	}
-	else if (input->GetRelease(DIK_DOWN))
+	else if (input->GetRelease(DIK_DOWN) && chargeCount < 50)
 	{
+		chargeCount = 0;
 		return DOWN_SHOT;
 	}
-	else if (input->GetRelease(DIK_LEFT))
+	else if (input->GetRelease(DIK_LEFT) && chargeCount < 50)
 	{
+		chargeCount = 0;
 		return LEFT_SHOT;
 	}
-	else if (input->GetRelease(DIK_RIGHT))
+	else if (input->GetRelease(DIK_RIGHT) && chargeCount < 50)
 	{
+		chargeCount = 0;
 		return RIGHT_SHOT;
+	}
+	else if (input->GetRelease(DIK_UP) && chargeCount >= 50)
+	{
+		chargeCount = 0;
+		return UP_CHARGE_SHOT;
+	}
+	else if (input->GetRelease(DIK_DOWN) && chargeCount >= 50)
+	{
+		chargeCount = 0;
+		return DOWN_CHARGE_SHOT;
+	}
+	else if (input->GetRelease(DIK_LEFT) && chargeCount >= 50)
+	{
+		chargeCount = 0;
+		return LEFT_CHARGE_SHOT;
+	}
+	else if (input->GetRelease(DIK_RIGHT) && chargeCount >= 50)
+	{
+		chargeCount = 0;
+		return RIGHT_CHARGE_SHOT;
+	}
+
+	if (chargeCount != 0)
+	{
+		return CHARGE_NOW;
 	}
 
 	return NONE_SHOT;

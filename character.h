@@ -94,6 +94,7 @@ private:
 	std::vector<std::vector<int>> m_ofBlockIndex;			// 乗ってるブロックの番号
 	std::vector<int> m_ofBlockIndexCenter;					// 中心が乗ってるブロックの番号
 	int m_ofBlockCount;										// 乗ってるブロックの個数
+	float m_spead;											// 速度
 	bool isCopied;											// コピー済みか
 };
 

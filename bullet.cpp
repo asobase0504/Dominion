@@ -327,7 +327,23 @@ bool CBullet::HitWithBlock(CBlock * inBlock)
 			return false;
 		}
 
-		block->ChangeType();
+		if (m_move.x < 0.0f)
+		{
+			block->ChangeType(CBlock::DIRECTION::LEFT);
+		}
+		else if (m_move.x > 0.0f)
+		{
+			block->ChangeType(CBlock::DIRECTION::RIGHT);
+		}
+		else if (m_move.y < 0.0f)
+		{
+			block->ChangeType(CBlock::DIRECTION::DOWN);
+		}
+		else if (m_move.y > 0.0f)
+		{
+			block->ChangeType(CBlock::DIRECTION::TOP);
+		}
+
 		return true;
 	}
 	return false;

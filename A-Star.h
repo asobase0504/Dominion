@@ -14,11 +14,6 @@
 #include <windows.h>
 #include <d3dx9.h>
 
-//ディファインデリート
-#define SAFE_DELETE(p)       { if(p) { delete (p);     (p)=NULL; } }
-#define SAFE_DELETE_ARRAY(p) { if(p) { delete[] (p);   (p)=NULL; } }
-#define SAFE_RELEASE(p)      { if(p) { (p)->Release(); (p)=NULL; } }
-
 //データ型定義
 enum ASTAR_STATUS
 {
@@ -74,7 +69,7 @@ protected:
 	D3DXVECTOR2* m_pOpenList;	//オープンリストの先頭pointer
 	DWORD m_dwOpenAmt;			//オープンリスト内のセルの数
 	D3DXVECTOR2* m_pClosedList;	//クロースリストの先頭pointer
-	DWORD m_dwClosedAmt;		//クロースリスト内のセルの数
+	int m_dwClosedAmt;		//クロースリスト内のセルの数
 
 	DWORD m_dwCellWidth;		//セルを幅
 	DWORD m_dwCellHeight;		//セルを高さ

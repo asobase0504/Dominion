@@ -11,6 +11,7 @@
 #include "character.h"
 #include "bullet.h"
 #include "application.h"
+#include "block_scraped.h"
 // デバッグ
 #include <assert.h>
 
@@ -19,7 +20,8 @@
 //--------------------------------------------------
 CBlock::CBlock(CObject::TYPE type) :
 	CObject2D(type),
-	m_team(BLOCK_TYPE::NONE)
+	m_team(CBlock::BLOCK_TYPE::NONE),
+	m_scraped(nullptr)
 {
 }
 
@@ -53,6 +55,17 @@ void CBlock::Uninit()
 //--------------------------------------------------
 void CBlock::Update()
 {
+	if (m_scraped != nullptr)
+	{
+		m_scraped->Update();
+		if (m_scraped->GetIsDeleted())
+		{
+			m_scraped->Uninit();
+			delete m_scraped;
+			m_scraped = nullptr;
+		}
+	}
+
 	ResurveyRidingObject();
 }
 
@@ -82,13 +95,13 @@ CBlock* CBlock::Create(CBlock::BLOCK_TYPE type)
 
 	switch (type)
 	{
-	case BLOCK_TYPE::NONE:
+	case CBlock::BLOCK_TYPE::NONE:
 		block->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
 		break;
-	case BLOCK_TYPE::BLOCK_01:
+	case CBlock::BLOCK_TYPE::BLOCK_01:
 		block->SetColor(CApplication::GetInstance()->GetColor(0));
 		break;
-	case BLOCK_TYPE::BLOCK_02:
+	case CBlock::BLOCK_TYPE::BLOCK_02:
 		block->SetColor(CApplication::GetInstance()->GetColor(1));
 		break;
 	default:
@@ -101,19 +114,34 @@ CBlock* CBlock::Create(CBlock::BLOCK_TYPE type)
 //--------------------------------------------------
 // 種別の切り替え
 //--------------------------------------------------
-void CBlock::ChangeType()
+void CBlock::ChangeType(DIRECTION inDirection)
 {
 	switch (m_team)
 	{
-	case BLOCK_TYPE::NONE:
+	case CBlock::BLOCK_TYPE::NONE:
 		break;
-	case BLOCK_TYPE::BLOCK_01:
-		m_team = BLOCK_TYPE::BLOCK_02;
+	case CBlock::BLOCK_TYPE::BLOCK_01:
+		m_team = CBlock::BLOCK_TYPE::BLOCK_02;
 		SetColor(CApplication::GetInstance()->GetColor(1));
+
+		if (m_scraped != nullptr)
+		{
+			m_scraped->Uninit();
+			delete m_scraped;
+			m_scraped = nullptr;
+		}
+		m_scraped = CBlockScraped::Create(m_pos,CBlock::BLOCK_01, inDirection);
 		break;
-	case BLOCK_TYPE::BLOCK_02:
-		m_team = BLOCK_TYPE::BLOCK_01;
+	case CBlock::BLOCK_TYPE::BLOCK_02:
+		m_team = CBlock::BLOCK_TYPE::BLOCK_01;
 		SetColor(CApplication::GetInstance()->GetColor(0));
+		if (m_scraped != nullptr)
+		{
+			m_scraped->Uninit();
+			delete m_scraped;
+			m_scraped = nullptr;
+		}
+		m_scraped = CBlockScraped::Create(m_pos, CBlock::BLOCK_02, inDirection);
 		break;
 	default:
 		MessageBox(NULL, TEXT("想定外の列挙型を検出。"), TEXT("swith文の条件式"), MB_ICONHAND);

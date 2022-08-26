@@ -63,7 +63,7 @@ HRESULT CTitle::Init()
 			{
 				if (i != 3)
 				{
-					for (int j = 0; j < 4; j++)
+					for (int j = 0; j < 3; j++)
 					{
 						CMenuItem* item = new CMenuItem;
 						item->Init();
@@ -75,7 +75,7 @@ HRESULT CTitle::Init()
 				}
 				else
 				{
-					for (int j = 0; j < 1; j++)
+					for (int j = 0; j < 2; j++)
 					{
 						CMenuItem* item = new CMenuItem;
 						item->Init();

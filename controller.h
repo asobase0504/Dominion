@@ -31,6 +31,11 @@ public:
 		DOWN_SHOT,
 		LEFT_SHOT,
 		RIGHT_SHOT,
+		UP_CHARGE_SHOT,
+		DOWN_CHARGE_SHOT,
+		LEFT_CHARGE_SHOT,
+		RIGHT_CHARGE_SHOT,
+		CHARGE_NOW,
 		NONE_SHOT
 	};
 public:
@@ -48,6 +53,7 @@ public:
 	void SetToOrder(CObject* inOrder) { m_toOrder = inOrder; }
 protected:
 	CObject* m_toOrder;	// ñΩóﬂêÊ
+	int chargeCount;
 };
 
 #endif // !_OPERATE_H_

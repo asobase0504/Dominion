@@ -36,7 +36,7 @@ public:
 
 	// Getter
 	CBlock* GetBlock(int indexX, int indexY);
-	float GetBlockSize() { return BLOCK_SIZE; }
+	static float GetBlockSize() { return BLOCK_SIZE; }
 	int GetMaxXBlock() { return MAX_X_BLOCK; }
 	int GetMaxYBlock() { return MAX_Y_BLOCK; }
 

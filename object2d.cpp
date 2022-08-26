@@ -17,9 +17,10 @@ CObject2D::CObject2D(TYPE type) :
 	CObject(type),
 	m_pVtxBuff(nullptr),
 	m_texture("\0"),
-	rotY(0.0f),
-	fLength(0.0f),
-	fAngle(0.0f)
+	m_rotY(0.0f),
+	m_fLength(0.0f),
+	m_fAngle(0.0f),
+	m_anchor(CENTER)
 {
 }
 
@@ -46,26 +47,26 @@ HRESULT CObject2D::Init()
 
 	VERTEX_2D *pVtx = NULL;		// 頂点情報へのポインタ
 
-	fLength = sqrtf(m_size.x * m_size.x + m_size.y * m_size.y) * 0.5f;
-	fAngle = atan2f(m_size.x, m_size.y);
+	m_fLength = sqrtf(m_size.x * m_size.x + m_size.y * m_size.y) * 0.5f;
+	m_fAngle = atan2f(m_size.x, m_size.y);
 
 	// 頂点情報をロックし、頂点情報へのポインタを取得
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-	pVtx[0].pos.x = CApplication::GetInstance()->CENTER_X + sinf(rotY + fAngle + -D3DX_PI) * fLength;
-	pVtx[0].pos.y = CApplication::GetInstance()->CENTER_Y + cosf(rotY + fAngle + -D3DX_PI) * fLength;
+	pVtx[0].pos.x = CApplication::GetInstance()->CENTER_X + sinf(m_rotY + m_fAngle + -D3DX_PI) * m_fLength;
+	pVtx[0].pos.y = CApplication::GetInstance()->CENTER_Y + cosf(m_rotY + m_fAngle + -D3DX_PI) * m_fLength;
 	pVtx[0].pos.z = 0.0f;
 
-	pVtx[1].pos.x = CApplication::GetInstance()->CENTER_X + sinf(rotY + -fAngle + D3DX_PI) * fLength;
-	pVtx[1].pos.y = CApplication::GetInstance()->CENTER_Y + cosf(rotY + -fAngle + D3DX_PI) * fLength;
+	pVtx[1].pos.x = CApplication::GetInstance()->CENTER_X + sinf(m_rotY + -m_fAngle + D3DX_PI) * m_fLength;
+	pVtx[1].pos.y = CApplication::GetInstance()->CENTER_Y + cosf(m_rotY + -m_fAngle + D3DX_PI) * m_fLength;
 	pVtx[1].pos.z = 0.0f;
 
-	pVtx[2].pos.x = CApplication::GetInstance()->CENTER_X + sinf(rotY + fAngle * -1.0f) * fLength;
-	pVtx[2].pos.y = CApplication::GetInstance()->CENTER_Y + cosf(rotY + fAngle * -1.0f) * fLength;
+	pVtx[2].pos.x = CApplication::GetInstance()->CENTER_X + sinf(m_rotY + m_fAngle * -1.0f) * m_fLength;
+	pVtx[2].pos.y = CApplication::GetInstance()->CENTER_Y + cosf(m_rotY + m_fAngle * -1.0f) * m_fLength;
 	pVtx[2].pos.z = 0.0f;
 
-	pVtx[3].pos.x = CApplication::GetInstance()->CENTER_X + sinf(rotY + fAngle) * fLength;
-	pVtx[3].pos.y = CApplication::GetInstance()->CENTER_Y + cosf(rotY + fAngle) * fLength;
+	pVtx[3].pos.x = CApplication::GetInstance()->CENTER_X + sinf(m_rotY + m_fAngle) * m_fLength;
+	pVtx[3].pos.y = CApplication::GetInstance()->CENTER_Y + cosf(m_rotY + m_fAngle) * m_fLength;
 	pVtx[3].pos.z = 0.0f;
 
 	// texの設定
@@ -150,21 +151,164 @@ void CObject2D::SetPos(const D3DXVECTOR3 & inPos)
 	// 頂点情報をロックし、頂点情報へのポインタを取得
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-	pVtx[0].pos.x = m_pos.x + sinf(rotY + fAngle + -D3DX_PI) * fLength;
-	pVtx[0].pos.y = m_pos.y + cosf(rotY + fAngle + -D3DX_PI) * fLength;
-	pVtx[0].pos.z = 0.0f;
+	switch (m_anchor)
+	{
+	case CObject2D::CENTER:
+		pVtx[0].pos.x = m_pos.x + sinf(m_rotY + m_fAngle + -D3DX_PI) * m_fLength;
+		pVtx[0].pos.y = m_pos.y + cosf(m_rotY + m_fAngle + -D3DX_PI) * m_fLength;
+		pVtx[0].pos.z = 0.0f;
 
-	pVtx[1].pos.x = m_pos.x + sinf(rotY + -fAngle + D3DX_PI) * fLength;
-	pVtx[1].pos.y = m_pos.y + cosf(rotY + -fAngle + D3DX_PI) * fLength;
-	pVtx[1].pos.z = 0.0f;
+		pVtx[1].pos.x = m_pos.x + sinf(m_rotY + -m_fAngle + D3DX_PI) * m_fLength;
+		pVtx[1].pos.y = m_pos.y + cosf(m_rotY + -m_fAngle + D3DX_PI) * m_fLength;
+		pVtx[1].pos.z = 0.0f;
 
-	pVtx[2].pos.x = m_pos.x + sinf(rotY + fAngle * -1.0f) * fLength;
-	pVtx[2].pos.y = m_pos.y + cosf(rotY + fAngle * -1.0f) * fLength;
-	pVtx[2].pos.z = 0.0f;
+		pVtx[2].pos.x = m_pos.x + sinf(m_rotY + m_fAngle * -1.0f) * m_fLength;
+		pVtx[2].pos.y = m_pos.y + cosf(m_rotY + m_fAngle * -1.0f) * m_fLength;
+		pVtx[2].pos.z = 0.0f;
 
-	pVtx[3].pos.x = m_pos.x + sinf(rotY + fAngle) * fLength;
-	pVtx[3].pos.y = m_pos.y + cosf(rotY + fAngle) * fLength;
-	pVtx[3].pos.z = 0.0f;
+		pVtx[3].pos.x = m_pos.x + sinf(m_rotY + m_fAngle) * m_fLength;
+		pVtx[3].pos.y = m_pos.y + cosf(m_rotY + m_fAngle) * m_fLength;
+		pVtx[3].pos.z = 0.0f;
+		break;
+	case CObject2D::TOP:
+		pVtx[0].pos.x = m_pos.x;
+		pVtx[0].pos.y = m_pos.y;
+		pVtx[0].pos.z = 0.0f;
+
+		pVtx[1].pos.x = m_pos.x + m_size.x;
+		pVtx[1].pos.y = m_pos.y;
+		pVtx[1].pos.z = 0.0f;
+
+		pVtx[2].pos.x = m_pos.x;
+		pVtx[2].pos.y = m_pos.y + m_size.y;
+		pVtx[2].pos.z = 0.0f;
+
+		pVtx[3].pos.x = m_pos.x + m_size.x;
+		pVtx[3].pos.y = m_pos.y + m_size.y;
+		pVtx[3].pos.z = 0.0f;
+		break;
+	case CObject2D::DOWN:
+		pVtx[0].pos.x = m_pos.x + sinf(m_rotY + m_fAngle + -D3DX_PI) * m_fLength;
+		pVtx[0].pos.y = m_pos.y + cosf(m_rotY + m_fAngle + -D3DX_PI) * m_fLength;
+		pVtx[0].pos.z = 0.0f;
+
+		pVtx[1].pos.x = m_pos.x + sinf(m_rotY + -m_fAngle + D3DX_PI) * m_fLength;
+		pVtx[1].pos.y = m_pos.y + cosf(m_rotY + -m_fAngle + D3DX_PI) * m_fLength;
+		pVtx[1].pos.z = 0.0f;
+
+		pVtx[2].pos.x = m_pos.x + sinf(m_rotY + m_fAngle * -1.0f) * m_fLength;
+		pVtx[2].pos.y = m_pos.y + cosf(m_rotY + m_fAngle * -1.0f) * m_fLength;
+		pVtx[2].pos.z = 0.0f;
+
+		pVtx[3].pos.x = m_pos.x + sinf(m_rotY + m_fAngle) * m_fLength;
+		pVtx[3].pos.y = m_pos.y + cosf(m_rotY + m_fAngle) * m_fLength;
+		pVtx[3].pos.z = 0.0f;
+		break;
+	case CObject2D::LEFT:
+		pVtx[0].pos.x = m_pos.x + sinf(m_rotY + m_fAngle + -D3DX_PI) * m_fLength;
+		pVtx[0].pos.y = m_pos.y + cosf(m_rotY + m_fAngle + -D3DX_PI) * m_fLength;
+		pVtx[0].pos.z = 0.0f;
+
+		pVtx[1].pos.x = m_pos.x + sinf(m_rotY + -m_fAngle + D3DX_PI) * m_fLength;
+		pVtx[1].pos.y = m_pos.y + cosf(m_rotY + -m_fAngle + D3DX_PI) * m_fLength;
+		pVtx[1].pos.z = 0.0f;
+
+		pVtx[2].pos.x = m_pos.x + sinf(m_rotY + m_fAngle * -1.0f) * m_fLength;
+		pVtx[2].pos.y = m_pos.y + cosf(m_rotY + m_fAngle * -1.0f) * m_fLength;
+		pVtx[2].pos.z = 0.0f;
+
+		pVtx[3].pos.x = m_pos.x + sinf(m_rotY + m_fAngle) * m_fLength;
+		pVtx[3].pos.y = m_pos.y + cosf(m_rotY + m_fAngle) * m_fLength;
+		pVtx[3].pos.z = 0.0f;
+		break;
+	case CObject2D::RIGHT:
+		pVtx[0].pos.x = m_pos.x + sinf(m_rotY + m_fAngle + -D3DX_PI) * m_fLength;
+		pVtx[0].pos.y = m_pos.y + cosf(m_rotY + m_fAngle + -D3DX_PI) * m_fLength;
+		pVtx[0].pos.z = 0.0f;
+
+		pVtx[1].pos.x = m_pos.x + sinf(m_rotY + -m_fAngle + D3DX_PI) * m_fLength;
+		pVtx[1].pos.y = m_pos.y + cosf(m_rotY + -m_fAngle + D3DX_PI) * m_fLength;
+		pVtx[1].pos.z = 0.0f;
+
+		pVtx[2].pos.x = m_pos.x + sinf(m_rotY + m_fAngle * -1.0f) * m_fLength;
+		pVtx[2].pos.y = m_pos.y + cosf(m_rotY + m_fAngle * -1.0f) * m_fLength;
+		pVtx[2].pos.z = 0.0f;
+
+		pVtx[3].pos.x = m_pos.x + sinf(m_rotY + m_fAngle) * m_fLength;
+		pVtx[3].pos.y = m_pos.y + cosf(m_rotY + m_fAngle) * m_fLength;
+		pVtx[3].pos.z = 0.0f;
+		break;
+	case CObject2D::TOPLEFT:
+		pVtx[0].pos.x = m_pos.x - m_size.x;
+		pVtx[0].pos.y = m_pos.y;
+		pVtx[0].pos.z = 0.0f;
+
+		pVtx[1].pos.x = m_pos.x;
+		pVtx[1].pos.y = m_pos.y;
+		pVtx[1].pos.z = 0.0f;
+
+		pVtx[2].pos.x = m_pos.x - m_size.x;
+		pVtx[2].pos.y = m_pos.y + m_size.y;
+		pVtx[2].pos.z = 0.0f;
+
+		pVtx[3].pos.x = m_pos.x;
+		pVtx[3].pos.y = m_pos.y + m_size.y;
+		pVtx[3].pos.z = 0.0f;
+		break;
+	case CObject2D::TOPRIGHT:
+		pVtx[0].pos.x = m_pos.x;
+		pVtx[0].pos.y = m_pos.y;
+		pVtx[0].pos.z = 0.0f;
+
+		pVtx[1].pos.x = m_pos.x + m_size.x;
+		pVtx[1].pos.y = m_pos.y;
+		pVtx[1].pos.z = 0.0f;
+
+		pVtx[2].pos.x = m_pos.x;
+		pVtx[2].pos.y = m_pos.y + m_size.y;
+		pVtx[2].pos.z = 0.0f;
+
+		pVtx[3].pos.x = m_pos.x + m_size.x;
+		pVtx[3].pos.y = m_pos.y + m_size.y;
+		pVtx[3].pos.z = 0.0f;
+		break;
+	case CObject2D::DOWNLEFT:
+		pVtx[0].pos.x = m_pos.x - m_size.x;
+		pVtx[0].pos.y = m_pos.y - m_size.y;
+		pVtx[0].pos.z = 0.0f;
+
+		pVtx[1].pos.x = m_pos.x;
+		pVtx[1].pos.y = m_pos.y - m_size.y;
+		pVtx[1].pos.z = 0.0f;
+
+		pVtx[2].pos.x = m_pos.x - m_size.x;
+		pVtx[2].pos.y = m_pos.y;
+		pVtx[2].pos.z = 0.0f;
+
+		pVtx[3].pos.x = m_pos.x;
+		pVtx[3].pos.y = m_pos.y;
+		pVtx[3].pos.z = 0.0f;
+		break;
+	case CObject2D::DOWNRIGHT:
+		pVtx[0].pos.x = m_pos.x;
+		pVtx[0].pos.y = m_pos.y - m_size.y;
+		pVtx[0].pos.z = 0.0f;
+
+		pVtx[1].pos.x = m_pos.x + m_size.x;
+		pVtx[1].pos.y = m_pos.y - m_size.y;
+		pVtx[1].pos.z = 0.0f;
+
+		pVtx[2].pos.x = m_pos.x;
+		pVtx[2].pos.y = m_pos.y;
+		pVtx[2].pos.z = 0.0f;
+
+		pVtx[3].pos.x = m_pos.x + m_size.x;
+		pVtx[3].pos.y = m_pos.y;
+		pVtx[3].pos.z = 0.0f;
+		break;
+	default:
+		break;
+	}
 
 	// 頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
@@ -176,8 +320,8 @@ void CObject2D::SetPos(const D3DXVECTOR3 & inPos)
 void CObject2D::SetSize(const D3DXVECTOR2 & inSize)
 {
 	m_size = inSize;
-	fLength = sqrtf(m_size.x * m_size.x + m_size.y * m_size.y) * 0.5f;
-	fAngle = atan2f(m_size.x, m_size.y);
+	m_fLength = sqrtf(m_size.x * m_size.x + m_size.y * m_size.y) * 0.5f;
+	m_fAngle = atan2f(m_size.x, m_size.y);
 
 	SetPos(m_pos);
 }

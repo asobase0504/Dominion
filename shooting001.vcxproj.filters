@@ -18,23 +18,29 @@
     <Filter Include="ソース ファイル\02_Object">
       <UniqueIdentifier>{46662834-efab-4c03-b618-defc1f03dcd1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\03_Cpntroller">
-      <UniqueIdentifier>{0d4dda8f-550b-4600-8408-706d6820c1bc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\04_Mode">
-      <UniqueIdentifier>{48f00a93-53ea-4db8-9029-d9913dbc6a89}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\04_Mode\01_Game">
-      <UniqueIdentifier>{4c881af5-b061-444d-9fb7-b7421a8acc50}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\04_Mode\02_Title">
-      <UniqueIdentifier>{5948040f-2933-4137-9606-0409f344630f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\04_Mode\03_Result">
-      <UniqueIdentifier>{104c158d-21c7-4f09-a2f8-c232e9da0e0d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="FIle">
       <UniqueIdentifier>{d34f2a52-70b7-4c95-bb42-419947bb7574}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\04_Player">
+      <UniqueIdentifier>{38ff11a4-b5d2-43c7-8daa-63f6366c0a9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\03_Mode">
+      <UniqueIdentifier>{48f00a93-53ea-4db8-9029-d9913dbc6a89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\03_Mode\01_Game">
+      <UniqueIdentifier>{4c881af5-b061-444d-9fb7-b7421a8acc50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\03_Mode\02_Title">
+      <UniqueIdentifier>{5948040f-2933-4137-9606-0409f344630f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\03_Mode\03_Result">
+      <UniqueIdentifier>{104c158d-21c7-4f09-a2f8-c232e9da0e0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\05_Cpntroller">
+      <UniqueIdentifier>{0d4dda8f-550b-4600-8408-706d6820c1bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\06_Block">
+      <UniqueIdentifier>{44d867a8-162d-4067-820f-adf507ea2048}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -72,10 +78,10 @@
       <Filter>ソース ファイル\00_Main</Filter>
     </ClCompile>
     <ClCompile Include="title.cpp">
-      <Filter>ソース ファイル\04_Mode\02_Title</Filter>
+      <Filter>ソース ファイル\03_Mode\02_Title</Filter>
     </ClCompile>
     <ClCompile Include="player_controller.cpp">
-      <Filter>ソース ファイル\03_Cpntroller</Filter>
+      <Filter>ソース ファイル\05_Cpntroller</Filter>
     </ClCompile>
     <ClCompile Include="object.cpp">
       <Filter>ソース ファイル\02_Object</Filter>
@@ -84,40 +90,43 @@
       <Filter>ソース ファイル\02_Object</Filter>
     </ClCompile>
     <ClCompile Include="AI_controller.cpp">
-      <Filter>ソース ファイル\03_Cpntroller</Filter>
+      <Filter>ソース ファイル\05_Cpntroller</Filter>
     </ClCompile>
     <ClCompile Include="mode.cpp">
-      <Filter>ソース ファイル\04_Mode</Filter>
+      <Filter>ソース ファイル\03_Mode</Filter>
     </ClCompile>
     <ClCompile Include="game.cpp">
-      <Filter>ソース ファイル\04_Mode\01_Game</Filter>
-    </ClCompile>
-    <ClCompile Include="block.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="bullet.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="character.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="map.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="remains_bullet.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\03_Mode\01_Game</Filter>
     </ClCompile>
     <ClCompile Include="controller.cpp">
-      <Filter>ソース ファイル\03_Cpntroller</Filter>
-    </ClCompile>
-    <ClCompile Include="A-Star.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\05_Cpntroller</Filter>
     </ClCompile>
     <ClCompile Include="theme_color.cpp">
       <Filter>ソース ファイル\00_Main</Filter>
     </ClCompile>
     <ClCompile Include="menu.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="block_scraped.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="A-Star.cpp">
+      <Filter>ソース ファイル\05_Cpntroller</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet.cpp">
+      <Filter>ソース ファイル\04_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="character.cpp">
+      <Filter>ソース ファイル\04_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="remains_bullet.cpp">
+      <Filter>ソース ファイル\04_Player</Filter>
+    </ClCompile>
+    <ClCompile Include="block.cpp">
+      <Filter>ソース ファイル\06_Block</Filter>
+    </ClCompile>
+    <ClCompile Include="map.cpp">
+      <Filter>ソース ファイル\06_Block</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -152,10 +161,10 @@
       <Filter>ソース ファイル\00_Main</Filter>
     </ClInclude>
     <ClInclude Include="title.h">
-      <Filter>ソース ファイル\04_Mode\02_Title</Filter>
+      <Filter>ソース ファイル\03_Mode\02_Title</Filter>
     </ClInclude>
     <ClInclude Include="player_controller.h">
-      <Filter>ソース ファイル\03_Cpntroller</Filter>
+      <Filter>ソース ファイル\05_Cpntroller</Filter>
     </ClInclude>
     <ClInclude Include="object.h">
       <Filter>ソース ファイル\02_Object</Filter>
@@ -164,40 +173,43 @@
       <Filter>ソース ファイル\02_Object</Filter>
     </ClInclude>
     <ClInclude Include="AI_controller.h">
-      <Filter>ソース ファイル\03_Cpntroller</Filter>
+      <Filter>ソース ファイル\05_Cpntroller</Filter>
     </ClInclude>
     <ClInclude Include="mode.h">
-      <Filter>ソース ファイル\04_Mode</Filter>
+      <Filter>ソース ファイル\03_Mode</Filter>
     </ClInclude>
     <ClInclude Include="game.h">
-      <Filter>ソース ファイル\04_Mode\01_Game</Filter>
-    </ClInclude>
-    <ClInclude Include="block.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="bullet.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="character.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="map.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="remains_bullet.h">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\03_Mode\01_Game</Filter>
     </ClInclude>
     <ClInclude Include="controller.h">
-      <Filter>ソース ファイル\03_Cpntroller</Filter>
-    </ClInclude>
-    <ClInclude Include="A-Star.h">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ソース ファイル\05_Cpntroller</Filter>
     </ClInclude>
     <ClInclude Include="theme_color.h">
       <Filter>ソース ファイル\00_Main</Filter>
     </ClInclude>
     <ClInclude Include="menu.h">
       <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="block_scraped.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="A-Star.h">
+      <Filter>ソース ファイル\05_Cpntroller</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet.h">
+      <Filter>ソース ファイル\04_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="character.h">
+      <Filter>ソース ファイル\04_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="remains_bullet.h">
+      <Filter>ソース ファイル\04_Player</Filter>
+    </ClInclude>
+    <ClInclude Include="block.h">
+      <Filter>ソース ファイル\06_Block</Filter>
+    </ClInclude>
+    <ClInclude Include="map.h">
+      <Filter>ソース ファイル\06_Block</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
