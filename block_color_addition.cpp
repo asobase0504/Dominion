@@ -43,19 +43,7 @@ void CBlockColorAddition::Update()
 
 void CBlockColorAddition::Draw()
 {
-	LPDIRECT3DDEVICE9 pDevice = CApplication::GetInstance()->GetRenderer()->GetDevice();
-
-	// αブレンディングを加算合成に設定
-	//pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-	//pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	//pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
-
 	CObject2D::Draw();
-
-	// αブレンディングを元に戻す
-	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 }
 
 CBlockColorAddition * CBlockColorAddition::Create(const D3DXVECTOR3 & inPos, CBlock* inParent)

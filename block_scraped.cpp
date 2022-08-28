@@ -16,6 +16,11 @@
 #include <assert.h>
 
 //--------------------------------------------------
+// 定義
+//--------------------------------------------------
+const float CBlockScraped::SUBTRACT_SPEED_RATIO = 0.95f;
+
+//--------------------------------------------------
 // コンストラクタ
 //--------------------------------------------------
 CBlockScraped::CBlockScraped()
@@ -58,7 +63,7 @@ void CBlockScraped::Update()
 
 		CObject2D* object2d = m_block[i];
 		object2d->Update();
-		object2d->SetSize(object2d->GetSize() * 0.95f);
+		object2d->SetSize(object2d->GetSize() * SUBTRACT_SPEED_RATIO);
 
 		if (object2d->GetSize().x <= 0.0f || object2d->GetSize().y <= 0.0f)
 		{

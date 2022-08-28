@@ -20,7 +20,7 @@
 class CBlockScraped
 {
 public:
-
+	static const float SUBTRACT_SPEED_RATIO;
 public:
 	CBlockScraped();
 	~CBlockScraped();
