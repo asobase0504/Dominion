@@ -43,7 +43,7 @@ CGame::~CGame()
 //-----------------------------------------------------------------------------
 HRESULT CGame::Init()
 {
-	CApplication::GetInstance()->SetThemeColor(0);
+	CApplication::GetInstance()->SetThemeColor(3);
 
 	stage = LoadJsonStage(L"data/FILE/STAGE/stage01.json");
 
@@ -76,8 +76,8 @@ HRESULT CGame::Init()
 		int y = stage["PLAYERS"].at(inIdx)["SPAWN"].at(1);				// Yの位置番号を取得
 		CCharacter::TEAM inTeam = stage["PLAYERS"].at(inIdx)["TYPE"];	// チームの作成
 		character.push_back(CCharacter::Create(inTeam));				// 生成
-		float size = map->GetBlockSize() * 0.65f;
-		character.at(inIdx)->SetSize(D3DXVECTOR2(size, size));			// 大きさの設定
+		float size = map->GetBlockSize() * 0.65f;						// 大きさの設定
+		character.at(inIdx)->SetSize(D3DXVECTOR2(size, size));			// 大きさの代入
 		D3DXVECTOR3 pos = map->GetBlock(x, y)->GetPos();				// 位置の取得
 		character.at(inIdx)->SetPos(pos);								// 位置の設定
 		character.at(inIdx)->SetCenterBlockIndex({ x,y });				// 中央位置の設定
@@ -97,11 +97,13 @@ HRESULT CGame::Init()
 //-----------------------------------------------------------------------------
 void CGame::Uninit()
 {
+	// キャラクターの解放
 	for (auto it = character.begin(); it != character.end();)
 	{
 		it = character.erase(it);
 	}
 
+	// コントローラーの解放
 	for (auto it = controller.begin(); it != controller.end();)
 	{
 		// コントローラーの削除
