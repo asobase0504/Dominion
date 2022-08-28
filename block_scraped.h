@@ -32,9 +32,8 @@ public:
 
 	static CBlockScraped* Create(const D3DXVECTOR3& inPos,CBlock::BLOCK_TYPE type, CBlock::DIRECTION inDirection);
 
-	bool GetIsDeleted() { return m_isDeleted; }
+	void SetIsDeleted();
 private:
 	std::vector<CObject2D*> m_block;
-	bool m_isDeleted;
 };
 #endif // !_BLOCK_H_

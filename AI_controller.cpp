@@ -67,88 +67,91 @@ CController::SHOT_TYPE CAIController::BulletShot()
 	std::vector<std::vector<int>> ofBlockCharcter = charcter->GetOfBlock();
 
 	// オブジェクトを全てチェックする
-	for (auto it = CObject::GetMyObject()->begin(); it != CObject::GetMyObject()->end(); it++)
+	for (int i = 0; i < CObject::GetPrioritySize(); i++)
 	{
-		if ((*it)->GetIsDeleted())
+		for (auto it = CObject::GetMyObject(i)->begin(); it != CObject::GetMyObject(i)->end(); it++)
 		{
-			continue;
-		}
-
-		/* ↓オブジェクトが死ぬ予定がない場合↓ */
-
-		if (!((*it)->CObject::GetType() == CObject::TYPE::BULLET))
-		{
-			continue;
-		}
-
-		CBullet* bullet = (CBullet*)(*it);
-
-		if ((int)bullet->GetTeam() == (int)charcter->GetType())
-		{
-			continue;
-		}
-
-		if (isBulletShot)
-		{
-			count++;
-			if (count >= 15)
-			{
-				isBulletShot = false;
-				count = 0;
-			}
-			continue;
-		}
-
-		// 対象所属のブロック取得
-		std::vector<std::vector<int>> ofBlockTarget = bullet->GetOfBlock();
-
-		// 自身が所属しているブロックを全部チェックする
-		for (int i = 0; i < 4; i++)
-		{
-			if (ofBlockCharcter[i].empty())
+			if ((*it)->GetIsDeleted())
 			{
 				continue;
 			}
 
-			/* ↓所属ブロックがあった場合↓ */
+			/* ↓オブジェクトが死ぬ予定がない場合↓ */
 
-			// 対象が所属しているブロックを全部チェックする
-			for (int j = 0; j < 4; j++)
+			if (!((*it)->CObject::GetType() == CObject::TYPE::BULLET))
 			{
-				if (ofBlockTarget[j].empty())
+				continue;
+			}
+
+			CBullet* bullet = (CBullet*)(*it);
+
+			if ((int)bullet->GetTeam() == (int)charcter->GetType())
+			{
+				continue;
+			}
+
+			if (isBulletShot)
+			{
+				count++;
+				if (count >= 15)
+				{
+					isBulletShot = false;
+					count = 0;
+				}
+				continue;
+			}
+
+			// 対象所属のブロック取得
+			std::vector<std::vector<int>> ofBlockTarget = bullet->GetOfBlock();
+
+			// 自身が所属しているブロックを全部チェックする
+			for (int i = 0; i < 4; i++)
+			{
+				if (ofBlockCharcter[i].empty())
 				{
 					continue;
 				}
 
 				/* ↓所属ブロックがあった場合↓ */
 
-				bool isXAxisMatched = ofBlockCharcter[i][0] == ofBlockTarget[j][0];	// X軸の一致
-				bool isYAxisMatched = ofBlockCharcter[i][1] == ofBlockTarget[j][1];	// Y軸の一致
+				// 対象が所属しているブロックを全部チェックする
+				for (int j = 0; j < 4; j++)
+				{
+					if (ofBlockTarget[j].empty())
+					{
+						continue;
+					}
 
-				if (isXAxisMatched)
-				{
-					if ((ofBlockCharcter[i][1] - 5 < ofBlockTarget[j][1]) && (ofBlockCharcter[i][1] > ofBlockTarget[j][1]))
+					/* ↓所属ブロックがあった場合↓ */
+
+					bool isXAxisMatched = ofBlockCharcter[i][0] == ofBlockTarget[j][0];	// X軸の一致
+					bool isYAxisMatched = ofBlockCharcter[i][1] == ofBlockTarget[j][1];	// Y軸の一致
+
+					if (isXAxisMatched)
 					{
-						isBulletShot = true;
-						return UP_SHOT;
+						if ((ofBlockCharcter[i][1] - 5 < ofBlockTarget[j][1]) && (ofBlockCharcter[i][1] > ofBlockTarget[j][1]))
+						{
+							isBulletShot = true;
+							return UP_SHOT;
+						}
+						else if ((ofBlockCharcter[i][1] + 5 > ofBlockTarget[j][1]) && (ofBlockCharcter[i][1] < ofBlockTarget[j][1]))
+						{
+							isBulletShot = true;
+							return DOWN_SHOT;
+						}
 					}
-					else if ((ofBlockCharcter[i][1] + 5 > ofBlockTarget[j][1]) && (ofBlockCharcter[i][1] < ofBlockTarget[j][1]))
+					else if (isYAxisMatched)
 					{
-						isBulletShot = true;
-						return DOWN_SHOT;
-					}
-				}
-				else if (isYAxisMatched)
-				{
-					if ((ofBlockCharcter[i][0] - 5 < ofBlockTarget[j][0]) && (ofBlockCharcter[i][0] > ofBlockTarget[j][0]))
-					{
-						isBulletShot = true;
-						return LEFT_SHOT;
-					}
-					else if ((ofBlockCharcter[i][0] + 5 > ofBlockTarget[j][0]) && (ofBlockCharcter[i][0] < ofBlockTarget[j][0]))
-					{
-						isBulletShot = true;
-						return RIGHT_SHOT;
+						if ((ofBlockCharcter[i][0] - 5 < ofBlockTarget[j][0]) && (ofBlockCharcter[i][0] > ofBlockTarget[j][0]))
+						{
+							isBulletShot = true;
+							return LEFT_SHOT;
+						}
+						else if ((ofBlockCharcter[i][0] + 5 > ofBlockTarget[j][0]) && (ofBlockCharcter[i][0] < ofBlockTarget[j][0]))
+						{
+							isBulletShot = true;
+							return RIGHT_SHOT;
+						}
 					}
 				}
 			}

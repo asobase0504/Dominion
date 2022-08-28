@@ -13,19 +13,24 @@
 // 静的メンバー変数の宣言
 //=========================================
 const int CObject::NUM_MAX;
-std::list<CObject*> CObject::object = {};
+std::vector<std::list<CObject*>> CObject::object = {};
 int CObject::numAll = 0;
  
 //----------------------------------------
 // コンストラクタ
 //----------------------------------------
-CObject::CObject(TYPE type) :
+CObject::CObject(TYPE type, int priority) :
 	m_pos(D3DXVECTOR3(0.0f,0.0f,0.0f)),
 	createIdx(0),
 	m_isDeleted(false)
 {
 	m_type = type;
-	object.push_back(this);
+
+	if (object.size() < priority)
+	{
+		object.resize(priority);
+	}
+	object.at(priority - 1).push_back(this);
 }
 
 //----------------------------------------
@@ -40,19 +45,22 @@ CObject::~CObject()
 //----------------------------------------
 auto CObject::Release()
 {
-	for (auto it = object.begin(); it != object.end(); it++)
+	for (int i = 0;i < object.size();i++)
 	{
-		if ((*it) != this)
+		for (auto it = object.at(i).begin(); it != object.at(i).end(); it++)
 		{
-			continue;
-		}
+			if ((*it) != this)
+			{
+				continue;
+			}
 
-		delete this;
-		return object.erase(it);
+			delete this;
+			return object.at(i).erase(it);
+		}
 	}
 
 	assert(false);
-	return object.begin();
+	return object.at(0).begin();
 }
 
 //----------------------------------------
@@ -60,17 +68,21 @@ auto CObject::Release()
 //----------------------------------------
 void CObject::ReleaseAll()
 {
-	for (auto it = object.begin(); it != object.end();)
+	for (int i = object.size() - 1; i >= 0; i--)
 	{
-		(*it)->Uninit();
-
-		if (!(*it)->m_isDeleted)
+		for (auto it = object.at(i).begin(); it != object.at(i).end();)
 		{
-			it = (*it)->Release();
-			continue;
-		}
+			(*it)->Uninit();
 
-		it++;
+			if (!(*it)->m_isDeleted)
+			{
+				delete (*it);
+				it = object.at(i).erase(it);
+				continue;
+			}
+
+			it++;
+		}
 	}
 }
 
@@ -79,21 +91,24 @@ void CObject::ReleaseAll()
 //----------------------------------------
 void CObject::UpdateAll()
 {
-	for (auto it = object.begin(); it != object.end(); it++)
+	for (int i = 0; i < object.size(); i++)
 	{
-		(*it)->Update();
-	}
-
-	for (auto it = object.begin(); it != object.end();)
-	{
-		if ((*it)->m_isDeleted)
+		for (auto it = object.at(i).begin(); it != object.at(i).end(); it++)
 		{
-			(*it)->Uninit();
-			it = (*it)->Release();
-			continue;
+			(*it)->Update();
 		}
 
-		it++;
+		for (auto it = object.at(i).begin(); it != object.at(i).end();)
+		{
+			if ((*it)->m_isDeleted)
+			{
+				(*it)->Uninit();
+				it = (*it)->Release();
+				continue;
+			}
+
+			it++;
+		}
 	}
 }
 
@@ -102,8 +117,11 @@ void CObject::UpdateAll()
 //----------------------------------------
 void CObject::DrawAll()
 {
-	for (auto it = object.begin(); it != object.end(); it++)
+	for (int i = 0; i < object.size(); i++)
 	{
-		(*it)->Draw();
+		for (auto it = object.at(i).begin(); it != object.at(i).end(); it++)
+		{
+			(*it)->Draw();
+		}
 	}
 }

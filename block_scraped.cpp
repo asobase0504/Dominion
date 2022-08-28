@@ -18,8 +18,7 @@
 //--------------------------------------------------
 // コンストラクタ
 //--------------------------------------------------
-CBlockScraped::CBlockScraped() :
-	m_isDeleted(false)
+CBlockScraped::CBlockScraped()
 {
 }
 
@@ -43,10 +42,6 @@ HRESULT CBlockScraped::Init()
 //--------------------------------------------------
 void CBlockScraped::Uninit()
 {
-	for (int i = 0; i < m_block.size(); i++)
-	{
-		m_block[i]->SetIsDeleted(true);
-	}
 }
 
 //--------------------------------------------------
@@ -68,8 +63,6 @@ void CBlockScraped::Update()
 		if (object2d->GetSize().x <= 0.0f || object2d->GetSize().y <= 0.0f)
 		{
 			object2d->SetIsDeleted(true);
-
-			m_isDeleted = true;
 		}
 	}
 }
@@ -156,4 +149,12 @@ CBlockScraped* CBlockScraped::Create(const D3DXVECTOR3& inPos,CBlock::BLOCK_TYPE
 	}
 
 	return blockScraped;
+}
+
+void CBlockScraped::SetIsDeleted()
+{
+	for (int i = 0; i < m_block.size(); i++)
+	{
+		m_block[i]->SetIsDeleted(true);
+	}
 }

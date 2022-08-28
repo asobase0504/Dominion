@@ -9,6 +9,7 @@
 
 #include <d3dx9.h>
 #include <list>
+#include <vector>
 
 class CObject
 {
@@ -29,10 +30,10 @@ public:	// 静的関数
 	static void ReleaseAll();
 	static void UpdateAll();
 	static void DrawAll();
-	static const std::list<CObject*>* GetMyObject() { return &object; }
-
+	static const std::list<CObject*>* GetMyObject(int inIndex) { return &object.at(inIndex); }
+	static int GetPrioritySize() { return (int)object.size(); }
 public:
-	CObject(TYPE type);
+	CObject(TYPE type,int priority = 3);
 	virtual ~CObject();
 
 	virtual HRESULT Init() = 0;
@@ -53,7 +54,7 @@ private:
 	auto Release();
 
 private:
-	static std::list<CObject*> object;	// オブジェクト
+	static std::vector<std::list<CObject*>> object;	// オブジェクト
 	static int numAll;	// 最大数
 	int createIdx;		// 生成番号
 

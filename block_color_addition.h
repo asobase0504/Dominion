@@ -19,8 +19,9 @@
 //--------------------------------------------------
 class CBlockColorAddition : public CObject2D
 {
-public:
-
+private:
+	static const int PRIORITY_BELONG;	// このクラスのプライオリティ。
+	static const float SUBTRACT_SPEED;	// 減算速度
 public:
 	CBlockColorAddition(CObject::TYPE type = CObject::TYPE::NONE);
 	~CBlockColorAddition() override;

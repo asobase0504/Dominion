@@ -21,6 +21,8 @@ class CBlockColorAddition;
 //--------------------------------------------------
 class CBlock : public CObject2D
 {
+private:
+	static const int PRIORITY_BELONG;
 public:
 	//--------------------------------------------------
 	// ƒuƒƒbƒNó‘Ô‚Ì—ñ‹“Œ^

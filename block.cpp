@@ -17,11 +17,13 @@
 // デバッグ
 #include <assert.h>
 
+const int CBlock::PRIORITY_BELONG = 1;
+
 //--------------------------------------------------
 // コンストラクタ
 //--------------------------------------------------
 CBlock::CBlock(CObject::TYPE type) :
-	CObject2D(type),
+	CObject2D(type, PRIORITY_BELONG),
 	m_team(CBlock::BLOCK_TYPE::NONE),
 	m_scraped(nullptr),
 	m_colorAddition(nullptr)
@@ -54,6 +56,12 @@ void CBlock::Uninit()
 	{
 		m_colorAddition->Uninit();
 	}
+	if (m_scraped != nullptr)
+	{
+		m_scraped->Uninit();
+		delete m_scraped;
+		m_scraped = nullptr;
+	}
 
 	CObject2D::Uninit();
 }
@@ -66,10 +74,6 @@ void CBlock::Update()
 	if (m_scraped != nullptr)
 	{
 		m_scraped->Update();
-		if (m_scraped->GetIsDeleted())
-		{
-			m_scraped = nullptr;
-		}
 	}
 
 	if (m_colorAddition != nullptr)
@@ -140,6 +144,7 @@ void CBlock::ChangeType(DIRECTION inDirection)
 
 		if (m_scraped != nullptr)
 		{
+			m_scraped->SetIsDeleted();
 			m_scraped->Uninit();
 			delete m_scraped;
 			m_scraped = nullptr;
@@ -151,6 +156,7 @@ void CBlock::ChangeType(DIRECTION inDirection)
 		SetColor(CApplication::GetInstance()->GetColor(0));
 		if (m_scraped != nullptr)
 		{
+			m_scraped->SetIsDeleted();
 			m_scraped->Uninit();
 			delete m_scraped;
 			m_scraped = nullptr;

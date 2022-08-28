@@ -13,8 +13,8 @@
 //=============================================================================
 // コンストラクタ
 //=============================================================================
-CObject2D::CObject2D(TYPE type) :
-	CObject(type),
+CObject2D::CObject2D(TYPE type,int inPriority) :
+	CObject(type, inPriority),
 	m_pVtxBuff(nullptr),
 	m_texture("\0"),
 	m_rotY(0.0f),
@@ -313,9 +313,9 @@ void CObject2D::SetColorAlpha(const float inAlpha)
 //=============================================================================
 // ポリゴンクラスの作成
 //=============================================================================
-CObject2D* CObject2D::Create()
+CObject2D* CObject2D::Create(TYPE type, int inPriority)
 {
-	CObject2D* objectCreate = new CObject2D;
+	CObject2D* objectCreate = new CObject2D(type, inPriority);
 
 	if ((objectCreate == nullptr) || FAILED(objectCreate->Init()))
 	{

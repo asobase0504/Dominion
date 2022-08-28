@@ -44,10 +44,10 @@ public:
 	static const DWORD FVF_VERTEX_2D = (D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1);
 
 public:	// ê√ìIä÷êî
-	static CObject2D* Create();
+	static CObject2D* Create(TYPE type = TYPE::NONE, int inPriority = 3);
 
 public:
-	CObject2D(TYPE type = TYPE::NONE);
+	CObject2D(TYPE type = TYPE::NONE, int inPriority = 3);
 	~CObject2D() override;
 
 	HRESULT Init() override;
