@@ -13,6 +13,7 @@
 #include "map.h"
 #include "player_controller.h"
 #include "AI_controller.h"
+#include "ui_countdown.h"
 #include <assert.h>
 #include <functional>
 
@@ -43,8 +44,6 @@ CGame::~CGame()
 //-----------------------------------------------------------------------------
 HRESULT CGame::Init()
 {
-	CApplication::GetInstance()->SetThemeColor(3);
-
 	stage = LoadJsonStage(L"data/FILE/STAGE/stage01.json");
 
 	// ”wŒi‚ÌÝ’è
@@ -89,6 +88,8 @@ HRESULT CGame::Init()
 	playerSet(0, new CAIController);
 	playerSet(1, new CPlayerController);
 
+	m_countDownUI = CCountDownUI::Create(D3DXVECTOR2(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y));
+
 	return S_OK;
 }
 
@@ -131,10 +132,16 @@ void CGame::Update()
 {
 	CInputKeybord* input = CApplication::GetInstance()->GetInput();
 
-	//	‰æ–Ê‚Ì‘JˆÚ
-	if (input->GetTrigger(DIK_RETURN))
+	if (m_countDownUI != nullptr)
 	{
-		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::TITLE);
+		m_countDownUI->Update();
+		if (m_countDownUI->GetIsDeleted())
+		{
+			m_countDownUI->Uninit();
+			delete m_countDownUI;
+			m_countDownUI = nullptr;
+		}
+		return;
 	}
 
 	for (int i = 0; i < character.size(); i++)
@@ -142,7 +149,15 @@ void CGame::Update()
 		if (character[i]->GetIsDeleted())
 		{
 			CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::TITLE);
+			return;
 		}
+	}
+
+	//	‰æ–Ê‚Ì‘JˆÚ
+	if (input->GetTrigger(DIK_RETURN))
+	{
+		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::TITLE);
+		return;
 	}
 }
 

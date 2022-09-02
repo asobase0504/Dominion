@@ -18,6 +18,7 @@
 class CCharacter;
 class CController;
 class CMap;
+class CCountDownUI;
 
 //-----------------------------------------
 // アプリケーションクラス
@@ -42,6 +43,7 @@ private: // 動的メンバー変数
 	std::vector<CController*> controller;
 	nlohmann::json stage;
 	CMap* map;
+	CCountDownUI* m_countDownUI;
 };
 
 #endif // !_GAME_H_

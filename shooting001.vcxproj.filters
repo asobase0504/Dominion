@@ -134,6 +134,9 @@
     <ClCompile Include="block_color_addition.cpp">
       <Filter>ソース ファイル\06_Block</Filter>
     </ClCompile>
+    <ClCompile Include="ui_countdown.cpp">
+      <Filter>ソース ファイル\07_UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="input.h">
@@ -214,11 +217,14 @@
     <ClInclude Include="block_scraped.h">
       <Filter>ソース ファイル\06_Block</Filter>
     </ClInclude>
-    <ClInclude Include="menu.h">
-      <Filter>ソース ファイル\06_Block</Filter>
-    </ClInclude>
     <ClInclude Include="block_color_addition.h">
       <Filter>ソース ファイル\06_Block</Filter>
+    </ClInclude>
+    <ClInclude Include="menu.h">
+      <Filter>ソース ファイル\07_UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ui_countdown.h">
+      <Filter>ソース ファイル\07_UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

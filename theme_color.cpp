@@ -36,7 +36,7 @@ CThemeColor::~CThemeColor()
 //-----------------------------------------------------------------------------
 HRESULT CThemeColor::Init()
 {
-	SetTheme(0);
+	//SetTheme(0);
 
 	return S_OK;
 }

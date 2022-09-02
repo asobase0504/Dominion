@@ -15,14 +15,16 @@
 const int CObject::NUM_MAX;
 std::vector<std::list<CObject*>> CObject::object = {};
 int CObject::numAll = 0;
- 
+bool CObject::isStopUpdate = false;
+
 //----------------------------------------
 // コンストラクタ
 //----------------------------------------
 CObject::CObject(TYPE type, int priority) :
 	m_pos(D3DXVECTOR3(0.0f,0.0f,0.0f)),
 	createIdx(0),
-	m_isDeleted(false)
+	m_isDeleted(false),
+	shouldStopAlsoUpdate(false)
 {
 	m_type = type;
 
@@ -68,7 +70,7 @@ auto CObject::Release()
 //----------------------------------------
 void CObject::ReleaseAll()
 {
-	for (int i = object.size() - 1; i >= 0; i--)
+	for (int i = (int)object.size() - 1; i >= 0; i--)
 	{
 		for (auto it = object.at(i).begin(); it != object.at(i).end();)
 		{
@@ -93,11 +95,16 @@ void CObject::UpdateAll()
 {
 	for (int i = 0; i < object.size(); i++)
 	{
+		// 更新処理
 		for (auto it = object.at(i).begin(); it != object.at(i).end(); it++)
 		{
-			(*it)->Update();
+			if (((*it)->shouldStopAlsoUpdate && isStopUpdate) || !isStopUpdate)
+			{
+				(*it)->Update();
+			}
 		}
 
+		// 死亡処理
 		for (auto it = object.at(i).begin(); it != object.at(i).end();)
 		{
 			if ((*it)->m_isDeleted)

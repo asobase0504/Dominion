@@ -12,6 +12,7 @@
 class CRenderer
 {
 public:
+public:
 	CRenderer();
 	~CRenderer();
 

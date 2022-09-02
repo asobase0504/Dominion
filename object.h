@@ -30,6 +30,9 @@ public:	// 静的関数
 	static void ReleaseAll();
 	static void UpdateAll();
 	static void DrawAll();
+
+	static void SetStopUpdate(bool inStopStatus) { isStopUpdate = inStopStatus; }
+
 	static const std::list<CObject*>* GetMyObject(int inIndex) { return &object.at(inIndex); }
 	static int GetPrioritySize() { return (int)object.size(); }
 public:
@@ -42,7 +45,8 @@ public:
 	virtual void Draw() = 0;
 
 	// Setter
-	void SetIsDeleted(bool inDeleted) { m_isDeleted = inDeleted; }
+	void SetIsDeleted(bool inDeleted) { m_isDeleted = inDeleted; }		// 死亡状態を設定
+	void SetShouldStopAlsoUpdate() { shouldStopAlsoUpdate = true; }
 	virtual void SetPos(const D3DXVECTOR3& inPos) { m_pos = inPos; }	// 位置の設定
 
 	// Getter
@@ -57,7 +61,8 @@ private:
 	static std::vector<std::list<CObject*>> object;	// オブジェクト
 	static int numAll;	// 最大数
 	int createIdx;		// 生成番号
-
+	static bool isStopUpdate;	// 更新が停止中か
+	bool shouldStopAlsoUpdate;	// 停止中も更新すべきか
 protected:
 	D3DXVECTOR3 m_pos;	// 位置
 	bool m_isDeleted;	// 削除フラグ
