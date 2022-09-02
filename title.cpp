@@ -35,6 +35,8 @@ CTitle::~CTitle()
 //-----------------------------------------------------------------------------
 HRESULT CTitle::Init()
 {
+	CApplication::GetInstance()->SetThemeColor(1);
+
 	// ”wŒi‚Ìİ’è
 	{
 		CObject2D* bg = CObject2D::Create();
@@ -56,41 +58,43 @@ HRESULT CTitle::Init()
 
 		// €–Ú‚Ìİ’è
 		std::vector<std::vector<CMenuItem*>> items;
-
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < (int)CTitle::Status::MAX; i++)
 		{
 			std::vector<CMenuItem*> X;
+
+			CMenuItem* item = new CMenuItem;
+			item->Init();
+			item->SetSize(D3DXVECTOR2(465.0f, 80.0f));			// ‘å‚«‚³‚Ìİ’è
+			item->SetColor(CApplication::GetInstance()->GetColor(0));			// F‚Ìİ’è
+
+			switch ((CTitle::Status)i)
 			{
-				if (i != 3)
-				{
-					for (int j = 0; j < 3; j++)
-					{
-						CMenuItem* item = new CMenuItem;
-						item->Init();
-						item->SetSize(D3DXVECTOR2(100.0f, 100.0f));
-						item->SetColor(CApplication::GetInstance()->GetColor(0));
-
-						X.push_back(item);
-					}
-				}
-				else
-				{
-					for (int j = 0; j < 2; j++)
-					{
-						CMenuItem* item = new CMenuItem;
-						item->Init();
-						item->SetSize(D3DXVECTOR2(150.0f, 80.0f));
-						item->SetColor(CApplication::GetInstance()->GetColor(0));
-
-						X.push_back(item);
-					}
-				}
+			case CTitle::Status::GAME_STAET:
+				item->SetTexture("TEXT_GAMESTART");
+				break;
+			case CTitle::Status::TUTORIAL:
+				item->SetTexture("TEXT_TUTORIAL");
+				break;
+			case CTitle::Status::CUSTOMIZE:
+				item->SetTexture("TEXT_CUSTOMIZE");
+				break;
+			case CTitle::Status::OPSITON:
+				item->SetTexture("TEXT_OPSITON");
+				break;
+			case CTitle::Status::EXIT:
+				item->SetTexture("TEXT_EXIT");
+				break;
+			default:
+				assert(false);
+				break;
 			}
+
+			X.push_back(item);
 			items.push_back(X);
 		}
 
 		D3DXVECTOR2 pos(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y);
-		D3DXVECTOR2 area(500.0f, 500.0f);
+		D3DXVECTOR2 area(500.0f, 550.0f);
 		m_manu = CMenu::Create(pos, area, fream, items);
 	}
 
@@ -117,7 +121,28 @@ void CTitle::Update()
 {
 	CInputKeybord* input = CApplication::GetInstance()->GetInput();
 
-	if (input->GetTrigger(DIK_RETURN))
+	if (m_manu != nullptr)
+	{
+		m_manu->Update();
+		if (input->GetTrigger(DIK_W))
+		{
+			m_manu->Select(CMenu::TOP);
+		}
+		if (input->GetTrigger(DIK_S))
+		{
+			m_manu->Select(CMenu::DOWN);
+		}
+		if (input->GetTrigger(DIK_A))
+		{
+			m_manu->Select(CMenu::LEFT);
+		}
+		if (input->GetTrigger(DIK_D))
+		{
+			m_manu->Select(CMenu::RIGHT);
+		}
+	}
+
+	if (input->GetTrigger(DIK_RETURN) && (m_manu->GetSelectIdx()[0] == 0))
 	{
 		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::GAME);
 	}

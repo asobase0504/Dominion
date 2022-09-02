@@ -20,6 +20,16 @@ class CMenu;
 //-----------------------------------------
 class CTitle : public CMode
 {
+public: // —ñ‹“Œ^
+	enum class Status
+	{
+		GAME_STAET,
+		TUTORIAL,
+		CUSTOMIZE,
+		OPSITON,
+		EXIT,
+		MAX
+	};
 public:	// ƒƒ“ƒo[ŠÖ”
 	CTitle();
 	~CTitle() override;

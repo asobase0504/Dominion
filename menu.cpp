@@ -8,6 +8,7 @@
 // include
 //-----------------------------------------
 #include "menu.h"
+#include "application.h"
 
 //-----------------------------------------
 // コンストラクタ
@@ -16,8 +17,8 @@ CMenu::CMenu() :
 	m_pos(D3DXVECTOR3(0.0f,0.0f,0.0f)),
 	m_Area(D3DXVECTOR2(0.0f, 0.0f)),
 	m_fream(nullptr),
-//	m_item(nullptr),
-	m_selectIdx(2,0),
+	m_item({}),
+	m_selectIdx({0,0}),
 	m_fInterval(D3DXVECTOR2(0.0f, 0.0f)),
 	m_AroundWhitespace(D3DXVECTOR2(0.0f, 0.0f))
 {
@@ -45,6 +46,7 @@ HRESULT CMenu::Init()
 //-----------------------------------------
 void CMenu::Uninit()
 {
+	m_item.clear();
 }
 
 //-----------------------------------------
@@ -52,6 +54,20 @@ void CMenu::Uninit()
 //-----------------------------------------
 void CMenu::Update()
 {
+	for (int i = 0; i < m_item.size(); i++)
+	{
+		for (int j = 0; j < m_item[i].size(); j++)
+		{
+			if (m_selectIdx[0] == i && m_selectIdx[1] == j)
+			{
+				m_item[i][j]->SelectUpdate();
+			}
+			else
+			{
+				m_item[i][j]->NomalUpdate();
+			}
+		}
+	}
 }
 
 //-----------------------------------------
@@ -59,6 +75,71 @@ void CMenu::Update()
 //-----------------------------------------
 void CMenu::Draw()
 {
+}
+
+//-----------------------------------------
+// 選択
+//-----------------------------------------
+void CMenu::Select(SELECT_DIRECTION inDirection)
+{
+	switch (inDirection)
+	{
+	case CMenu::TOP:
+		m_selectIdx[0]--;
+		if (m_selectIdx[0] < 0)
+		{
+			m_selectIdx[0] = (int)m_item.size() - 1;
+		}
+		if (m_selectIdx[1] >= (int)m_item[m_selectIdx[0]].size())
+		{
+			m_selectIdx[1] = (int)m_item[m_selectIdx[0]].size() - 1;
+		}
+		break;
+	case CMenu::DOWN:
+		m_selectIdx[0]++;
+		if (m_selectIdx[0] >= (int)m_item.size())
+		{
+			m_selectIdx[0] = 0;
+		}
+		if (m_selectIdx[1] >= (int)m_item[m_selectIdx[0]].size())
+		{
+			m_selectIdx[1] = (int)m_item[m_selectIdx[0]].size() - 1;
+		}
+		break;
+	case CMenu::LEFT:
+		m_selectIdx[1]--;
+		if (m_selectIdx[1] < 0)
+		{
+			m_selectIdx[1] = (int)m_item[m_selectIdx[0]].size() - 1;
+		}
+		break;
+	case CMenu::RIGHT:
+		m_selectIdx[1]++;
+		if (m_selectIdx[1] >= (int)m_item[m_selectIdx[0]].size())
+		{
+			m_selectIdx[1] = 0;
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+//-----------------------------------------
+// 選択された番号の設定
+//-----------------------------------------
+void CMenu::SetSelectIdx(int Y, int X)
+{
+	m_selectIdx[0] = Y;
+	m_selectIdx[1] = X;
+}
+
+//-----------------------------------------
+// 選択された番号の設定
+//-----------------------------------------
+void CMenu::SetSelectIdx(std::vector<int> inIdx)
+{
+	m_selectIdx = inIdx;
 }
 
 //-----------------------------------------
@@ -104,13 +185,6 @@ CMenu * CMenu::Create(D3DXVECTOR2 inPos, D3DXVECTOR2 inArea, CMenuFream * inFrea
 	}
 
 	return menu;
-}
-
-//-----------------------------------------
-// 選択
-//-----------------------------------------
-void CMenu::Select()
-{
 }
 
 //=========================================
@@ -209,6 +283,22 @@ void CMenuItem::Uninit()
 //-----------------------------------------
 void CMenuItem::Update()
 {
+}
+
+//-----------------------------------------
+// 選択状態のアップデート
+//-----------------------------------------
+void CMenuItem::SelectUpdate()
+{
+	SetColor(CApplication::GetInstance()->GetColor(3));
+}
+
+//-----------------------------------------
+// 通常状態のアップデート
+//-----------------------------------------
+void CMenuItem::NomalUpdate()
+{
+	SetColor(CApplication::GetInstance()->GetColor(0));
 }
 
 //-----------------------------------------
