@@ -137,6 +137,12 @@
     <ClCompile Include="ui_countdown.cpp">
       <Filter>ソース ファイル\07_UI</Filter>
     </ClCompile>
+    <ClCompile Include="title_status.cpp">
+      <Filter>ソース ファイル\03_Mode\02_Title</Filter>
+    </ClCompile>
+    <ClCompile Include="stage.cpp">
+      <Filter>ソース ファイル\03_Mode\01_Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="input.h">
@@ -225,6 +231,12 @@
     </ClInclude>
     <ClInclude Include="ui_countdown.h">
       <Filter>ソース ファイル\07_UI</Filter>
+    </ClInclude>
+    <ClInclude Include="title_status.h">
+      <Filter>ソース ファイル\03_Mode\02_Title</Filter>
+    </ClInclude>
+    <ClInclude Include="stage.h">
+      <Filter>ソース ファイル\03_Mode\01_Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

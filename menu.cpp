@@ -11,6 +11,11 @@
 #include "application.h"
 
 //-----------------------------------------
+// 定義
+//-----------------------------------------
+const int CMenu::DECISION_AFTERGLOW_TIME = 30;
+
+//-----------------------------------------
 // コンストラクタ
 //-----------------------------------------
 CMenu::CMenu() :
@@ -20,7 +25,9 @@ CMenu::CMenu() :
 	m_item({}),
 	m_selectIdx({0,0}),
 	m_fInterval(D3DXVECTOR2(0.0f, 0.0f)),
-	m_AroundWhitespace(D3DXVECTOR2(0.0f, 0.0f))
+	m_AroundWhitespace(D3DXVECTOR2(0.0f, 0.0f)),
+	m_isDexision(false),
+	m_decisionAfterglowCount(0)
 {
 
 }
@@ -54,20 +61,44 @@ void CMenu::Uninit()
 //-----------------------------------------
 void CMenu::Update()
 {
+	if (!m_isDexision)
+	{
+		UpdateBeforeDecision();
+	}
+	else
+	{
+		UpdateAfterDecision();
+	}
+}
+
+//-----------------------------------------
+// 決定前の更新
+//-----------------------------------------
+void CMenu::UpdateBeforeDecision()
+{
 	for (int i = 0; i < m_item.size(); i++)
 	{
 		for (int j = 0; j < m_item[i].size(); j++)
 		{
 			if (m_selectIdx[0] == i && m_selectIdx[1] == j)
 			{
+				// 自身が選択中の場合
 				m_item[i][j]->SelectUpdate();
 			}
 			else
 			{
+				// 自身が選択中ではない場合
 				m_item[i][j]->NomalUpdate();
 			}
 		}
 	}
+}
+
+//-----------------------------------------
+// 決定後の更新
+//-----------------------------------------
+void CMenu::UpdateAfterDecision()
+{
 }
 
 //-----------------------------------------
@@ -126,6 +157,30 @@ void CMenu::Select(SELECT_DIRECTION inDirection)
 }
 
 //-----------------------------------------
+// 決定
+//-----------------------------------------
+bool CMenu::Decision(bool inDecison)
+{
+	// 決定したか否か
+	if (!m_isDexision)
+	{
+		m_isDexision = inDecison;
+		return false;
+	}
+
+	/* ↓決定している場合↓ */
+
+	m_decisionAfterglowCount++;
+
+	bool check = m_decisionAfterglowCount >= DECISION_AFTERGLOW_TIME;
+	if (check)
+	{
+		m_isDexision = false;
+	}
+	return check;
+}
+
+//-----------------------------------------
 // 選択された番号の設定
 //-----------------------------------------
 void CMenu::SetSelectIdx(int Y, int X)
@@ -168,23 +223,32 @@ CMenu * CMenu::Create(D3DXVECTOR2 inPos, D3DXVECTOR2 inArea, CMenuFream * inFrea
 
 	menu->m_item = inItem;	// 項目の設定
 
-	for (int i = 0; i < menu->m_item.size(); i++)
+	menu->SetItemPos();
+
+	return menu;
+}
+
+//-----------------------------------------
+// アイテムの位置を設定する
+//-----------------------------------------
+void CMenu::SetItemPos()
+{
+	for (int i = 0; i < m_item.size(); i++)
 	{
-		for (int j = 0; j < menu->m_item.at(i).size(); j++)
+		for (int j = 0; j < m_item.at(i).size(); j++)
 		{
-			CMenuItem* item = menu->m_item[i][j];
-			D3DXVECTOR2 pos = menu->m_pos;
-			pos.y -= ((menu->m_item.size() - 1) * 0.5f) * (item->GetSize().y + menu->m_fInterval.y);
-			pos.x -= ((menu->m_item.at(i).size() - 1) * 0.5f) * (item->GetSize().x + menu->m_fInterval.x);
+			CMenuItem* item = m_item[i][j];
+			D3DXVECTOR2 pos = m_pos;
+			pos.y -= ((m_item.size() - 1) * 0.5f) * (item->GetSize().y + m_fInterval.y);
+			pos.x -= ((m_item.at(i).size() - 1) * 0.5f) * (item->GetSize().x + m_fInterval.x);
 
-			pos.y += i * (item->GetSize().y + menu->m_fInterval.y);
-			pos.x += j * (item->GetSize().x + menu->m_fInterval.x);
+			pos.y += i * (item->GetSize().y + m_fInterval.y);
+			pos.x += j * (item->GetSize().x + m_fInterval.x);
 
-			item->SetPos(D3DXVECTOR3(pos.x,pos.y,0.0f));
+			item->SetPos(D3DXVECTOR3(pos.x, pos.y, 0.0f));
 		}
 	}
 
-	return menu;
 }
 
 //=========================================

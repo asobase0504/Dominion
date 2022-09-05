@@ -98,7 +98,7 @@ void CObject::UpdateAll()
 		// XVˆ—
 		for (auto it = object.at(i).begin(); it != object.at(i).end(); it++)
 		{
-			if (((*it)->shouldStopAlsoUpdate && isStopUpdate) || !isStopUpdate)
+			if ((((*it)->shouldStopAlsoUpdate && isStopUpdate) || !isStopUpdate) && !(*it)->m_isDeleted)
 			{
 				(*it)->Update();
 			}

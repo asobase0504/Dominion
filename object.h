@@ -63,6 +63,7 @@ private:
 	int createIdx;		// 生成番号
 	static bool isStopUpdate;	// 更新が停止中か
 	bool shouldStopAlsoUpdate;	// 停止中も更新すべきか
+	bool shouldInvisible;		// 描画を停止中すべきか
 protected:
 	D3DXVECTOR3 m_pos;	// 位置
 	bool m_isDeleted;	// 削除フラグ

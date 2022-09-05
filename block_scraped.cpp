@@ -47,6 +47,15 @@ HRESULT CBlockScraped::Init()
 //--------------------------------------------------
 void CBlockScraped::Uninit()
 {
+	for (int i = 0; i < m_block.size(); i++)
+	{
+		if (m_block[i] == nullptr)
+		{
+			continue;
+		}
+
+		m_block[i]->Uninit();
+	}
 }
 
 //--------------------------------------------------

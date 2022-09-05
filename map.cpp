@@ -51,6 +51,7 @@ void CMap::Uninit()
 	{
 		for (CBlock* block_X : block_Y)
 		{
+			block_X->SetIsDeleted(true);
 			block_X = nullptr;
 		}
 	}

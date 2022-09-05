@@ -28,7 +28,8 @@ public: // 列挙型
 		CUSTOMIZE,
 		OPSITON,
 		EXIT,
-		MAX
+		MAX,
+		NONE
 	};
 public:	// メンバー関数
 	CTitle();
@@ -41,6 +42,7 @@ public:	// メンバー関数
 
 private: // 動的メンバー変数
 	CMenu* m_manu;
+	Status m_status;
 };
 
 #endif // !_TITLE_H_

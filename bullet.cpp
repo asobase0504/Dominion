@@ -12,6 +12,7 @@
 #include "collision.h"
 #include "block.h"
 #include "game.h"
+#include "stage.h"
 #include "map.h"
 
 //-----------------------------------------
@@ -160,7 +161,7 @@ void CBullet::Collision()
 	auto HitBlock = [this](int x, int y)
 	{
 		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-		CMap* pMap = game->GetMap();
+		CMap* pMap = game->GetStage()->GetMap();
 
 		// 当たったか否か
 		bool isHit = HitWithBlock(pMap->GetBlock(x, y));
@@ -190,7 +191,7 @@ void CBullet::Collision()
 		int BottomY = m_ofBlockIndex[i][1] + 1;	// Y軸の下側
 
 		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-		CMap* pMap = game->GetMap();
+		CMap* pMap = game->GetStage()->GetMap();
 
 		// ブロック端の場合の処理
 		if (LeftX < 0)

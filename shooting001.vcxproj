@@ -162,6 +162,7 @@
     <ClCompile Include="character.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="menu.cpp" />
+    <ClCompile Include="stage.cpp" />
     <ClCompile Include="theme_color.cpp" />
     <ClCompile Include="remains_bullet.cpp" />
     <ClCompile Include="error_warning.cpp" />
@@ -181,6 +182,7 @@
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="title.cpp" />
+    <ClCompile Include="title_status.cpp" />
     <ClCompile Include="ui_countdown.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +196,7 @@
     <ClInclude Include="character.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="menu.h" />
+    <ClInclude Include="stage.h" />
     <ClInclude Include="theme_color.h" />
     <ClInclude Include="remains_bullet.h" />
     <ClInclude Include="error_warning.h" />
@@ -212,6 +215,7 @@
     <ClInclude Include="renderer.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="title.h" />
+    <ClInclude Include="title_status.h" />
     <ClInclude Include="ui_countdown.h" />
   </ItemGroup>
   <ItemGroup>

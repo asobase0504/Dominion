@@ -1,11 +1,11 @@
 //=========================================
 // 
-// ゲーム内クラス
+// ステージクラス
 // Author YudaKaito
 // 
 //=========================================
-#ifndef _GAME_H_
-#define _GAME_H_
+#ifndef _STAGE_H_
+#define _STAGE_H_
 
 #include "mode.h"
 #include "file.h"
@@ -15,33 +15,39 @@
 //-----------------------------------------
 // 前方宣言
 //-----------------------------------------
-class CStage;
 class CCharacter;
 class CController;
 class CMap;
 class CCountDownUI;
 
 //-----------------------------------------
-// アプリケーションクラス
+// ステージクラス
 //-----------------------------------------
-class CGame : public CMode
+class CStage
 {
 public:	// メンバー関数
-	CGame();
-	~CGame() override;
+	CStage();
+	~CStage();
 
-	HRESULT Init() override;
-	void Uninit() override;
-	void Update() override;
-	void Draw() override;
+	HRESULT Init();
+	void Uninit();
+	void Update();
+	void Draw();
 
 	// ゲッタ―
-	CStage* GetStage() { return m_stage; }
+	bool GetEndSet() { return m_isEndGame; }
+	CMap* GetMap() { return map; }
+	std::vector<CCharacter*>* GetCharacter() { return &character; }
+
+private: // プライベート関数
+	void BulletDelete();
 
 private: // 動的メンバー変数
-	CStage* m_stage;
-	int m_setNumber;
-	CCountDownUI* m_countDownUI;
+	std::vector<CCharacter*> character;
+	std::vector<CController*> controller;
+	nlohmann::json stage;
+	CMap* map;
+	bool m_isEndGame;
 };
 
 #endif // !_GAME_H_

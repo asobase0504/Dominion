@@ -48,13 +48,14 @@ HRESULT CBlock::Init()
 }
 
 //--------------------------------------------------
-// デストラクタ
+// 終了
 //--------------------------------------------------
 void CBlock::Uninit()
 {
 	if (m_colorAddition != nullptr)
 	{
 		m_colorAddition->Uninit();
+		m_colorAddition = nullptr;
 	}
 	if (m_scraped != nullptr)
 	{

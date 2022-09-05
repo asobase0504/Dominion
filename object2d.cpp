@@ -104,7 +104,7 @@ void CObject2D::Uninit()
 		m_pVtxBuff = nullptr;
 	}
 
-	m_isDeleted = false;
+	m_isDeleted = true;
 }
 
 //=============================================================================

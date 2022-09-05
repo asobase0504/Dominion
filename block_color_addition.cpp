@@ -38,7 +38,7 @@ HRESULT CBlockColorAddition::Init()
 void CBlockColorAddition::Uninit()
 {
 	CObject2D::Uninit();
-	m_parent->DeleteColorAddition();
+	//m_parent->DeleteColorAddition();
 }
 
 //--------------------------------------------------
@@ -50,11 +50,12 @@ void CBlockColorAddition::Update()
 
 	m_col.a -= SUBTRACT_SPEED;
 
+	SetColor(m_col);
+
 	if (m_col.a <= 0.0f)
 	{
 		SetIsDeleted(true);
 	}
-	SetColor(m_col);
 }
 
 //--------------------------------------------------

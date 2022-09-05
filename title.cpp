@@ -19,7 +19,9 @@
 //-----------------------------------------------------------------------------
 // コンストラクタ
 //-----------------------------------------------------------------------------
-CTitle::CTitle()
+CTitle::CTitle() : 
+	m_manu(nullptr),
+	m_status(Status::NONE)
 {
 }
 
@@ -119,32 +121,52 @@ void CTitle::Uninit()
 //-----------------------------------------------------------------------------
 void CTitle::Update()
 {
-	CInputKeybord* input = CApplication::GetInstance()->GetInput();
-
-	if (m_manu != nullptr)
+	switch (m_status)
 	{
-		m_manu->Update();
-		if (input->GetTrigger(DIK_W))
+	case CTitle::Status::NONE:
+	{
+		CInputKeybord* input = CApplication::GetInstance()->GetInput();
+
+		if (m_manu != nullptr)
 		{
-			m_manu->Select(CMenu::TOP);
+			m_manu->Update();
+			if (input->GetTrigger(DIK_W))
+			{
+				m_manu->Select(CMenu::TOP);
+			}
+			if (input->GetTrigger(DIK_S))
+			{
+				m_manu->Select(CMenu::DOWN);
+			}
+			if (input->GetTrigger(DIK_A))
+			{
+				m_manu->Select(CMenu::LEFT);
+			}
+			if (input->GetTrigger(DIK_D))
+			{
+				m_manu->Select(CMenu::RIGHT);
+			}
 		}
-		if (input->GetTrigger(DIK_S))
+
+		if (m_manu->Decision(input->GetTrigger(DIK_RETURN)))
 		{
-			m_manu->Select(CMenu::DOWN);
-		}
-		if (input->GetTrigger(DIK_A))
-		{
-			m_manu->Select(CMenu::LEFT);
-		}
-		if (input->GetTrigger(DIK_D))
-		{
-			m_manu->Select(CMenu::RIGHT);
+			m_status = (CTitle::Status)m_manu->GetSelectIdx()[0];
 		}
 	}
-
-	if (input->GetTrigger(DIK_RETURN) && (m_manu->GetSelectIdx()[0] == 0))
-	{
+		break;
+	case CTitle::Status::GAME_STAET:
 		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::GAME);
+		break;
+	case CTitle::Status::TUTORIAL:
+		break;
+	case CTitle::Status::CUSTOMIZE:
+		break;
+	case CTitle::Status::OPSITON:
+		break;
+	case CTitle::Status::EXIT:
+		break;
+	default:
+		break;
 	}
 }
 

@@ -15,6 +15,7 @@
 #include "bullet.h"
 #include "controller.h"
 #include "remains_bullet.h"
+#include "stage.h"
 #include "collision.h"
 #include "block.h"
 #include <assert.h>
@@ -94,7 +95,7 @@ void CCharacter::Update()
 	CObject2D::SetPos(m_pos);		// 位置の設定
 
 	CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-	CMap* pMap = game->GetMap();
+	CMap* pMap = game->GetStage()->GetMap();
 	CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
 	pBlock->SetAdditionColor();
 
@@ -146,7 +147,7 @@ void CCharacter::BulletShot()
 	auto Shot = [this](const D3DXVECTOR3& inMove)
 	{
 		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-		CMap* pMap = game->GetMap();
+		CMap* pMap = game->GetStage()->GetMap();
 		CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
 
 		CBullet* bullet = CBullet::Create(pBlock->GetPos(), inMove, m_team);
@@ -173,7 +174,7 @@ void CCharacter::BulletShot()
 	case CController::UP_CHARGE_SHOT:
 	{
 		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-		CMap* pMap = game->GetMap();
+		CMap* pMap = game->GetStage()->GetMap();
 		CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
 		CBlock* pBlockUp = pMap->GetBlock(m_ofBlockIndexCenter[0] - 1, m_ofBlockIndexCenter[1]);
 		CBlock* pBlockDown = pMap->GetBlock(m_ofBlockIndexCenter[0] + 1, m_ofBlockIndexCenter[1]);
@@ -200,7 +201,7 @@ void CCharacter::BulletShot()
 	case CController::DOWN_CHARGE_SHOT:
 	{
 		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-		CMap* pMap = game->GetMap();
+		CMap* pMap = game->GetStage()->GetMap();
 		CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
 		CBlock* pBlockUp = pMap->GetBlock(m_ofBlockIndexCenter[0] - 1, m_ofBlockIndexCenter[1]);
 		CBlock* pBlockDown = pMap->GetBlock(m_ofBlockIndexCenter[0] + 1, m_ofBlockIndexCenter[1]);
@@ -227,7 +228,7 @@ void CCharacter::BulletShot()
 	case CController::LEFT_CHARGE_SHOT:
 	{
 		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-		CMap* pMap = game->GetMap();
+		CMap* pMap = game->GetStage()->GetMap();
 		CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
 		CBlock* pBlockUp = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1] - 1);
 		CBlock* pBlockDown = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1] + 1);
@@ -254,7 +255,7 @@ void CCharacter::BulletShot()
 	case CController::RIGHT_CHARGE_SHOT:
 	{
 		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-		CMap* pMap = game->GetMap();
+		CMap* pMap = game->GetStage()->GetMap();
 		CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
 		CBlock* pBlockUp = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1] - 1);
 		CBlock* pBlockDown = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1] + 1);
@@ -421,7 +422,7 @@ void CCharacter::ScreenFromOutTime()
 
 			// そのブロックがキャラクターの中心が所属してるブロックがチェック
 			CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-			CBlock* block = game->GetMap()->GetBlock(x, y);
+			CBlock* block = game->GetStage()->GetMap()->GetBlock(x, y);
 			D3DXVECTOR3 blockSize = D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f);	// ブロックの大きさ
 
 			if (Collision::RectangleAndRectangle(m_pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), block->GetPos(), blockSize))
@@ -482,7 +483,7 @@ void CCharacter::Collision()
 	auto HitBlock = [this](int x, int y, DIRECTION inDirection, std::vector<DIRECTION> inAround)
 	{
 		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-		CMap* pMap = game->GetMap();
+		CMap* pMap = game->GetStage()->GetMap();
 		CBlock* block = pMap->GetBlock(x, y);
 
 		if ((int)m_team == (int)block->CBlock::GetType())
@@ -522,7 +523,7 @@ void CCharacter::Collision()
 		int BottomY = m_ofBlockIndexCenter[1] + 1;
 
 		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-		CMap* pMap = game->GetMap();
+		CMap* pMap = game->GetStage()->GetMap();
 
 		// ブロック端の場合の処理
 		if (LeftX < 0)

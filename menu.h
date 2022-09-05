@@ -22,7 +22,7 @@ class CMenuItem;
 class CMenu
 {
 public: // 定義
-
+	static const int DECISION_AFTERGLOW_TIME;	// 決定後の余韻時間
 public: // 列挙型
 	enum SELECT_DIRECTION
 	{
@@ -42,6 +42,9 @@ public:	// パブリック関数
 	void Draw();
 
 	void Select(SELECT_DIRECTION inDirection);
+	bool Decision(bool inDecison);
+	void UpdateBeforeDecision();
+	void UpdateAfterDecision();
 
 	// Setter
 	void SetSelectIdx(int Y, int X);
@@ -52,7 +55,8 @@ public:	// パブリック関数
 
 	static CMenu* Create(D3DXVECTOR2 inPos, D3DXVECTOR2 inArea,CMenuFream* inFream, std::vector<std::vector<CMenuItem*>> inItem);
 private: // プライベート関数
-
+	// Setter
+	void SetItemPos();
 private: // メンバー変数
 	D3DXVECTOR2 m_pos;	// 位置
 	D3DXVECTOR2 m_Area;	// 範囲
@@ -61,6 +65,8 @@ private: // メンバー変数
 	std::vector<int> m_selectIdx;					// 現在選択中の番号
 	D3DXVECTOR2 m_fInterval;						// 項目の間隔
 	D3DXVECTOR2 m_AroundWhitespace;					// 周りの余白
+	bool m_isDexision;	// 決定しているか否か
+	int m_decisionAfterglowCount;					// 決定後の余韻カウント
 };
 
 //-----------------------------------------
