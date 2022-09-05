@@ -79,8 +79,7 @@ private: // プライベート関数
 	void BulletReload();		// 弾をリロードする処理
 	void ScreenFromOutTime();	// 画面外に行く場合の処理
 
-	void Collision();
-	void HitWithBullet(CBullet* inBullet);
+	void Collision();	// 当たり判定
 
 	void HitWithAnotherTeamBlock(CBlock* inBlock, DIRECTION inDirection, std::vector<DIRECTION> inAround);
 

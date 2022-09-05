@@ -88,16 +88,18 @@ void CCharacter::Update()
 	// 弾数の回復
 	BulletReload();
 
-	// ブロックとの当たり判定
+	// 当たり判定
 	Collision();
 
 	m_pos += m_move;
 	CObject2D::SetPos(m_pos);		// 位置の設定
 
-	CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-	CMap* pMap = game->GetStage()->GetMap();
-	CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
-	pBlock->SetAdditionColor();
+	{ // 自身が所属しているブロックに軌跡を表示
+		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
+		CMap* pMap = game->GetStage()->GetMap();
+		CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
+		pBlock->SetAdditionColor();
+	}
 
 	// スクリーン外に出た時
 	ScreenFromOutTime();
@@ -513,7 +515,7 @@ void CCharacter::Collision()
 		}
 	};
 
-	{
+	{ // 所属していないブロックとの当たり判定
 		int CenterX = m_ofBlockIndexCenter[0];
 		int LeftX = m_ofBlockIndexCenter[0] - 1;
 		int RightX = m_ofBlockIndexCenter[0] + 1;
@@ -551,16 +553,19 @@ void CCharacter::Collision()
 		{
 			inAround.push_back(CenterTop);
 		}
+
 		block = pMap->GetBlock(CenterX, BottomY);
 		if ((int)m_team != (int)block->CBlock::GetType())
 		{
 			inAround.push_back(CenterBottom);
 		}
+
 		block = pMap->GetBlock(LeftX, CenterY);
 		if ((int)m_team != (int)block->CBlock::GetType())
 		{
 			inAround.push_back(LeftCenter);
 		}
+
 		block = pMap->GetBlock(RightX, CenterY);
 		if ((int)m_team != (int)block->CBlock::GetType())
 		{
@@ -580,17 +585,13 @@ void CCharacter::Collision()
 		m_move *= m_spead;
 	}
 
-	// 弾との当たり判定
-	for (auto it = GetMyObject(2)->begin(); it != GetMyObject(2)->end(); it++)
 	{
-		if ((*it)->GetIsDeleted())
+		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
+		CBlock* block = game->GetStage()->GetMap()->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
+		
+		if ((int)m_team != (int)block->CBlock::GetType())
 		{
-			continue;
-		}
-
-		if ((*it)->CObject::GetType() == CObject::TYPE::BULLET)
-		{
-			HitWithBullet((CBullet*)(*it));
+			m_isDeleted = true;	// 死亡状態にする
 		}
 	}
 }
@@ -608,49 +609,6 @@ bool CCharacter::HitWithBlock(CBlock* inBlock)
 		return true;
 	}
 	return false;
-}
-
-//-----------------------------------------
-// 弾との当たり判定
-//-----------------------------------------
-void CCharacter::HitWithBullet(CBullet* inBullet)
-{
-	CBullet* pBullet = inBullet;
-
-	// 同じ所属なら弾く
-	if ((int)m_team == (int)pBullet->CBullet::GetTeam())
-	{
-		return;
-	}
-
-	std::vector<std::vector<int>> bulletOfBlock = pBullet->GetOfBlock();
-
-	// 乗ってるブロックの数分回す
-	for (int i = 0; i < m_ofBlockIndex.size(); i++)
-	{
-		if (m_ofBlockIndex[i].empty())
-		{
-			continue;
-		}
-
-		/* ↓プレイヤーの所属ブロックが空ではなかった場合↓ */
-
-		for (int j = 0; j < bulletOfBlock.size(); j++)
-		{
-			if (bulletOfBlock[j].empty())
-			{
-				continue;
-			}
-
-			/* ↓弾の所属ブロックが空ではなかった場合↓ */
-
-			if (m_ofBlockIndex[i] == bulletOfBlock[j])
-			{
-				m_isDeleted = true;
-				return;
-			}
-		}
-	}
 }
 
 //-----------------------------------------

@@ -88,13 +88,21 @@ void CGame::Update()
 		m_stage->Update();
 		if (m_stage->GetEndSet())
 		{
-			m_stage->Uninit();
-			delete m_stage;
-			m_stage = nullptr;
+			m_setNumber++;
+			if ((m_setNumber <= 5))
+			{
+				m_stage->Uninit();
+				delete m_stage;
+				m_stage = nullptr;
 
-			m_stage = new CStage;
-			m_stage->Init();
-			m_countDownUI = CCountDownUI::Create(D3DXVECTOR2(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y));
+				m_stage = new CStage;
+				m_stage->Init();
+				m_countDownUI = CCountDownUI::Create(D3DXVECTOR2(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y));
+			}
+			else
+			{
+				CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::TITLE);
+			}
 		}
 	}
 

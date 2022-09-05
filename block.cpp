@@ -79,6 +79,7 @@ void CBlock::Update()
 
 	if (m_colorAddition != nullptr)
 	{
+		m_colorAddition->Update();
 		if (m_colorAddition->GetIsDeleted())
 		{
 			m_colorAddition = nullptr;
