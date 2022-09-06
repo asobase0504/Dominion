@@ -62,7 +62,7 @@ D3DXVECTOR3 CAIController::Move()
 //-----------------------------------------
 CController::SHOT_TYPE CAIController::BulletShot()
 {
-	static int count = 0;
+	static int count = 0;	// 弾発射の間隔。
 	CCharacter* charcter = (CCharacter*)m_toOrder;
 	std::vector<std::vector<int>> ofBlockCharcter = charcter->GetOfBlock();
 
@@ -82,6 +82,8 @@ CController::SHOT_TYPE CAIController::BulletShot()
 			{
 				continue;
 			}
+
+			/* ↓オブジェクトが弾の場合↓ */
 
 			CBullet* bullet = (CBullet*)(*it);
 
@@ -157,5 +159,45 @@ CController::SHOT_TYPE CAIController::BulletShot()
 			}
 		}
 	}
+	return NONE_SHOT;
+}
+
+//-----------------------------------------------------------------------------
+// 避けるために移動する
+//-----------------------------------------------------------------------------
+D3DXVECTOR3 CAIController::MoveToAvoid()
+{
+	return D3DXVECTOR3();
+}
+
+//-----------------------------------------------------------------------------
+// 追うために移動する
+//-----------------------------------------------------------------------------
+D3DXVECTOR3 CAIController::MoveToChase()
+{
+	return D3DXVECTOR3();
+}
+
+//-----------------------------------------------------------------------------
+// 道を広げるために弾を撃つ
+//-----------------------------------------------------------------------------
+CController::SHOT_TYPE CAIController::ShootToSpreadWay()
+{
+	return NONE_SHOT;
+}
+
+//-----------------------------------------------------------------------------
+// キャラクターを攻撃するために弾を撃つ
+//-----------------------------------------------------------------------------
+CController::SHOT_TYPE CAIController::ShootToAttack()
+{
+	return NONE_SHOT;
+}
+
+//-----------------------------------------------------------------------------
+// 弾を相殺するために弾を撃つ
+//-----------------------------------------------------------------------------
+CController::SHOT_TYPE CAIController::ShootToOffsetBullet()
+{
 	return NONE_SHOT;
 }
