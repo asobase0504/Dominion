@@ -143,6 +143,9 @@
     <ClCompile Include="stage.cpp">
       <Filter>ソース ファイル\03_Mode\01_Game</Filter>
     </ClCompile>
+    <ClCompile Include="sound.cpp">
+      <Filter>ソース ファイル\00_Main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="input.h">
@@ -237,6 +240,9 @@
     </ClInclude>
     <ClInclude Include="stage.h">
       <Filter>ソース ファイル\03_Mode\01_Game</Filter>
+    </ClInclude>
+    <ClInclude Include="sound.h">
+      <Filter>ソース ファイル\00_Main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
