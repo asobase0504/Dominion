@@ -88,7 +88,7 @@ void CCountDownUI::Uninit()
 //--------------------------------------------------
 void CCountDownUI::Update()
 {
-	CObject::SetStopUpdate(true);
+	//CObject::SetStopUpdate(true);
 	m_count++;
 
 	if (m_count >= READY_TIME)
@@ -97,6 +97,7 @@ void CCountDownUI::Update()
 	}
 	if (m_count >= READY_TIME + GO_TIME)
 	{
+		//
 		CObject::SetStopUpdate(false);
 		SetIsDeleted();
 	}

@@ -37,7 +37,7 @@ CTitle::~CTitle()
 //-----------------------------------------------------------------------------
 HRESULT CTitle::Init()
 {
-	CApplication::GetInstance()->SetThemeColor(1);
+	CApplication::GetInstance()->SetThemeColor(3);
 
 	// ”wŒi‚Ìİ’è
 	{

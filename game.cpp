@@ -22,6 +22,7 @@
 //-----------------------------------------------------------------------------
 CGame::CGame() : 
 	m_stage(nullptr),
+	m_nowSetNumber(0),
 	m_setNumber(0)
 {
 }
@@ -40,6 +41,7 @@ CGame::~CGame()
 //-----------------------------------------------------------------------------
 HRESULT CGame::Init()
 {
+	m_setNumber = 5;
 	// ”wŒi‚ÌÝ’è
 	{
 		CObject2D* bg = CObject2D::Create(CObject::TYPE::NONE, 1);
@@ -95,7 +97,6 @@ void CGame::Update()
 			delete m_countDownUI;
 			m_countDownUI = nullptr;
 		}
-		return;
 	}
 
 	if (m_stage != nullptr)
@@ -103,8 +104,8 @@ void CGame::Update()
 		m_stage->Update();
 		if (m_stage->GetEndSet())
 		{
-			m_setNumber++;
-			if (!(m_setNumber >= 5))
+			m_nowSetNumber++;
+			if (!(m_nowSetNumber >= m_setNumber))
 			{
 				m_stage->AllDelete();
 				m_stage->Uninit();

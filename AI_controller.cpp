@@ -54,7 +54,7 @@ void CAIController::Update()
 //-----------------------------------------
 D3DXVECTOR3 CAIController::Move()
 {
-	return D3DXVECTOR3(-0.5f,0.0f,0.0f);
+	return D3DXVECTOR3(-0.0f,0.0f,0.0f);
 }
 
 //-----------------------------------------

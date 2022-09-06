@@ -47,6 +47,8 @@ private: // “®“Iƒƒ“ƒo[•Ï”
 	std::vector<CController*> controller;
 	nlohmann::json stage;
 	CMap* map;
+	bool m_isPreparing;
+	int m_PreparingCount;
 	bool m_isEndGame;
 };
 

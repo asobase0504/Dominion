@@ -91,8 +91,8 @@ void CMap::Set()
 			index = y * MAX_X_BLOCK + x;
 
 			m_block[y].push_back(CBlock::Create(m_blockIdx[y][x]));
-			m_block[y][x]->SetPos(D3DXVECTOR3(x * BLOCK_SIZE + (BLOCK_SIZE * 0.5f), y * BLOCK_SIZE + (BLOCK_SIZE * 0.5f), 0.0f));
-			m_block[y][x]->SetSize(D3DXVECTOR2(BLOCK_SIZE, BLOCK_SIZE));
+			m_block[y][x]->SetPosPlan(D3DXVECTOR3(x * BLOCK_SIZE + (BLOCK_SIZE * 0.5f), y * BLOCK_SIZE + (BLOCK_SIZE * 0.5f), 0.0f));
+			m_block[y][x]->SetSizePlan(D3DXVECTOR2(BLOCK_SIZE, BLOCK_SIZE));
 		}
 	}
 }

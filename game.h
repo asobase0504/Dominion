@@ -40,6 +40,7 @@ public:	// メンバー関数
 
 private: // 動的メンバー変数
 	CStage* m_stage;
+	int m_nowSetNumber;
 	int m_setNumber;
 	CCountDownUI* m_countDownUI;
 };
