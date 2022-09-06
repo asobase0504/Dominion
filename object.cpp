@@ -76,9 +76,10 @@ void CObject::ReleaseAll()
 		{
 			(*it)->Uninit();
 
-			if (!(*it)->m_isDeleted)
+			if ((*it)->m_isDeleted)
 			{
 				delete (*it);
+				(*it) = nullptr;
 				it = object.at(i).erase(it);
 				continue;
 			}

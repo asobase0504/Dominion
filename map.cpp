@@ -47,15 +47,6 @@ HRESULT CMap::Init()
 //--------------------------------------------------
 void CMap::Uninit()
 {
-	for (std::vector<CBlock*> block_Y : m_block)
-	{
-		for (CBlock* block_X : block_Y)
-		{
-			block_X->SetIsDeleted(true);
-			block_X = nullptr;
-		}
-	}
-
 	// ブロックのクリア
 	if (!m_block.empty())
 	{
@@ -112,6 +103,26 @@ void CMap::Set()
 void CMap::Load()
 {
 
+}
+
+//--------------------------------------------------
+// 解放
+//--------------------------------------------------
+void CMap::Delete()
+{
+	for (std::vector<CBlock*> block_Y : m_block)
+	{
+		for (CBlock* block_X : block_Y)
+		{
+			if (block_X != nullptr)
+			{
+				block_X->ColorAdditionDelete();
+				block_X->ScrapedDelete();
+				block_X->SetIsDeleted(true);
+				block_X = nullptr;
+			}
+		}
+	}
 }
 
 //--------------------------------------------------

@@ -33,6 +33,7 @@ public:	// メンバー関数
 	void Uninit();
 	void Update();
 	void Draw();
+	void AllDelete();
 
 	// ゲッタ―
 	bool GetEndSet() { return m_isEndGame; }
@@ -40,8 +41,7 @@ public:	// メンバー関数
 	std::vector<CCharacter*>* GetCharacter() { return &character; }
 
 private: // プライベート関数
-	void BulletDelete();
-
+	void DeleteBullet();
 private: // 動的メンバー変数
 	std::vector<CCharacter*> character;
 	std::vector<CController*> controller;

@@ -54,7 +54,7 @@ void CBlockScraped::Uninit()
 			continue;
 		}
 
-		m_block[i]->Uninit();
+		m_block[i] = nullptr;
 	}
 }
 

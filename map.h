@@ -34,6 +34,7 @@ public:
 	void Set();
 	void Load();
 
+	void Delete();
 	// Getter
 	CBlock* GetBlock(int indexX, int indexY);
 	static float GetBlockSize() { return BLOCK_SIZE; }

@@ -54,9 +54,9 @@ void CBlock::Uninit()
 {
 	if (m_colorAddition != nullptr)
 	{
-		m_colorAddition->Uninit();
 		m_colorAddition = nullptr;
 	}
+
 	if (m_scraped != nullptr)
 	{
 		m_scraped->Uninit();
@@ -221,6 +221,28 @@ void CBlock::ResurveyRidingObject()
 
 		// 削除しない場合
 		it++;
+	}
+}
+
+//--------------------------------------------------
+// 加算しているブロックの削除依頼
+//--------------------------------------------------
+void CBlock::ColorAdditionDelete()
+{
+	if (m_colorAddition != nullptr)
+	{
+		m_colorAddition->SetIsDeleted(true);
+	}
+}
+
+//--------------------------------------------------
+// 削っているブロックの削除依頼
+//--------------------------------------------------
+void CBlock::ScrapedDelete()
+{
+	if (m_scraped != nullptr)
+	{
+		m_scraped->SetIsDeleted();
 	}
 }
 

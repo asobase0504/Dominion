@@ -60,7 +60,8 @@ public:
 
 	void ResurveyRidingObject();
 
-	void DeleteColorAddition() { m_colorAddition = nullptr; }
+	void ColorAdditionDelete();
+	void ScrapedDelete();
 
 	// Setter
 	void SetRidingObject(CObject* inObject);

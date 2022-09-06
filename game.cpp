@@ -31,6 +31,8 @@ CGame::CGame() :
 //-----------------------------------------------------------------------------
 CGame::~CGame()
 {
+	assert(m_countDownUI == nullptr);
+	assert(m_stage == nullptr);
 }
 
 //-----------------------------------------------------------------------------
@@ -61,6 +63,19 @@ HRESULT CGame::Init()
 //-----------------------------------------------------------------------------
 void CGame::Uninit()
 {
+	if (m_countDownUI != nullptr)
+	{
+		m_countDownUI->Uninit();
+		delete m_countDownUI;
+		m_countDownUI = nullptr;
+	}
+
+	if (m_stage != nullptr)
+	{
+		m_stage->Uninit();
+		delete m_stage;
+		m_stage = nullptr;
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -89,15 +104,17 @@ void CGame::Update()
 		if (m_stage->GetEndSet())
 		{
 			m_setNumber++;
-			if ((m_setNumber <= 5))
+			if (!(m_setNumber >= 5))
 			{
+				m_stage->AllDelete();
 				m_stage->Uninit();
 				delete m_stage;
 				m_stage = nullptr;
 
 				m_stage = new CStage;
 				m_stage->Init();
-				m_countDownUI = CCountDownUI::Create(D3DXVECTOR2(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y));
+				D3DXVECTOR2 pos = D3DXVECTOR2(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y);
+				m_countDownUI = CCountDownUI::Create(pos);
 			}
 			else
 			{
