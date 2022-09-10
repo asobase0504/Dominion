@@ -228,7 +228,7 @@ void CBullet::Collision()
 	}
 
 	// オブジェクト全体を取得
-	for (auto it = GetMyObject(2)->begin(); it != GetMyObject(2)->end(); it++)
+	for (auto it = GetMyObject(3)->begin(); it != GetMyObject(3)->end(); it++)
 	{
 		if ((*it)->GetIsDeleted())
 		{

@@ -28,11 +28,11 @@ CObject::CObject(TYPE type, int priority) :
 {
 	m_type = type;
 
-	if (object.size() < priority)
+	if (object.size() < priority + 1)
 	{
-		object.resize(priority);
+		object.resize(priority + 1);
 	}
-	object.at(priority - 1).push_back(this);
+	object.at(priority).push_back(this);
 }
 
 //----------------------------------------

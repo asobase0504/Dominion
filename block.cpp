@@ -8,6 +8,7 @@
 // include
 //-----------------------------------------------------------------------------
 #include "block.h"
+#include "crush_effect.h"
 #include "character.h"
 #include "bullet.h"
 #include "application.h"
@@ -139,12 +140,37 @@ CBlock* CBlock::Create(CBlock::BLOCK_TYPE type)
 //-----------------------------------------------------------------------------
 void CBlock::ChangeType(DIRECTION inDirection)
 {
+	D3DXVECTOR3 move(0.0f,0.0f,0.0f);
+
+	switch (inDirection)
+	{
+	case CBlock::TOP:
+		move.y += -1.5f;
+		break;
+	case CBlock::DOWN:
+		move.y += 1.5f;
+		break;
+	case CBlock::LEFT:
+		move.x += -1.5f;
+		break;
+	case CBlock::RIGHT:
+		move.x += 1.5f;
+		break;
+	default:
+		break;
+	}
+
 	switch (m_team)
 	{
 	case CBlock::BLOCK_TYPE::NONE:
 		break;
 	case CBlock::BLOCK_TYPE::BLOCK_01:
 		m_team = CBlock::BLOCK_TYPE::BLOCK_02;
+		for (int i = 0; i < 2; i++)
+		{
+			CCrushEffect::Create(m_pos, move, m_col, m_team);
+		}
+
 		SetColor(CApplication::GetInstance()->GetColor(1));
 
 		if (m_scraped != nullptr)
@@ -158,6 +184,12 @@ void CBlock::ChangeType(DIRECTION inDirection)
 		break;
 	case CBlock::BLOCK_TYPE::BLOCK_02:
 		m_team = CBlock::BLOCK_TYPE::BLOCK_01;
+
+		for (int i = 0; i < 2; i++)
+		{
+			CCrushEffect::Create(m_pos, move, m_col, m_team);
+		}
+
 		SetColor(CApplication::GetInstance()->GetColor(0));
 		if (m_scraped != nullptr)
 		{
