@@ -87,7 +87,7 @@ CController::SHOT_TYPE CAIController::BulletShot()
 
 			CBullet* bullet = (CBullet*)(*it);
 
-			if ((int)bullet->GetTeam() == (int)charcter->GetType())
+			if ((int)bullet->GetTeam() == (int)charcter->GetTeam())
 			{
 				continue;
 			}
