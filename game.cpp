@@ -10,21 +10,23 @@
 #include "game.h"
 #include "stage.h"
 #include "ui_countdown.h"
+#include "ui_obtained_setnumber.h"
 #include <assert.h>
 #include <functional>
 
 #include "application.h"
-#include "input.h"
-#include "input_keybord.h"
 
 //-----------------------------------------------------------------------------
 // コンストラクタ
 //-----------------------------------------------------------------------------
-CGame::CGame() : 
+CGame::CGame() :
 	m_stage(nullptr),
-	m_nowSetNumber(0),
-	m_setNumber(0)
+	m_countDownUI(nullptr),
+	m_obtainedSetNumberUI(nullptr),
+	m_needWinNumber(0),
+	m_winnerIndex(0)
 {
+	m_winNumber.clear();
 }
 
 //-----------------------------------------------------------------------------
@@ -41,7 +43,14 @@ CGame::~CGame()
 //-----------------------------------------------------------------------------
 HRESULT CGame::Init()
 {
-	m_setNumber = 5;
+	// 勝ちをカウントするint型をチーム数分作成する。
+	m_winNumber.resize(2);
+	for (int i = 0; i < m_winNumber.size(); i++)
+	{
+		m_winNumber[i] = 0;
+	}
+
+	m_needWinNumber = 5;
 	// 背景の設定
 	{
 		CObject2D* bg = CObject2D::Create(CObject::TYPE::NONE, 1);
@@ -85,8 +94,24 @@ void CGame::Uninit()
 //-----------------------------------------------------------------------------
 void CGame::Update()
 {
-	CInputKeybord* input = CApplication::GetInstance()->GetInput();
+	// ラウンド終了UIの更新
+	if (m_obtainedSetNumberUI != nullptr)
+	{
+		m_obtainedSetNumberUI->Update();
+		if (m_obtainedSetNumberUI->GetIsDeleted())
+		{
+			// delete処理
+			m_obtainedSetNumberUI->Uninit();
+			delete m_obtainedSetNumberUI;
+			m_obtainedSetNumberUI = nullptr;
 
+			// もう一度ゲームを行う
+			ResetStage();
+		}
+		return;
+	}
+
+	// カウントダウンUIの更新
 	if (m_countDownUI != nullptr)
 	{
 		m_countDownUI->Update();
@@ -104,31 +129,41 @@ void CGame::Update()
 		m_stage->Update();
 		if (m_stage->GetEndSet())
 		{
-			m_nowSetNumber++;
-			if (!(m_nowSetNumber >= m_setNumber))
-			{
-				m_stage->AllDelete();
-				m_stage->Uninit();
-				delete m_stage;
-				m_stage = nullptr;
+			m_winnerIndex = m_stage->GetWinnerIndex();
+			m_winNumber[m_winnerIndex]++;
 
-				m_stage = new CStage;
-				m_stage->Init();
-				D3DXVECTOR2 pos = D3DXVECTOR2(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y);
-				m_countDownUI = CCountDownUI::Create(pos);
+			auto isSetCheack = [this](int idx)
+			{
+				return m_winNumber[idx] >= m_needWinNumber;
+			};
+
+			bool isRoundCountWon = false;
+			for (int i = 0; i < m_winNumber.size(); i++)
+			{
+				if (isSetCheack(i))
+				{
+					isRoundCountWon = true;
+				}
+			}
+
+			if (isRoundCountWon)
+			{ // 指定数分どちらかのチームが勝った場合
+				//	画面の遷移
+				CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::TITLE);
 			}
 			else
 			{
-				CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::TITLE);
+				// もう一度やる前にUIで催促
+				if (m_obtainedSetNumberUI != nullptr)
+				{
+					// ここを通った段階でUIが消えてなかった場合警告
+					assert(false);
+				}
+
+				D3DXVECTOR2 pos = D3DXVECTOR2(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y);
+				m_obtainedSetNumberUI = CObtainedSetNumberUI::Create(pos);
 			}
 		}
-	}
-
-	//	画面の遷移
-	if (input->GetTrigger(DIK_RETURN))
-	{
-		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::TITLE);
-		return;
 	}
 }
 
@@ -137,4 +172,20 @@ void CGame::Update()
 //-----------------------------------------------------------------------------
 void CGame::Draw()
 {
+}
+
+//-----------------------------------------------------------------------------
+// ステージのリセット
+//-----------------------------------------------------------------------------
+void CGame::ResetStage()
+{
+	m_stage->AllDelete();	// ステージ状で作ったオブジェクトを全て解放
+	m_stage->Uninit();	// 終了
+	delete m_stage;
+	m_stage = nullptr;
+
+	m_stage = new CStage;
+	m_stage->Init();	// 初期化
+	D3DXVECTOR2 pos = D3DXVECTOR2(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y);
+	m_countDownUI = CCountDownUI::Create(pos);	// カウントダウンの開始
 }

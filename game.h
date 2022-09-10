@@ -20,6 +20,7 @@ class CCharacter;
 class CController;
 class CMap;
 class CCountDownUI;
+class CObtainedSetNumberUI;
 
 //-----------------------------------------
 // アプリケーションクラス
@@ -35,14 +36,22 @@ public:	// メンバー関数
 	void Update() override;
 	void Draw() override;
 
-	// ゲッタ―
-	CStage* GetStage() { return m_stage; }
+	// Getter
+	CStage* GetStage() { return m_stage; }	// ステージの情報
+	int GetNeedWinNumber() { return m_needWinNumber; }	// ラウンド数の取得
+	int GetWinNumber(int inIndex) { return m_winNumber[inIndex]; }	// 勝利数の取得
+	int GetWinner() { return m_winnerIndex; }
+
+private: // 動的プライベート関数
+	void ResetStage();
 
 private: // 動的メンバー変数
-	CStage* m_stage;
-	int m_nowSetNumber;
-	int m_setNumber;
-	CCountDownUI* m_countDownUI;
+	CStage* m_stage;	// ステージ
+	CCountDownUI* m_countDownUI;	// カウントダウンUI
+	CObtainedSetNumberUI* m_obtainedSetNumberUI;	// ラウンド終了時のUI
+	int m_winnerIndex;
+	std::vector<int> m_winNumber;	// 現在勝利数
+	int m_needWinNumber;			// 必要勝利数
 };
 
 #endif // !_GAME_H_

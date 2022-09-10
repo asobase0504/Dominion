@@ -185,6 +185,7 @@
     <ClCompile Include="title.cpp" />
     <ClCompile Include="title_status.cpp" />
     <ClCompile Include="ui_countdown.cpp" />
+    <ClCompile Include="ui_obtained_setnumber.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="A-Star.h" />
@@ -219,6 +220,7 @@
     <ClInclude Include="title.h" />
     <ClInclude Include="title_status.h" />
     <ClInclude Include="ui_countdown.h" />
+    <ClInclude Include="ui_obtained_setnumber.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\FILE\color.json" />

@@ -5,6 +5,7 @@
     [ "BULLET", "data\/TEXTURE\/Bullet.png" ],
     [ "BG", "data\/TEXTURE\/bg.png" ],
     [ "TEXT_READY", "data\/TEXTURE\/TEXT\/Ready1.png" ],
-    [ "TEXT_GO", "data\/TEXTURE\/TEXT\/Go1.png" ]
+    [ "TEXT_GO", "data\/TEXTURE\/TEXT\/Go1.png" ],
+    [ "MENU_TITLE", "data\/TEXTURE\/title.png" ]
   ]
 }

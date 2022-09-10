@@ -34,22 +34,24 @@ public:	// メンバー関数
 	void Update();
 	void Draw();
 	void AllDelete();
-
 	// ゲッタ―
 	bool GetEndSet() { return m_isEndGame; }
+	int GetWinnerIndex();
 	CMap* GetMap() { return map; }
 	std::vector<CCharacter*>* GetCharacter() { return &character; }
 
 private: // プライベート関数
+	void PassOnceCreatePlater();
 	void DeleteBullet();
 private: // 動的メンバー変数
-	std::vector<CCharacter*> character;
-	std::vector<CController*> controller;
-	nlohmann::json stage;
-	CMap* map;
-	bool m_isPreparing;
-	int m_PreparingCount;
-	bool m_isEndGame;
+	std::vector<CCharacter*> character;	// キャラクター
+	std::vector<CController*> controller;	// コントローラー
+	nlohmann::json stage;	// ステージの情報
+	CMap* map;			// マップデータ
+	int m_winnarTeam;	// 勝ったチーム
+	bool m_isPopFlag;	// キャラクターの出現を制御するフラグ
+	int m_PreparingCount;	// 準備完了までの
+	bool m_isEndGame;	// ラウンド終了中か
 };
 
 #endif // !_GAME_H_

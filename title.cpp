@@ -37,7 +37,7 @@ CTitle::~CTitle()
 //-----------------------------------------------------------------------------
 HRESULT CTitle::Init()
 {
-	CApplication::GetInstance()->SetThemeColor(3);
+	CApplication::GetInstance()->SetThemeColor(0);
 
 	// ”wŒi‚ÌÝ’è
 	{
@@ -72,19 +72,19 @@ HRESULT CTitle::Init()
 			switch ((CTitle::Status)i)
 			{
 			case CTitle::Status::GAME_STAET:
-				item->SetTexture("TEXT_GAMESTART");
+				item->SetTexture("MENU_TITLE");
 				break;
 			case CTitle::Status::TUTORIAL:
-				item->SetTexture("TEXT_TUTORIAL");
+				item->SetTexture("MENU_TITLE");
 				break;
 			case CTitle::Status::CUSTOMIZE:
-				item->SetTexture("TEXT_CUSTOMIZE");
+				item->SetTexture("MENU_TITLE");
 				break;
 			case CTitle::Status::OPSITON:
-				item->SetTexture("TEXT_OPSITON");
+				item->SetTexture("MENU_TITLE");
 				break;
 			case CTitle::Status::EXIT:
-				item->SetTexture("TEXT_EXIT");
+				item->SetTexture("MENU_TITLE");
 				break;
 			default:
 				assert(false);
@@ -158,12 +158,16 @@ void CTitle::Update()
 		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::GAME);
 		break;
 	case CTitle::Status::TUTORIAL:
+		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::GAME);
 		break;
 	case CTitle::Status::CUSTOMIZE:
+		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::GAME);
 		break;
 	case CTitle::Status::OPSITON:
+		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::GAME);
 		break;
 	case CTitle::Status::EXIT:
+		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::GAME);
 		break;
 	default:
 		break;

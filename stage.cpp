@@ -13,7 +13,7 @@
 CStage::CStage() :
 	map(nullptr),
 	m_isEndGame(false),
-	m_isPreparing(false),
+	m_isPopFlag(false),
 	m_PreparingCount(0)
 {
 	character.clear();
@@ -46,7 +46,7 @@ HRESULT CStage::Init()
 	map->SetMap(stage["MAP"]);
 	map->Set();
 
-	m_isPreparing = true;
+	m_isPopFlag = true;
 	return S_OK;
 }
 
@@ -88,45 +88,32 @@ void CStage::Uninit()
 //-----------------------------------------------------------------------------
 void CStage::Update()
 {
-	if (m_isPreparing)
-	{
-		if (m_PreparingCount <= CCountDownUI::READY_TIME + CCountDownUI::GO_TIME)
-		{
-			m_PreparingCount++;
-			return;
-		}
+	// 一度しか通らないプレイヤーの作成
+	PassOnceCreatePlater();
 
-		// プレイヤーをラムダ式でクリエイト
-		std::function<void(int, CController*)> playerSet;
-
-		playerSet = [this](int inIdx, CController* inController)->void
-		{
-			controller.push_back(inController);
-			int x = stage["PLAYERS"].at(inIdx)["SPAWN"].at(0);				// Xの位置番号を取得
-			int y = stage["PLAYERS"].at(inIdx)["SPAWN"].at(1);				// Yの位置番号を取得
-			CCharacter::TEAM inTeam = stage["PLAYERS"].at(inIdx)["TYPE"];	// チームの作成
-			character.push_back(CCharacter::Create(inTeam));				// 生成
-			float size = map->GetBlockSize() * 0.65f;						// 大きさの設定
-			character.at(inIdx)->SetSize(D3DXVECTOR2(size, size));			// 大きさの代入
-			D3DXVECTOR3 pos = map->GetBlock(x, y)->GetPos();				// 位置の取得
-			character.at(inIdx)->SetPos(pos);								// 位置の設定
-			character.at(inIdx)->SetCenterBlockIndex({ x,y });				// 中央位置の設定
-			character.at(inIdx)->SetBlockIndex(0, { x,y });					// 所属ブロックを設定
-			character.at(inIdx)->SetController(inController);				// 命令者の設定
-		};
-
-		// キャラクターの設定
-		playerSet(0, new CAIController);
-		playerSet(1, new CPlayerController);
-		m_isPreparing = false;
-	}
-
+	// キャラクターが死亡したかを調べる
 	for (int i = 0; i < character.size(); i++)
 	{
-		if (character[i]->GetIsDeleted())
+		if (!character[i]->GetIsDeleted())
 		{
-			// 死亡時;
-			m_isEndGame = true;
+			continue;
+		}
+
+		/* ↓死亡処理↓ */
+		m_isEndGame = true;
+	}
+
+	if (m_isEndGame)
+	{
+		// 死んでないキャラクターを調べる
+		for (int i = 0; i < character.size(); i++)
+		{
+			if (character[i]->GetIsDeleted())
+			{
+				continue;
+			}
+
+			m_winnarTeam = character[i]->GetTeam();	// キャラクターのIdxを取得
 		}
 	}
 }
@@ -136,6 +123,47 @@ void CStage::Update()
 //-----------------------------------------------------------------------------
 void CStage::Draw()
 {
+}
+
+//-----------------------------------------------------------------------------
+// 一度しか通らない処理
+//-----------------------------------------------------------------------------
+void CStage::PassOnceCreatePlater()
+{
+	if (!m_isPopFlag)
+	{
+		return;
+	}
+
+	if (m_PreparingCount <= CCountDownUI::READY_TIME + CCountDownUI::GO_TIME)
+	{
+		m_PreparingCount++;
+		return;
+	}
+
+	/* ↓UIがGOまで言った場合↓ */
+
+	// プレイヤーをラムダ式でクリエイト
+	auto playerSet = [this](int inIdx, CController* inController)->void
+	{
+		controller.push_back(inController);
+		int x = stage["PLAYERS"].at(inIdx)["SPAWN"].at(0);				// Xの位置番号を取得
+		int y = stage["PLAYERS"].at(inIdx)["SPAWN"].at(1);				// Yの位置番号を取得
+		CCharacter::TEAM inTeam = stage["PLAYERS"].at(inIdx)["TYPE"];	// チームの作成
+		character.push_back(CCharacter::Create(inTeam));				// 生成
+		float size = map->GetBlockSize() * 0.65f;						// 大きさの設定
+		character.at(inIdx)->SetSize(D3DXVECTOR2(size, size));			// 大きさの代入
+		D3DXVECTOR3 pos = map->GetBlock(x, y)->GetPos();				// 位置の取得
+		character.at(inIdx)->SetPos(pos);								// 位置の設定
+		character.at(inIdx)->SetCenterBlockIndex({ x,y });				// 中央位置の設定
+		character.at(inIdx)->SetBlockIndex(0, { x,y });					// 所属ブロックを設定
+		character.at(inIdx)->SetController(inController);				// 命令者の設定
+	};
+
+	// キャラクターの設定
+	playerSet(0, new CAIController);
+	playerSet(1, new CPlayerController);
+	m_isPopFlag = false;
 }
 
 //-----------------------------------------------------------------------------
@@ -164,4 +192,19 @@ void CStage::AllDelete()
 		it = character.erase(it);
 	}
 	map->Delete();
+}
+
+//-----------------------------------------------------------------------------
+// ラウンド勝者の番号を取得
+//-----------------------------------------------------------------------------
+int CStage::GetWinnerIndex()
+{
+	if (!m_isEndGame)
+	{
+		// まだゲームが終わってない場合
+		assert(false);
+		return -1;
+	}
+
+	return m_winnarTeam;
 }

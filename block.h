@@ -13,6 +13,9 @@
 #include "object2d.h"
 #include <vector>
 
+//--------------------------------------------------
+// ‘O•ûéŒ¾
+//--------------------------------------------------
 class CBlockScraped;
 class CBlockColorAddition;
 
