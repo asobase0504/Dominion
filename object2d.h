@@ -65,6 +65,7 @@ public:
 
 	// Getter
 	const D3DXVECTOR2 GetSize() { return m_size; }
+	const D3DXCOLOR GetColor() { return m_col; }
 private:
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	// VtxBuff
 	Anchor m_anchor;	// ÉAÉìÉJÅ[ÇÃê›íË

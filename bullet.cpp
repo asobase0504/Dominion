@@ -8,6 +8,7 @@
 // include
 //-----------------------------------------
 #include "bullet.h"
+#include "bullet_effect.h"
 #include "application.h"
 #include "collision.h"
 #include "block.h"
@@ -73,6 +74,9 @@ void CBullet::Update()
 
 	// ˆÊ’u‚ÌÝ’è
 	SetPos(GetPos() + m_move);
+
+	CBulletEffect* effect = CBulletEffect::Create(GetPos());
+	effect->SetColor(GetColor());
 
 	// “–‚½‚è”»’è
 	Collision();
