@@ -12,8 +12,11 @@
 // 定義
 //-----------------------------------------------------------------------------
 const int CObtainedSetNumberUI::PRIORITY_BELONG = 5;	// プライオリティ
-const int CObtainedSetNumberUI::TRANSITION_END_TIME = 20;	// プライオリティ
-const int CObtainedSetNumberUI::NEXT_STAGE_TIME = 90;	// プライオリティ
+const int CObtainedSetNumberUI::NEW_SCORE_END_IN_TIME = 60;		// 新規得点の出現が終わる時間
+const int CObtainedSetNumberUI::NEW_SCORE_BEGIN_OUT_TIME = 120;	// 新規得点の消失が始まる時間
+const int CObtainedSetNumberUI::NEW_SCORE_END_OUT_TIME = 160;	// 新規得点の消失が終わる時間
+const int CObtainedSetNumberUI::NEXT_STAGE_TIME = 160
+;	// 次のステージへ移行する
 
 //-----------------------------------------------------------------------------
 // 作成
@@ -149,8 +152,6 @@ CObtainedSetNumberUI::~CObtainedSetNumberUI()
 //-----------------------------------------------------------------------------
 HRESULT CObtainedSetNumberUI::Init()
 {
-	// アップデートを止める
-	CObject::SetStopUpdate(true);
 	return E_NOTIMPL;
 }
 
@@ -159,8 +160,6 @@ HRESULT CObtainedSetNumberUI::Init()
 //-----------------------------------------------------------------------------
 void CObtainedSetNumberUI::Uninit()
 {
-	// アップデートを開始する
-	CObject::SetStopUpdate(false);
 	m_tookSetUI.clear();
 	m_setCountUI.clear();
 }
@@ -171,14 +170,40 @@ void CObtainedSetNumberUI::Uninit()
 void CObtainedSetNumberUI::Update()
 {
 	m_time++;
-	if (m_time <= TRANSITION_END_TIME)
+	if (m_time <= NEW_SCORE_END_IN_TIME)
 	{
 		CGame* modeGame = (CGame*)CApplication::GetInstance()->GetMode();
 		CObject2D* point = m_tookSetUI[modeGame->GetWinner()][m_tookSetUI[modeGame->GetWinner()].size() - 1];
-		float transitionSize = 25.0f / TRANSITION_END_TIME;
+		float transitionSize = 25.0f / NEW_SCORE_END_IN_TIME;
 
 		point->SetSize(D3DXVECTOR2(transitionSize * m_time, transitionSize * m_time));
 	}
+
+	if (m_time >= NEW_SCORE_BEGIN_OUT_TIME && m_time <= NEW_SCORE_END_OUT_TIME)
+	{
+		float count = (float)(m_time - NEW_SCORE_BEGIN_OUT_TIME) / (float)(NEW_SCORE_END_OUT_TIME - NEW_SCORE_BEGIN_OUT_TIME);
+		float pow = count * count;
+		//float pow = sinf((count * D3DX_PI) * 0.5f);
+
+		for (int i = 0; i < m_setCountUI.size(); i++)
+		{
+			for (int j = 0; j < m_setCountUI[i].size(); j++)
+			{
+				D3DXVECTOR2 size = m_setCountUI[i][j]->GetSize() - m_setCountUI[i][j]->GetSize() * pow;
+				m_setCountUI[i][j]->SetSize(size);
+			}
+		}
+
+		for (int i = 0; i < m_tookSetUI.size(); i++)
+		{
+			for (int j = 0; j < m_tookSetUI[i].size(); j++)
+			{
+				D3DXVECTOR2 size = m_tookSetUI[i][j]->GetSize() - m_tookSetUI[i][j]->GetSize() * pow;
+				m_tookSetUI[i][j]->SetSize(size);
+			}
+		}
+	}
+
 	if (m_time >= NEXT_STAGE_TIME)
 	{
 		SetIsDeleted();

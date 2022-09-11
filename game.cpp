@@ -100,13 +100,13 @@ void CGame::Update()
 		m_obtainedSetNumberUI->Update();
 		if (m_obtainedSetNumberUI->GetIsDeleted())
 		{
+			// もう一度ゲームを行う
+			ResetStage();
+
 			// delete処理
 			m_obtainedSetNumberUI->Uninit();
 			delete m_obtainedSetNumberUI;
 			m_obtainedSetNumberUI = nullptr;
-
-			// もう一度ゲームを行う
-			ResetStage();
 		}
 		return;
 	}

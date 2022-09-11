@@ -22,8 +22,10 @@ class CObtainedSetNumberUI
 {
 public: // 定義
 	static const int PRIORITY_BELONG;	// このクラスのプライオリティ。
-	static const int TRANSITION_END_TIME;	// 遷移が終わる時間
-	static const int NEXT_STAGE_TIME;	// 次のステージに移行
+	static const int NEW_SCORE_END_IN_TIME;		// 新規得点の出現が終わる時間
+	static const int NEW_SCORE_BEGIN_OUT_TIME;	// 新規得点の消失が始まる時間
+	static const int NEW_SCORE_END_OUT_TIME;	// 新規得点の消失が終わる時間
+	static const int NEXT_STAGE_TIME;	// 次のステージに移行時間
 public: // 列挙型
 
 public:	// 静的パブリック関数

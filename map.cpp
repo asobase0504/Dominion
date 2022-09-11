@@ -80,18 +80,23 @@ void CMap::Draw()
 //--------------------------------------------------
 void CMap::Set()
 {
-	int index;
 	BLOCK_SIZE = (float)CApplication::GetInstance()->SCREEN_HEIGHT / m_blockIdx.size();
-	for (int y = 0; y < m_blockIdx.size(); y++)
+
+	m_block.resize(m_blockIdx.size());
+	for (int y = 0; y < m_block.size(); y++)
 	{
-		std::vector<CBlock*> a;
-		m_block.push_back(a);
+		float halfY = m_blockIdx.size() * 0.5f;
 		for (int x = 0; x < m_blockIdx[y].size(); x++)
 		{
-			index = y * MAX_X_BLOCK + x;
+			float halfX = m_blockIdx[y].size() * 0.5f;
 
 			m_block[y].push_back(CBlock::Create(m_blockIdx[y][x]));
-			m_block[y][x]->SetPosPlan(D3DXVECTOR3(x * BLOCK_SIZE + (BLOCK_SIZE * 0.5f), y * BLOCK_SIZE + (BLOCK_SIZE * 0.5f), 0.0f));
+
+			D3DXVECTOR3 pos = {};
+			pos.x = (CApplication::GetInstance()->CENTER_X - BLOCK_SIZE * halfX + BLOCK_SIZE * 0.5f) + (x * BLOCK_SIZE);
+			pos.y = (CApplication::GetInstance()->CENTER_Y - BLOCK_SIZE * halfY + BLOCK_SIZE * 0.5f) + (y * BLOCK_SIZE);
+			pos.z = 0.0f;
+			m_block[y][x]->SetPosPlan(pos);
 			m_block[y][x]->SetSizePlan(D3DXVECTOR2(BLOCK_SIZE, BLOCK_SIZE));
 		}
 	}

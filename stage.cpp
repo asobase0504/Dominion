@@ -108,6 +108,7 @@ void CStage::Update()
 		// 死んでないキャラクターを調べる
 		for (int i = 0; i < character.size(); i++)
 		{
+			character[i]->SetOperationState(false);
 			if (character[i]->GetIsDeleted())
 			{
 				continue;
@@ -172,7 +173,7 @@ void CStage::PassOnceCreatePlater()
 void CStage::DeleteBullet()
 {
 	// オブジェクト全体を取得
-	for (auto it = CObject::GetMyObject(2)->begin(); it != CObject::GetMyObject(2)->end(); it++)
+	for (auto it = CObject::GetMyObject(3)->begin(); it != CObject::GetMyObject(3)->end(); it++)
 	{
 		if ((*it)->CObject::GetType() == CObject::TYPE::BULLET)
 		{

@@ -66,6 +66,7 @@ public:
 	void SetCenterBlockIndex(std::vector<int> inIndex) { m_ofBlockIndexCenter = inIndex; }
 	void SetTeam(const TEAM inTeam);
 	bool SetBlockIndex(const int count,std::vector<int> inIndex);
+	void SetOperationState(const bool inState) { m_isOperationState = inState; }
 
 	// Getter
 	std::vector<std::vector<int>> GetOfBlock() { return m_ofBlockIndex; }
@@ -95,6 +96,7 @@ private:
 	int m_ofBlockCount;										// 乗ってるブロックの個数
 	float m_spead;											// 速度
 	bool isCopied;											// コピー済みか
+	bool m_isOperationState;
 };
 
 #endif // !_CHARACTER_H_

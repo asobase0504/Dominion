@@ -305,7 +305,7 @@ void CBlock::SetSizePlan(const D3DXVECTOR2& inSize)
 	m_sizePlan = inSize;
 
 	CApplication* application = CApplication::GetInstance();
-	float size = ((rand() / (float)RAND_MAX) * (10.0f - 0.0f)) + 0.0f;
+	float size = ((rand() / (float)RAND_MAX) * (5.0f - 0.0f)) + 0.0f;
 
 	SetSize(D3DXVECTOR2(size, size));
 }

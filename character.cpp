@@ -78,6 +78,11 @@ void CCharacter::Uninit()
 //-----------------------------------------
 void CCharacter::Update()
 {
+	if (!m_isOperationState)
+	{
+		return;
+	}
+
 	m_spead = MOVE_SPEAD;
 	// ˆÚ“®
 	Move();
@@ -296,6 +301,7 @@ void CCharacter::SetController(CController * inOperate)
 {
 	m_controller = inOperate;
 	m_controller->SetToOrder(this);
+	m_isOperationState = true;
 }
 
 //-----------------------------------------
