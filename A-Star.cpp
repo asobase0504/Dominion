@@ -15,18 +15,15 @@
 
 
 //ディファインデリート
-#define SAFE_DELETE(p)       { if(p) { delete (p);     (p)=NULL; } }
-#define SAFE_DELETE_ARRAY(p) { if(p) { delete[] (p);   (p)=NULL; } }
-#define SAFE_RELEASE(p)      { if(p) { (p)->Release(); (p)=NULL; } }
+#define SAFE_DELETE(p)       { if(p) { delete (p);		(p) = nullptr; } }
+#define SAFE_DELETE_ARRAY(p) { if(p) { delete[] (p);	(p) = nullptr; } }
+#define SAFE_RELEASE(p)      { if(p) { (p)->Release();	(p) = nullptr; } }
 
 //-----------------------------------------------------------------------------
 // include
 //-----------------------------------------------------------------------------
 #include "A-Star.h"
-
-//Thing[1]			ブロック
-//Thing[2]			追いかける側
-//Thing[3]			追いかけられる側
+#include "block.h"
 
 //-----------------------------------------------------------------------------
 // コンストラクタ
@@ -91,24 +88,24 @@ ASTAR::~ASTAR()
 HRESULT ASTAR::Init(ASTAR_INIT* pai)
 {
 	//
-	m_dwCellWidth = pai->dwCellWidth;
-	m_dwCellHeight = pai->dwCellHeight;
+	m_widthSize = pai->dwCellWidth;
+	m_heightSize = pai->dwCellHeight;
 	m_pCell = pai->pCell;
 
 	//動的確保
-	m_pOpenList = (D3DXVECTOR2*) new D3DXVECTOR2[m_dwCellWidth * m_dwCellHeight];
+	m_pOpenList = (POINT*) new POINT[m_widthSize * m_heightSize];
 	if(!m_pOpenList)
 	{//メモリ不足のエラー
 		return E_OUTOFMEMORY;
 	}
 
-	m_pClosedList = (D3DXVECTOR2*) new D3DXVECTOR2[m_dwCellWidth * m_dwCellHeight];
+	m_pClosedList = (POINT*) new POINT[m_widthSize * m_heightSize];
 	if(!m_pClosedList)
 	{//メモリ不足のエラー
 		return E_OUTOFMEMORY;
 	}
 
-	m_ptPath = (D3DXVECTOR2*) new D3DXVECTOR2[m_dwCellWidth * m_dwCellHeight];
+	m_ptPath = (POINT*) new POINT[m_widthSize * m_heightSize];
 	if(!m_ptPath)
 	{//メモリ不足のエラー
 		return E_OUTOFMEMORY;
@@ -122,7 +119,7 @@ HRESULT ASTAR::Init(ASTAR_INIT* pai)
 //-----------------------------------------------------------------------------
 HRESULT ASTAR::Reset()
 {
-	DWORD dwMaxAmt = m_dwCellWidth * m_dwCellHeight;
+	int dwMaxAmt = m_widthSize * m_heightSize;
 
 	for (int i = 0; i < dwMaxAmt; i++)
 	{
@@ -140,7 +137,7 @@ HRESULT ASTAR::Reset()
 	m_dwOpenAmt = 0;
 	m_dwClosedAmt = 0;
 	m_dwPathList = 0;
-	ZeroMemory(m_ptPath, sizeof(D3DXVECTOR2) * m_dwCellWidth * m_dwCellHeight);
+	ZeroMemory(m_ptPath, sizeof(D3DXVECTOR2) * m_widthSize * m_heightSize);
 
 	return S_OK;
 }
@@ -151,7 +148,7 @@ HRESULT ASTAR::Reset()
 //-----------------------------------------------------------------------------
 HRESULT ASTAR::CalcPath(ASTAR_PARAM* pParam)
 {
-	int idx = (int)pParam->ptGoalPos.y * m_dwCellWidth + (int)pParam->ptGoalPos.x;	// ゴールに指定されたセルの番号
+	int idx = (int)pParam->ptGoalPos.y * m_widthSize + (int)pParam->ptGoalPos.x;	// ゴールに指定されたセルの番号
 
 	//ゴールが適正な場所か（ゴールが障害物の内部になっていないか）
 	if (m_pCell[idx].Status == ASTAR_OBSTACLE)
@@ -177,26 +174,67 @@ HRESULT ASTAR::CalcPath(ASTAR_PARAM* pParam)
 }
 
 //-----------------------------------------------------------------------------
+// ステージ情報の設定
+// Author 湯田 海都
+//-----------------------------------------------------------------------------
+void ASTAR::SetCellStage(std::vector<std::vector<CBlock*>>& inStage , CCharacter::TEAM inTeam)
+{
+	m_stage = &inStage;
+
+	for (int i = 0; i < m_stage->size(); i++)
+	{
+		for (int j = 0; j < m_stage->at(i).size(); j++)
+		{
+			CELL cell;
+			cell.ptIndex;			// 番号
+			cell.ptParent;			// 親	
+			cell.iCost = 0;			// 実コスト
+			cell.iHeuristic = 0;	// 推定コスト
+			cell.iScore = 0;		// 合計スコア
+
+			// 同じチームか否か
+			bool isSameTeam = (int)inTeam == (int)m_stage->at(i).at(j)->CBlock::GetType();
+
+			if (isSameTeam)
+			{
+				cell.Status = ASTAR_EMPTY;		// ステータスを未探索にする
+			}
+			else
+			{
+				cell.Status = ASTAR_OBSTACLE;	// ステータスを障害物にする
+			}
+
+			cell.boRealPath = false;	// 経路の情報の初期化
+
+			// セルの追加
+			m_cell.insert(std::make_pair(&m_stage->at(i).at(j), cell));
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------
 // １回の呼び出しで8方向セルの調査を行う
 // Author 磯江寿希亜
 // 説明：再帰しながらゴールまでの計算をすべて行う
 //-----------------------------------------------------------------------------
 HRESULT ASTAR::CalcScore(ASTAR_PARAM* pParam)
 {
-	int iOffset;
 
-	D3DXVECTOR2 ptStart = pParam->ptStartPos;	// スタート位置
-	D3DXVECTOR2 ptGoal = pParam->ptGoalPos;		// ゴール位置
-	D3DXVECTOR2 ptCurrentPos = pParam->ptCurrentPos;	// 現在地
+	POINT ptStart = pParam->ptStartPos;	// スタート位置
+	POINT ptGoal = pParam->ptGoalPos;		// ゴール位置
+	POINT ptCurrentPos = pParam->ptCurrentPos;	// 現在地
 
 	// 現在地のセルは無条件でクローズドにする
-	iOffset = ptCurrentPos.x * m_dwCellHeight + ptCurrentPos.y;
+	CBlock* thisBlock = m_stage->at((int)ptCurrentPos.x).at((int)ptCurrentPos.y);
+	CELL* cell = &m_cell[&thisBlock];	// セル情報
 
-	if (m_pCell[iOffset].Status != ASTAR_CLOSED)
+	if (cell->Status != ASTAR_CLOSED)
 	{
-		m_pCell[iOffset].Status = ASTAR_CLOSED;
+		cell->Status = ASTAR_CLOSED;
 		m_dwClosedAmt++;
 	}
+
+	int iOffset;
 
 	// 隣接8セルのスコアリング　進めるマスを検索中
 	for (int i = 1; i <= 8; i++)
@@ -206,41 +244,42 @@ HRESULT ASTAR::CalcScore(ASTAR_PARAM* pParam)
 		ptCurrentPos.y += m_ptVolute[i].y;
 
 		//セルマップの範囲外に到達した場合
-		if ((ptCurrentPos.x < 0) || ((DWORD)ptCurrentPos.x > m_dwCellWidth) || (ptCurrentPos.y < 0) || ((DWORD)ptCurrentPos.y > m_dwCellHeight))
+		if ((ptCurrentPos.x < 0.0f) || (ptCurrentPos.x > (float)m_widthSize) || (ptCurrentPos.y < 0.0f) || (ptCurrentPos.y >(float)m_heightSize))
 		{
 			continue;	//処理をスキップする
 		}
 
 		/* ↓現在地がセルマップの範囲内だった場合↓ */
 
-		iOffset = ptCurrentPos.x * m_dwCellHeight + ptCurrentPos.y;
+		iOffset = ptCurrentPos.x * m_heightSize + ptCurrentPos.y;
+		thisBlock = m_stage->at((int)ptCurrentPos.x).at((int)ptCurrentPos.y);
 
 		//ゴールセルに到達した場合
 		if (ptCurrentPos.x == ptGoal.x && ptCurrentPos.y == ptGoal.y)
 		{
-			m_pCell[iOffset].ptParent = pParam->ptCurrentPos;//親セルへのリンク
-			m_pCell[iOffset].Status = ASTAR_GOAL;
-			m_ptGoal = m_pCell[iOffset].ptIndex;
+			cell->ptParent = pParam->ptCurrentPos;//親セルへのリンク
+			cell->Status = ASTAR_GOAL;
+			m_ptGoal = cell->ptIndex;
 			return S_OK;
 		}
 
 		/* ↓まだゴールではない場合↓ */
 
-		switch (m_pCell[iOffset].Status)
+		switch (cell->Status)
 		{
 		case ASTAR_EMPTY:	//進むとき
-			m_pCell[iOffset].iHeuristic = CalcDistance(&ptGoal, &ptCurrentPos);
+			cell->iHeuristic = CalcDistance(&ptGoal, &ptCurrentPos);
 			//コストは親のコストに１を足したもの
 			{
-				m_pCell[iOffset].iCost = m_pCell[(int)pParam->ptCurrentPos.x * m_dwCellHeight + (int)pParam->ptCurrentPos.y].iCost + 1;
+				cell->iCost = m_pCell[(int)pParam->ptCurrentPos.x * m_heightSize + (int)pParam->ptCurrentPos.y].iCost + 1;
 			}
-			m_pCell[iOffset].iScore = m_pCell[iOffset].iCost + m_pCell[iOffset].iHeuristic;
-			m_pCell[iOffset].Status = ASTAR_OPEN;
+			cell->iScore = cell->iCost + cell->iHeuristic;
+			cell->Status = ASTAR_OPEN;
 			m_pOpenList[m_dwOpenAmt] = ptCurrentPos;
 			m_dwOpenAmt++;
 			//８セルの親を現在セルにする
 			{
-				m_pCell[iOffset].ptParent = pParam->ptCurrentPos;//
+				cell->ptParent = pParam->ptCurrentPos;//
 			}
 			break;
 		case ASTAR_OPEN:
@@ -251,14 +290,19 @@ HRESULT ASTAR::CalcScore(ASTAR_PARAM* pParam)
 		}
 	}
 
+	/* ↓新たなCELLからルート検索を行う↓ */
+
 	//オープンリストを含めて最小スコアを、新たな起点セルにする　（クローズドリストの作成）
 	int iMinScore = INT_MAX;
-	D3DXVECTOR2 ptNextCellIndex = { 0 ,0 };
+	POINT ptNextCellIndex = { 0 ,0 };
 	DWORD dwMinIndex = 0;
 
+	// スコアが最小のセルを探す
 	for (int i = 0; i < m_dwOpenAmt; i++)
 	{
-		iOffset = m_pOpenList[i].x * m_dwCellHeight + m_pOpenList[i].y;
+		thisBlock = m_stage->at((int)m_pOpenList[i].x).at((int)m_pOpenList[i].y);
+
+		iOffset = m_pOpenList[i].x * m_heightSize + m_pOpenList[i].y;
 
 		if (m_pCell[iOffset].iScore < iMinScore && m_pCell[iOffset].Status == ASTAR_OPEN)
 		{
@@ -267,7 +311,8 @@ HRESULT ASTAR::CalcScore(ASTAR_PARAM* pParam)
 		}
 	}
 
-	iOffset = m_pOpenList[dwMinIndex].x * m_dwCellHeight + m_pOpenList[dwMinIndex].y;
+	thisBlock = m_stage->at((int)m_pOpenList[dwMinIndex].x).at((int)m_pOpenList[dwMinIndex].y);
+	iOffset = m_pOpenList[dwMinIndex].x * m_heightSize + m_pOpenList[dwMinIndex].y;
 	ptNextCellIndex = m_pCell[iOffset].ptIndex;
 
 	m_pClosedList[m_dwClosedAmt] = ptNextCellIndex;
@@ -288,11 +333,11 @@ HRESULT ASTAR::CalcScore(ASTAR_PARAM* pParam)
 HRESULT ASTAR::MakePathFromClosedList(ASTAR_PARAM* pParam)
 {
 	int iBreak = 0;
-	int iMaxStep = m_dwCellWidth * m_dwCellHeight;	//総合のマス
+	int iMaxStep = m_widthSize * m_heightSize;	//総合のマス
 	m_dwPathList = 0;
 	// クローズドセル上で、ゴール地点からスタート地点まで親を辿った経路を最終的なパスとする
 
-	int iOffset = m_ptGoal.x*m_dwCellHeight + m_ptGoal.y;	// 番号のID
+	int iOffset = m_ptGoal.x*m_heightSize + m_ptGoal.y;	// 番号のID
 
 	//whileと違い１回は必ず通る
 	do
@@ -303,8 +348,10 @@ HRESULT ASTAR::MakePathFromClosedList(ASTAR_PARAM* pParam)
 			break;
 		}
 		iBreak++;
-		m_pCell[iOffset].boRealPath = TRUE;
-		iOffset = m_pCell[iOffset].ptParent.x*m_dwCellHeight + m_pCell[iOffset].ptParent.y;
+		m_pCell[iOffset].boRealPath = true;
+
+		iOffset = m_pCell[iOffset].ptParent.x * m_heightSize + m_pCell[iOffset].ptParent.y;
+
 		//パスリストに記録（呼び出し元の利便性)	クリアリング
 		m_ptPath[m_dwPathList] = m_pCell[iOffset].ptIndex;
 		m_dwPathList++;
@@ -314,10 +361,10 @@ HRESULT ASTAR::MakePathFromClosedList(ASTAR_PARAM* pParam)
 }
 
 //-----------------------------------------------------------------------------
-// 目的と最終地の入力
+// 距離の算出
 // Author 磯江寿希亜
 //-----------------------------------------------------------------------------
-int ASTAR::CalcDistance(D3DXVECTOR2* pptA, D3DXVECTOR2* pptB)
+int ASTAR::CalcDistance(POINT* pptA, POINT* pptB)
 {
 	int iX = pptA->x - pptB->x;
 	int iY = pptA->y - pptB->y;

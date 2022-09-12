@@ -13,43 +13,47 @@
 //*****************************************************************************
 #include <windows.h>
 #include <d3dx9.h>
+#include <map>
+#include <vector>
+#include "character.h"
+
+// 前方宣言
+class CBlock;
 
 //データ型定義
 enum ASTAR_STATUS
 {
-	ASTAR_EMPTY,	// 空
-	ASTAR_OPEN,		// 未探索
-	ASTAR_CLOSED,	// 探索済み
+	ASTAR_EMPTY,	// 未探索
+	ASTAR_OPEN,		// 最短ルート候補
+	ASTAR_CLOSED,	// 最短ルート
 	ASTAR_OBSTACLE,	// 障害物
 	ASTAR_GOAL,		// ゴール
 };
 
-//自分自身の座標
 struct CELL
 {
-	D3DXVECTOR2 ptIndex;
-	D3DXVECTOR2 ptParent;
-	int iCost;
-	int iHeuristic;
-	int iScore;
-	ASTAR_STATUS Status;	//ステータスを保持する変数
-	BOOL boRealPath;		//調査が完了したときに経路上にあるセルにおいて、このフラグがTRUEになる。つまりこのフラグが１の時セルを並べると経路になる
-	VOID* ppv1;				//メッシュ		main.cppで使用する
+	POINT ptIndex;	// 番号
+	POINT ptParent;	// 親	
+	int iCost;				// 実コスト
+	int iHeuristic;			// 推定コスト
+	int iScore;				// 合計スコア
+	ASTAR_STATUS Status;	// ステータスを保持する変数
+	bool boRealPath;		// 調査が完了したときに経路上にあるセルにおいて、このフラグがTRUEになる。つまりこのフラグが１の時セルを並べると経路になる
 };
 
 struct ASTAR_INIT
 {
 	CELL* pCell;
-	DWORD dwCellWidth;
-	DWORD dwCellHeight;		
+	int dwCellWidth;
+	int dwCellHeight;
 };
 
 struct ASTAR_PARAM	// マップ情報的な？
 {
 	CELL* pCell;	// セル
-	D3DXVECTOR2 ptStartPos;	// スタートの位置
-	D3DXVECTOR2 ptGoalPos;	// ゴールの位置
-	D3DXVECTOR2 ptCurrentPos;		//現在地
+	POINT ptStartPos;	// スタートの位置
+	POINT ptGoalPos;	// ゴールの位置
+	POINT ptCurrentPos;		//現在地
 };
 
 class ASTAR
@@ -59,27 +63,43 @@ public:
 	ASTAR();
 	//デストラクタ
 	~ASTAR();
-	D3DXVECTOR2* m_ptPath;	//最終的に検索した最短経路セル群へのpointer
-	DWORD m_dwPathList;		//最終パスを形成するセルの個数
 
 	HRESULT Init(ASTAR_INIT*);
 	HRESULT CalcPath(ASTAR_PARAM*);	//パス計算関数
-protected:
-	CELL* m_pCell;				//すべてのセルの先頭セル
-	D3DXVECTOR2* m_pOpenList;	//オープンリストの先頭pointer
-	DWORD m_dwOpenAmt;			//オープンリスト内のセルの数
-	D3DXVECTOR2* m_pClosedList;	//クロースリストの先頭pointer
-	int m_dwClosedAmt;		//クロースリスト内のセルの数
 
-	DWORD m_dwCellWidth;		//セルを幅
-	DWORD m_dwCellHeight;		//セルを高さ
+	// Getter
+	POINT* GetPath() { return m_ptPath; }
+	int GetPathList() { return m_dwPathList; }
 
-	D3DXVECTOR2 m_ptVolute[9+1];	//周囲8方向を参照するさいの利便性のため	[1]左上[2]上[3]右上[4]左　	ここから先は多分　[5]左下[6]下[7]右下[8]右
-	D3DXVECTOR2 m_ptGoal;			//ゴールの変数
+	// Setter
+	void SetCellStage(std::vector<std::vector<CBlock*>>& , CCharacter::TEAM);
 
-	HRESULT CalcScore(ASTAR_PARAM*);	//最重要関数これが消えたら終わり	（スコアの計算、ゴールまでのクロースドリストを作る）
-	HRESULT MakePathFromClosedList(ASTAR_PARAM*);	//最終パスの制作
-	int CalcDistance(D3DXVECTOR2*, D3DXVECTOR2*);	//プレイヤーと敵の距離を求めているだけ
-	HRESULT Reset();	//再検索が可能になるため
+protected: // 引継ぎ可能な関数
+	HRESULT CalcScore(ASTAR_PARAM*);	// 最重要関数これが消えたら終わり	（スコアの計算、ゴールまでのクロースドリストを作る）
+	HRESULT MakePathFromClosedList(ASTAR_PARAM*);	// 最終パスの制作
+	int CalcDistance(POINT*, POINT*);	// プレイヤーと敵の距離を求めているだけ
+	HRESULT Reset();	// 再検索が可能になるため
+
+private:
+	POINT* m_ptPath;	// 最終的に検索した最短経路セル群へのpointer
+	int m_dwPathList;		// 最終パスを形成するセルの個数
+
+	// ブロック情報
+	std::vector<std::vector<CBlock*>>* m_stage;	// ステージ情報
+	std::map<CBlock**, CELL> m_cell;	// 全てのセル情報
+	CBlock* m_startBlock;		// スタートブロック
+	CBlock* m_goalBlock;		// ゴールブロック
+
+	CELL* m_pCell;				// すべてのセルの先頭セル
+	POINT* m_pOpenList;	// オープンリストの先頭pointer
+	int m_dwOpenAmt;			// オープンリスト内のセルの数
+	POINT* m_pClosedList;	// クロースリストの先頭pointer
+	int m_dwClosedAmt;		// クロースリスト内のセルの数
+
+	int m_widthSize;		// 幅のサイズ数
+	int m_heightSize;		// 高さのサイズ数
+
+	POINT m_ptVolute[9+1];	// 周囲8方向を参照するさいの利便性のため	[1]左上[2]上[3]右上[4]左　	ここから先は多分　[5]左下[6]下[7]右下[8]右
+	POINT m_ptGoal;			// ゴールの変数
 };
 #endif
