@@ -179,7 +179,7 @@ void CBullet::Collision()
 		}
 	};
 
-	for (int i = 0; i < m_ofBlockIndex.size(); i++)
+	for (int i = 0; i < (int)m_ofBlockIndex.size(); i++)
 	{
 		if (m_ofBlockIndex[i].empty())
 		{

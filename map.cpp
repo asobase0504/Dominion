@@ -83,10 +83,10 @@ void CMap::Set()
 	BLOCK_SIZE = (float)CApplication::GetInstance()->SCREEN_HEIGHT / m_blockIdx.size();
 
 	m_block.resize(m_blockIdx.size());
-	for (int y = 0; y < m_block.size(); y++)
+	for (int y = 0; y < (int)m_block.size(); y++)
 	{
 		float halfY = m_blockIdx.size() * 0.5f;
-		for (int x = 0; x < m_blockIdx[y].size(); x++)
+		for (int x = 0; x < (int)m_blockIdx[y].size(); x++)
 		{
 			float halfX = m_blockIdx[y].size() * 0.5f;
 

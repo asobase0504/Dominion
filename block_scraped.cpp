@@ -47,7 +47,7 @@ HRESULT CBlockScraped::Init()
 //--------------------------------------------------
 void CBlockScraped::Uninit()
 {
-	for (int i = 0; i < m_block.size(); i++)
+	for (int i = 0; i < (int)m_block.size(); i++)
 	{
 		if (m_block[i] == nullptr)
 		{
@@ -63,7 +63,7 @@ void CBlockScraped::Uninit()
 //--------------------------------------------------
 void CBlockScraped::Update()
 {
-	for (int i = 0; i < m_block.size(); i++)
+	for (int i = 0; i < (int)m_block.size(); i++)
 	{
 		if (m_block[i] == nullptr)
 		{
@@ -103,7 +103,7 @@ CBlockScraped* CBlockScraped::Create(const D3DXVECTOR3& inPos,CBlock::BLOCK_TYPE
 		return nullptr;
 	}
 
-	for (int i = 0; i < blockScraped->m_block.size(); i++)
+	for (int i = 0; i < (int)blockScraped->m_block.size(); i++)
 	{
 		CObject2D* object2d = blockScraped->m_block[i];
 		object2d->Init();
@@ -167,7 +167,7 @@ CBlockScraped* CBlockScraped::Create(const D3DXVECTOR3& inPos,CBlock::BLOCK_TYPE
 
 void CBlockScraped::SetIsDeleted()
 {
-	for (int i = 0; i < m_block.size(); i++)
+	for (int i = 0; i < (int)m_block.size(); i++)
 	{
 		m_block[i]->SetIsDeleted(true);
 	}

@@ -38,8 +38,8 @@ public:
 public: // 定数
 	const int SCREEN_WIDTH;		// スクリーンの幅
 	const int SCREEN_HEIGHT;	// スクリーンの高さ
-	const float CENTER_X;			// スクリーン中心座標のX座標
-	const float CENTER_Y;			// スクリーン中心座標のY座標
+	const float CENTER_X;		// スクリーン中心座標のX座標
+	const float CENTER_Y;		// スクリーン中心座標のY座標
 
 public: // 静的メンバー変数
 	static CApplication* application;
@@ -62,6 +62,8 @@ public:	// メンバー関数
 	CTexture* GetTextureClass() { return texture; }
 	CMode* GetMode() { return mode; }
 	D3DXCOLOR GetColor(int inKey);
+	D3DXVECTOR2 GetScreenSize() { return D3DXVECTOR2((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT); }
+	D3DXVECTOR2 GetScreenCenter() { return D3DXVECTOR2(CENTER_X, CENTER_Y); }
 
 	// Setter
 	void SetMode(MODE_TYPE inType);

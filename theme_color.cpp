@@ -92,7 +92,7 @@ void CThemeColor::SetTheme(int idx)
 	auto VectorToD3DXCOLOR = [this](int inIndex, int inColor)
 	{
 		// 指定番号に値が存在しているか否か
-		if (colorFile["TYPE"].size() < inIndex || 0 > inIndex)
+		if ((int)colorFile["TYPE"].size() < inIndex || 0 > inIndex)
 		{ // 指定番号に値が存在しない
 			return D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 		}

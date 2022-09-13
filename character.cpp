@@ -18,6 +18,7 @@
 #include "stage.h"
 #include "collision.h"
 #include "block.h"
+#include "crush_effect.h"
 #include <assert.h>
 #include <functional>
 
@@ -209,10 +210,13 @@ void CCharacter::BulletShot()
 	{
 		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
 		CMap* pMap = game->GetStage()->GetMap();
+
+		// 弾を出現させるブロック
 		CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
 		CBlock* pBlockUp = pMap->GetBlock(m_ofBlockIndexCenter[0] - 1, m_ofBlockIndexCenter[1]);
 		CBlock* pBlockDown = pMap->GetBlock(m_ofBlockIndexCenter[0] + 1, m_ofBlockIndexCenter[1]);
-		D3DXVECTOR3 move = D3DXVECTOR3(0.0f, CBullet::MOVE_SPEAD, 0.0f);
+
+		D3DXVECTOR3 move(0.0f, CBullet::MOVE_SPEAD, 0.0f);	// 移動量
 
 		CBullet* bullet;
 		bullet = CBullet::Create(pBlock->GetPos(), move, m_team);
@@ -380,11 +384,17 @@ void CCharacter::BulletReload()
 	{
 		m_reloadCount++;
 
-		if (m_reloadCount % (int)(RELOAD_TIME * 0.5f) == 0)
-		{
-			//m_remainsBulletDisplay[m_remainsBulletCount]->SetColorAlpha(0.5f);
-		}
+		
+		/*
+		// バグがあるため一時コメントアウト、処理を大きく変える必要あり
+		*/
+		// 回復中の弾をうっすらと表示する
+		//if (m_reloadCount % (int)(RELOAD_TIME * 0.5f) == 0)
+		//{
+		//	m_remainsBulletDisplay[m_remainsBulletCount]->SetColorAlpha(0.5f);
+		//}
 
+		// 回復した弾を残弾数に表記する
 		if (m_reloadCount % RELOAD_TIME == 0)
 		{
 			m_reloadCount = 0;
@@ -412,13 +422,13 @@ void CCharacter::ScreenFromOutTime()
 		character->SetSize(m_size);		// 大きさの設定
 
 		// ブロックの番号登録
-		for (int i = 0; i < m_ofBlockIndex.size();i++)
+		for (int i = 0; i < (int)m_ofBlockIndex.size();i++)
 		{
 			character->SetBlockIndex(i, m_ofBlockIndex[i]);
 		}
 
 		// 中心の位置がどのブロックに所属しているかチェックする
-		for (int i = 0; i < character->m_ofBlockIndex.size(); i++)
+		for (int i = 0; i < (int)character->m_ofBlockIndex.size(); i++)
 		{
 			if (character->m_ofBlockIndex[i].empty())
 			{
@@ -505,7 +515,7 @@ void CCharacter::Collision()
 			SetBlockIndex(m_ofBlockCount, { x, y });
 
 			// そのブロックがキャラクターの中心が所属してるブロックがチェック
-			CBlock* block = pMap->GetBlock(x, y);
+			block = pMap->GetBlock(x, y);
 			D3DXVECTOR3 blockSize = D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f);	// ブロックの大きさ
 
 			D3DXVECTOR3 movePlanPos = m_pos + m_move;
@@ -597,6 +607,19 @@ void CCharacter::Collision()
 		
 		if ((int)m_team != (int)block->CBlock::GetType())
 		{
+			for (int i = 0; i < 40; i++)
+			{
+				D3DXVECTOR3 pos;
+				pos.x = m_pos.x + ((rand() / (float)RAND_MAX) * (40.0f - -40.0f)) + -40.0f;
+				pos.y = m_pos.y + ((rand() / (float)RAND_MAX) * (40.0f - -40.0f)) + -40.0f;
+				pos.z = 0.0f;
+				D3DXVECTOR3 move;
+				move.x = ((rand() / (float)RAND_MAX) * (40.0f - -40.0f)) + -40.0f;
+				move.y = ((rand() / (float)RAND_MAX) * (40.0f - -40.0f)) + -40.0f;
+				move.z = 0.0f;
+				CCrushEffect::Create(pos, move, CApplication::GetInstance()->GetColor(m_team), block->CBlock::GetType());
+			}
+
 			m_isDeleted = true;	// 死亡状態にする
 		}
 	}
@@ -686,7 +709,7 @@ void CCharacter::HitWithAnotherTeamBlock(CBlock * inBlock, DIRECTION inDirection
 	{
 		bool top = false;
 		bool left = false;
-		for (int i = 0; i < inAround.size(); i++)
+		for (int i = 0; i < (int)inAround.size(); i++)
 		{
 			if (inAround[i] == CenterTop)
 			{
@@ -727,7 +750,7 @@ void CCharacter::HitWithAnotherTeamBlock(CBlock * inBlock, DIRECTION inDirection
 	{
 		bool top = false;
 		bool right = false;
-		for (int i = 0; i < inAround.size(); i++)
+		for (int i = 0; i < (int)inAround.size(); i++)
 		{
 			if (inAround[i] == CenterTop)
 			{
@@ -773,7 +796,7 @@ void CCharacter::HitWithAnotherTeamBlock(CBlock * inBlock, DIRECTION inDirection
 	{
 		bool bottom = false;
 		bool left = false;
-		for (int i = 0; i < inAround.size(); i++)
+		for (int i = 0; i < (int)inAround.size(); i++)
 		{
 			if (inAround[i] == CenterBottom)
 			{
@@ -814,7 +837,7 @@ void CCharacter::HitWithAnotherTeamBlock(CBlock * inBlock, DIRECTION inDirection
 	{
 		bool bottom = false;
 		bool right = false;
-		for (int i = 0; i < inAround.size(); i++)
+		for (int i = 0; i < (int)inAround.size(); i++)
 		{
 			if (inAround[i] == CenterBottom)
 			{

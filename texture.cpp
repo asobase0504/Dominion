@@ -37,7 +37,7 @@ void CTexture::LoadAll()
 {
 	nlohmann::json list = LoadJsonStage(L"data/FILE/texture.json");
 	
-	for (int i = 0; i < list["TEXTURE"].size(); ++i)
+	for (int i = 0; i < (int)list["TEXTURE"].size(); ++i)
 	{
 		Load(list["TEXTURE"].at(i));
 	}

@@ -76,9 +76,9 @@ void CMenu::Update()
 //-----------------------------------------
 void CMenu::UpdateBeforeDecision()
 {
-	for (int i = 0; i < m_item.size(); i++)
+	for (int i = 0; i < (int)m_item.size(); i++)
 	{
-		for (int j = 0; j < m_item[i].size(); j++)
+		for (int j = 0; j < (int)m_item[i].size(); j++)
 		{
 			if (m_selectIdx[0] == i && m_selectIdx[1] == j)
 			{
@@ -197,6 +197,21 @@ void CMenu::SetSelectIdx(std::vector<int> inIdx)
 	m_selectIdx = inIdx;
 }
 
+//-----------------------------------------------------------------------------
+// âï˙ó\íËÇÃê›íË
+//-----------------------------------------------------------------------------
+void CMenu::SetIsDeleted()
+{
+	for (int i = 0; i < (int)m_item.size(); i++)
+	{
+		for (int j = 0; j < (int)m_item[i].size(); j++)
+		{
+			m_item[i][j]->SetIsDeleted(true);
+		}
+	}
+	m_fream->SetIsDeleted(true);
+}
+
 //-----------------------------------------
 // çÏê¨
 //-----------------------------------------
@@ -233,9 +248,9 @@ CMenu * CMenu::Create(D3DXVECTOR2 inPos, D3DXVECTOR2 inArea, CMenuFream * inFrea
 //-----------------------------------------
 void CMenu::SetItemPos()
 {
-	for (int i = 0; i < m_item.size(); i++)
+	for (int i = 0; i < (int)m_item.size(); i++)
 	{
-		for (int j = 0; j < m_item.at(i).size(); j++)
+		for (int j = 0; j < (int)m_item.at(i).size(); j++)
 		{
 			CMenuItem* item = m_item[i][j];
 			D3DXVECTOR2 pos = m_pos;

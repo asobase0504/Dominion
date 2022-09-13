@@ -54,11 +54,11 @@ CObtainedSetNumberUI * CObtainedSetNumberUI::Create(const D3DXVECTOR2 & inPos)
 
 		int needWinNumber = modeGame->GetNeedWinNumber();
 
-		for (int i = 0; i < setCountUI.size(); i++)
+		for (int i = 0; i < (int)setCountUI.size(); i++)
 		{
 			setCountUI[i].resize(needWinNumber);
 
-			for (int j = 0; j < setCountUI[i].size(); j++)
+			for (int j = 0; j < (int)setCountUI[i].size(); j++)
 			{
 				setCountUI[i][j] = new CObject2D(CObject::TYPE::NONE, PRIORITY_BELONG);
 
@@ -89,7 +89,7 @@ CObtainedSetNumberUI * CObtainedSetNumberUI::Create(const D3DXVECTOR2 & inPos)
 
 		tookSetUI.resize(teem);	// É`Å[ÉÄÇÃêîï™ëÂÇ´Ç≥Çämï€
 		
-		for (int i = 0; i < tookSetUI.size(); i++)
+		for (int i = 0; i < (int)tookSetUI.size(); i++)
 		{
 			tookSetUI[i].resize(modeGame->GetWinNumber(i));
 
@@ -109,7 +109,7 @@ CObtainedSetNumberUI * CObtainedSetNumberUI::Create(const D3DXVECTOR2 & inPos)
 				tookSetUI[i][j]->SetPos(pos);
 				D3DXCOLOR color = CApplication::GetInstance()->GetColor(3);
 				tookSetUI[i][j]->SetColor(color);
-				if ((modeGame->GetWinner() == i) && (tookSetUI[i].size() == j))
+				if ((modeGame->GetWinner() == i) && ((int)tookSetUI[i].size() == j))
 				{ // èüé“ÇÃèÍçá
 					tookSetUI[i][j]->SetSize({ 0.0f,0.0f });
 				}
@@ -185,18 +185,18 @@ void CObtainedSetNumberUI::Update()
 		float pow = count * count;
 		//float pow = sinf((count * D3DX_PI) * 0.5f);
 
-		for (int i = 0; i < m_setCountUI.size(); i++)
+		for (int i = 0; i < (int)m_setCountUI.size(); i++)
 		{
-			for (int j = 0; j < m_setCountUI[i].size(); j++)
+			for (int j = 0; j < (int)m_setCountUI[i].size(); j++)
 			{
 				D3DXVECTOR2 size = m_setCountUI[i][j]->GetSize() - m_setCountUI[i][j]->GetSize() * pow;
 				m_setCountUI[i][j]->SetSize(size);
 			}
 		}
 
-		for (int i = 0; i < m_tookSetUI.size(); i++)
+		for (int i = 0; i < (int)m_tookSetUI.size(); i++)
 		{
-			for (int j = 0; j < m_tookSetUI[i].size(); j++)
+			for (int j = 0; j < (int)m_tookSetUI[i].size(); j++)
 			{
 				D3DXVECTOR2 size = m_tookSetUI[i][j]->GetSize() - m_tookSetUI[i][j]->GetSize() * pow;
 				m_tookSetUI[i][j]->SetSize(size);
@@ -217,20 +217,23 @@ void CObtainedSetNumberUI::Draw()
 {
 }
 
+//-----------------------------------------------------------------------------
+// âï˙ó\íËÇÃê›íË
+//-----------------------------------------------------------------------------
 void CObtainedSetNumberUI::SetIsDeleted()
 {
 	m_isDeleted = true;
-	for (int i = 0; i < m_setCountUI.size(); i++)
+	for (int i = 0; i < (int)m_setCountUI.size(); i++)
 	{
-		for (int j = 0; j < m_setCountUI[i].size(); j++)
+		for (int j = 0; j < (int)m_setCountUI[i].size(); j++)
 		{
 			m_setCountUI[i][j]->SetIsDeleted(true);
 		}
 	}
 
-	for (int i = 0; i < m_tookSetUI.size(); i++)
+	for (int i = 0; i < (int)m_tookSetUI.size(); i++)
 	{
-		for (int j = 0; j < m_tookSetUI[i].size(); j++)
+		for (int j = 0; j < (int)m_tookSetUI[i].size(); j++)
 		{
 			m_tookSetUI[i][j]->SetIsDeleted(true);
 		}

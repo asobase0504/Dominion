@@ -28,7 +28,7 @@ CObject::CObject(TYPE type, int priority) :
 {
 	m_type = type;
 
-	if (object.size() < priority + 1)
+	if ((int)object.size() < priority + 1)
 	{
 		object.resize(priority + 1);
 	}
@@ -47,7 +47,7 @@ CObject::~CObject()
 //----------------------------------------
 auto CObject::Release()
 {
-	for (int i = 0;i < object.size();i++)
+	for (int i = 0;i < (int)object.size();i++)
 	{
 		for (auto it = object.at(i).begin(); it != object.at(i).end(); it++)
 		{
@@ -94,7 +94,7 @@ void CObject::ReleaseAll()
 //----------------------------------------
 void CObject::UpdateAll()
 {
-	for (int i = 0; i < object.size(); i++)
+	for (int i = 0; i < (int)object.size(); i++)
 	{
 		// XVˆ—
 		for (auto it = object.at(i).begin(); it != object.at(i).end(); it++)
@@ -125,7 +125,7 @@ void CObject::UpdateAll()
 //----------------------------------------
 void CObject::DrawAll()
 {
-	for (int i = 0; i < object.size(); i++)
+	for (int i = 0; i < (int)object.size(); i++)
 	{
 		for (auto it = object.at(i).begin(); it != object.at(i).end(); it++)
 		{

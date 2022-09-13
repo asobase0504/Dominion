@@ -49,6 +49,7 @@ public:	// パブリック関数
 	// Setter
 	void SetSelectIdx(int Y, int X);
 	void SetSelectIdx(std::vector<int> inIdx);
+	void SetIsDeleted();
 
 	// Getter
 	const std::vector<int>& GetSelectIdx() { return m_selectIdx; }

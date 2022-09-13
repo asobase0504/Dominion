@@ -1,5 +1,6 @@
 #include "stage.h"
 #include "application.h"
+#include "game.h"
 #include "character.h"
 #include "block.h"
 #include "map.h"
@@ -36,7 +37,8 @@ CStage::~CStage()
 HRESULT CStage::Init()
 {
 	// マップクラス
-	stage = LoadJsonStage(L"data/FILE/STAGE/stage01.json");
+	CGame* gameMode = (CGame*)CApplication::GetInstance()->GetMode();
+	stage = gameMode->GetStageInfo();
 
 	map = new CMap;
 	if (FAILED(map->Init()))
@@ -92,7 +94,7 @@ void CStage::Update()
 	PassOnceCreatePlater();
 
 	// キャラクターが死亡したかを調べる
-	for (int i = 0; i < character.size(); i++)
+	for (int i = 0; i < (int)character.size(); i++)
 	{
 		if (!character[i]->GetIsDeleted())
 		{
@@ -106,7 +108,7 @@ void CStage::Update()
 	if (m_isEndGame)
 	{
 		// 死んでないキャラクターを調べる
-		for (int i = 0; i < character.size(); i++)
+		for (int i = 0; i < (int)character.size(); i++)
 		{
 			character[i]->SetOperationState(false);
 			if (character[i]->GetIsDeleted())
@@ -142,7 +144,7 @@ void CStage::PassOnceCreatePlater()
 		return;
 	}
 
-	/* ↓UIがGOまで言った場合↓ */
+	/* ↓カウントダウンが終了した場合↓ */
 
 	// プレイヤーをラムダ式でクリエイト
 	auto playerSet = [this](int inIdx, CController* inController)->void
@@ -161,9 +163,22 @@ void CStage::PassOnceCreatePlater()
 		character.at(inIdx)->SetController(inController);				// 命令者の設定
 	};
 
+	CGame* gameMode = (CGame*)CApplication::GetInstance()->GetMode();
+	std::vector<int> charcterIndex = gameMode->GetControllerIndex();
+
 	// キャラクターの設定
-	playerSet(0, new CPlayerController(1));
-	playerSet(1, new CPlayerController(0));
+	for (int i = 0; i < (int)charcterIndex.size(); i++)
+	{
+		if (charcterIndex[i] != -2)
+		{
+			playerSet(i, new CPlayerController(charcterIndex[i]));
+		}
+		else
+		{
+			playerSet(i, new CAIController);
+		}
+	}
+
 	m_isPopFlag = false;
 }
 
