@@ -15,7 +15,7 @@
 class CPlayerController : public CController
 {
 public:
-	CPlayerController();
+	CPlayerController(int inInputIndex);
 	~CPlayerController() override;
 
 	HRESULT Init() override;
@@ -26,7 +26,7 @@ public:
 	SHOT_TYPE BulletShot() override;
 
 private:
-
+	int m_nInputIdx;
 };
 
 #endif // !_PLAYER_OPERATE_H_

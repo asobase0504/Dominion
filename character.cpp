@@ -25,8 +25,8 @@
 // 定義
 //-----------------------------------------
 const int CCharacter::LIMIT_BULLET_COUNT = 5;	// 弾の最大数
-const int CCharacter::RELOAD_TIME = 100;		// 一発の弾が回復する時間
-const float CCharacter::MOVE_SPEAD = 4.0f;		// 移動速度
+const int CCharacter::RELOAD_TIME = 60;			// 一発の弾が回復する時間
+const float CCharacter::MOVE_SPEAD = 5.0f;		// 移動速度
 
 //-----------------------------------------
 // コンストラクタ
@@ -287,7 +287,7 @@ void CCharacter::BulletShot()
 	}
 	break;
 	case CController::CHARGE_NOW:
-		m_spead *= 0.5f;
+		m_spead *= 0.525f;
 		break;
 	default:
 		break;
@@ -382,7 +382,7 @@ void CCharacter::BulletReload()
 
 		if (m_reloadCount % (int)(RELOAD_TIME * 0.5f) == 0)
 		{
-			m_remainsBulletDisplay[m_remainsBulletCount]->SetColorAlpha(0.5f);
+			//m_remainsBulletDisplay[m_remainsBulletCount]->SetColorAlpha(0.5f);
 		}
 
 		if (m_reloadCount % RELOAD_TIME == 0)

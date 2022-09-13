@@ -162,8 +162,8 @@ void CStage::PassOnceCreatePlater()
 	};
 
 	// キャラクターの設定
-	playerSet(0, new CAIController);
-	playerSet(1, new CPlayerController);
+	playerSet(0, new CPlayerController(1));
+	playerSet(1, new CPlayerController(0));
 	m_isPopFlag = false;
 }
 

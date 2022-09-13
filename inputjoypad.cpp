@@ -187,7 +187,8 @@ void CInputJoyPad::Update(void)
 		{
 			for (int nButtons = 0; nButtons < MAX_JOY_KEY; nButtons++)
 			{
-				m_JoyPadData[nCnt].aKeyStateTrigger.rgbButtons[nButtons] = (m_JoyPadData[nCnt].aKeyState.rgbButtons[nButtons] ^ JoyKey.rgbButtons[nButtons]) & JoyKey.rgbButtons[nButtons]; //トリガー情報を保存
+				m_JoyPadData[nCnt].aKeyStateTrigger.rgbButtons[nButtons] = ~m_JoyPadData[nCnt].aKeyState.rgbButtons[nButtons] & JoyKey.rgbButtons[nButtons]; //トリガー情報を保存
+				m_JoyPadData[nCnt].aKeyStateRelease.rgbButtons[nButtons] = m_JoyPadData[nCnt].aKeyState.rgbButtons[nButtons] & ~JoyKey.rgbButtons[nButtons]; //トリガー情報を保存
 			}
 			m_JoyPadData[nCnt].aKeyState = JoyKey;//プレス処理の保管
 			m_JoyPadData[nCnt].nCrossPressRot = (int)(m_JoyPadData[nCnt].aKeyState.rgdwPOV[0] / 100.0f);//ジョイパッドの十字キーの押されている方向
@@ -237,7 +238,7 @@ bool CInputJoyPad::GetRelease(DirectJoypad eKey, int nNum)
 	{
 		return GetCrossRelease(eKey, nNum);
 	}
-	return (m_JoyPadData[nNum].aKeyStateTrigger.rgbButtons[eKey] & 0x80) ? true : false;
+	return (m_JoyPadData[nNum].aKeyStateRelease.rgbButtons[eKey] & 0x80) ? true : false;
 }
 
 //十字キープレス処理
@@ -258,42 +259,10 @@ bool CInputJoyPad::GetCrossPress(DirectJoypad eKey, int nNum)
 			return true;
 		}
 		break;
-	case JOYPAD_UP_LEFT:
-		if (m_JoyPadData[nNum].aKeyState.rgdwPOV[0] == JOYKEY_DIRECT_CROSS::JOYKEY_CROSS_UP_LEFT
-			|| (m_JoyPadData[nNum].aKeyState.lY <= -700 && m_JoyPadData[nNum].aKeyState.lX <= -700)
-			|| (m_JoyPadData[nNum].aKeyState.lRz <= -700 && m_JoyPadData[nNum].aKeyState.lZ <= -700))
-		{
-			return true;
-		}
-		break;
-	case JOYPAD_UP_RIGHT:
-		if (m_JoyPadData[nNum].aKeyState.rgdwPOV[0] == JOYKEY_DIRECT_CROSS::JOYKEY_CROSS_UP_RIGHT
-			|| (m_JoyPadData[nNum].aKeyState.lY <= -700 && m_JoyPadData[nNum].aKeyState.lX >= 700)
-			|| (m_JoyPadData[nNum].aKeyState.lRz <= -700 && m_JoyPadData[nNum].aKeyState.lZ >= 700))
-		{
-			return true;
-		}
-		break;
 	case JOYPAD_DOWN:
 		if (m_JoyPadData[nNum].aKeyState.rgdwPOV[0] == JOYKEY_DIRECT_CROSS::JOYKEY_CROSS_DOWN
 			|| m_JoyPadData[nNum].aKeyState.lY >= 700
 			|| m_JoyPadData[nNum].aKeyState.lRz >= 700)
-		{
-			return true;
-		}
-		break;
-	case JOYPAD_DOWN_LEFT:
-		if (m_JoyPadData[nNum].aKeyState.rgdwPOV[0] == JOYKEY_DIRECT_CROSS::JOYKEY_CROSS_DOWN_LEFT
-			|| (m_JoyPadData[nNum].aKeyState.lY >= 700 && m_JoyPadData[nNum].aKeyState.lX <= -700)
-			|| (m_JoyPadData[nNum].aKeyState.lRz >= 700 && m_JoyPadData[nNum].aKeyState.lZ <= -700))
-		{
-			return true;
-		}
-		break;
-	case JOYPAD_DOWN_RIGHT:
-		if (m_JoyPadData[nNum].aKeyState.rgdwPOV[0] == JOYKEY_DIRECT_CROSS::JOYKEY_CROSS_DOWN_RIGHT
-			|| (m_JoyPadData[nNum].aKeyState.lY >= 700 && m_JoyPadData[nNum].aKeyState.lX >= 700)
-			|| (m_JoyPadData[nNum].aKeyState.lRz >= 700 && m_JoyPadData[nNum].aKeyState.lZ >= 700))
 		{
 			return true;
 		}
@@ -353,16 +322,15 @@ bool CInputJoyPad::GetCrossRelease(DirectJoypad eKey, int nNum)
 		return false;
 	}
 
-	if (m_JoyPadData[nNum].aOldKey != eKey
-		&& GetCrossRelease(eKey, nNum))
+	if (m_JoyPadData[nNum].aOldKey != eKey && !GetCrossPress(eKey, nNum))
+	{
+		return false;
+	}
+
+	else if (m_JoyPadData[nNum].aOldKey == eKey && !GetCrossPress(eKey, nNum))
 	{
 		m_JoyPadData[nNum].aOldKey = eKey;
 		return true;
-	}
-	else if (m_JoyPadData[nNum].aOldKey == eKey
-		&& GetCrossRelease(eKey, nNum))
-	{
-		return false;
 	}
 
 	m_JoyPadData[nNum].aOldKey = DirectJoypad::JOYPAD_MAX;

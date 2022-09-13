@@ -43,6 +43,9 @@ public:
 	bool Press(STAN_DART_INPUT_KEY key);				//総合プレス
 	bool Trigger(STAN_DART_INPUT_KEY key);				//総合トリガー
 	bool Release(STAN_DART_INPUT_KEY key);				//総合リリース
+	bool Press(STAN_DART_INPUT_KEY key, int nNum);		//総合プレス
+	bool Trigger(STAN_DART_INPUT_KEY key, int nNum);	//総合トリガー
+	bool Release(STAN_DART_INPUT_KEY key, int nNum);	//総合リリース
 	bool Press(int nKey);								//キーボードプレス
 	bool Trigger(int nkey);								//キーボードトリガー
 	bool Release(int nkey);								//キーボードリリース

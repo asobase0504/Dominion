@@ -16,13 +16,17 @@
 enum STAN_DART_INPUT_KEY
 {						//					キーボード						ジョイパッド
 	KEY_UP = 0,			//上			 W & UP							スティック上　＆　十字キー上
-	KEY_UP_LEFT,		//左上			(W&A)  &  (UP&Left)				スティック左上　＆　（十字キー上　＆　十字キー左）
-	KEY_UP_RIGHT,		//右上			(W&D)  &  (UP&Right)			スティック右上　＆　（十字キー上　＆　十字キー右）
 	KEY_DOWN,			//下			 S  & Down						スティック下　＆　十字キー下
-	KEY_DOWN_LEFT,		//左下			(S&A)  &  (Down&Left)			スティック左下　＆　（十字キー下　＆　十字キー左）
-	KEY_DOWN_RIGHT,		//右下			(S&D)  &  (Down&Right)			スティック右下　＆　（十字キー下　＆　十字キー右）
-	KEY_LEFT,			//左			 A  &  Left)					スティック左　＆　十字キー左
+	KEY_LEFT,			//左			 A  &  Left						スティック左　＆　十字キー左
 	KEY_RIGHT,			//右			 D  &  Right					スティック右　＆　十字キー右
+	KEY_MOVE_UP,		//上(移動)		 W & UP							スティック上　＆　十字キー上
+	KEY_MOVE_DOWN,		//下(移動)		 W & UP							スティック上　＆　十字キー上
+	KEY_MOVE_LEFT,		//左(移動)		 W & UP							スティック上　＆　十字キー上
+	KEY_MOVE_RIGHT,		//右(移動)		 W & UP							スティック上　＆　十字キー上
+	KEY_SHOT_UP,		//上(射撃)		 W & UP							スティック上　＆　十字キー上
+	KEY_SHOT_DOWN,		//下(射撃)		 W & UP							スティック上　＆　十字キー上
+	KEY_SHOT_LEFT,		//左(射撃)		 W & UP							スティック上　＆　十字キー上
+	KEY_SHOT_RIGHT,		//右(射撃)		 W & UP							スティック上　＆　十字キー上
 	KEY_DECISION,		//決定			 エンターキー								A
 	KEY_SHOT,			//スペース		 スペースキー								R1
 	KEY_BACK,			//バック		 バックスペースキー & B						B
@@ -49,30 +53,24 @@ enum JOYKEY_DIRECT_CROSS
 //キー種類(ジョイパッド)
 enum DirectJoypad
 {
-	JOYPAD_X = 0,				//Xボタン
-	JOYPAD_Y,					//Yボタン
-	JOYPAD_A,					//Aボタン
-	JOYPAD_B,					//Bボタン
-	JOYPAD_L1,					//L1ボタン
-	JOYPAD_R1,					//R1ボタン
-	JOYPAD_L2,					//L2ボタン
-	JOYPAD_R2,					//R2ボタン
-	JOYPAD_LT,					//左スティック押し込みボタン
-	JOYPAD_RT,					//右スティック押し込みボタン
-	JOYPAD_BACK,				//バックボタン
-	JOYPAD_START,				//スタートボタン
-	JOYPAD_HOME,				//ホームボタン
-	JOYPAD_UP,					//上
-	JOYPAD_UP_LEFT,				//左上
-	JOYPAD_UP_RIGHT,			//右上
-	JOYPAD_DOWN,				//下
-	JOYPAD_DOWN_LEFT,			//左下
-	JOYPAD_DOWN_RIGHT,			//右下
-	JOYPAD_LEFT,				//左
-	JOYPAD_RIGHT,				//右
+	JOYPAD_X = 0,	// Xボタン
+	JOYPAD_Y,		// Yボタン
+	JOYPAD_A,		// Aボタン
+	JOYPAD_B,		// Bボタン
+	JOYPAD_L1,		// L1ボタン
+	JOYPAD_R1,		// R1ボタン
+	JOYPAD_L2,		// L2ボタン
+	JOYPAD_R2,		// R2ボタン
+	JOYPAD_LT,		// 左スティック押し込みボタン
+	JOYPAD_RT,		// 右スティック押し込みボタン
+	JOYPAD_BACK,	// バックボタン
+	JOYPAD_START,	// スタートボタン
+	JOYPAD_HOME,	// ホームボタン
+	JOYPAD_UP,		// 上
+	JOYPAD_DOWN,	// 下
+	JOYPAD_LEFT,	// 左
+	JOYPAD_RIGHT,	// 右
 	JOYPAD_MAX
 };
-
-
 #endif
 

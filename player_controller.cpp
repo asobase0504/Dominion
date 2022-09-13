@@ -14,8 +14,9 @@
 //-----------------------------------------
 // コンストラクタ
 //-----------------------------------------
-CPlayerController::CPlayerController()
+CPlayerController::CPlayerController(int inInputIndex)
 {
+	m_nInputIdx = inInputIndex;
 }
 
 //-----------------------------------------
@@ -54,9 +55,6 @@ D3DXVECTOR3 CPlayerController::Move()
 {
 	CInput* input = CInput::GetKey();
 
-	//CDirectInput* dinput = CApplication::GetInstance()->GetDirectInput();
-
-	//bool isMove = false;
 	D3DXVECTOR3 moveInput = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	if (input == nullptr)
@@ -65,28 +63,24 @@ D3DXVECTOR3 CPlayerController::Move()
 	}
 
 	// モデルの移動
-	if (input->Press(DIK_W))
+	if (input->Press(KEY_MOVE_UP,m_nInputIdx))
 	{
 		moveInput.y -= 1.0f;
-		//isMove = true;
 	}
-	if (input->Press(DIK_A))
+	if (input->Press(KEY_MOVE_LEFT, m_nInputIdx))
 	{
 		moveInput.x -= 1.0f;
-		//isMove = true;
 	}
-	if (input->Press(DIK_S))
+	if (input->Press(KEY_MOVE_DOWN, m_nInputIdx))
 	{
 		moveInput.y += 1.0f;
-		//isMove = true;
 	}
-	if (input->Press(DIK_D))
+	if (input->Press(KEY_MOVE_RIGHT, m_nInputIdx))
 	{
 		moveInput.x += 1.0f;
-		//isMove = true;
 	}
 
-	if (/*isMove*/ moveInput.x != 0.0f || moveInput.y != 0.0f)
+	if (moveInput.x != 0.0f || moveInput.y != 0.0f)
 	{
 		D3DXVec3Normalize(&moveInput, &moveInput);
 	}
@@ -106,50 +100,50 @@ CController::SHOT_TYPE CPlayerController::BulletShot()
 		return NONE_SHOT;
 	}
 
-	if (input->Press(DIK_UP) ||
-		input->Press(DIK_DOWN) ||
-		input->Press(DIK_LEFT) ||
-		input->Press(DIK_RIGHT))
+	if (input->Press(KEY_SHOT_UP, m_nInputIdx) ||
+		input->Press(KEY_SHOT_DOWN, m_nInputIdx) ||
+		input->Press(KEY_SHOT_LEFT, m_nInputIdx) ||
+		input->Press(KEY_SHOT_RIGHT, m_nInputIdx))
 	{
 		chargeCount++;
 	}
 
-	if (input->Release(DIK_UP) && chargeCount < 50)
+	if (input->Release(KEY_SHOT_UP, m_nInputIdx) && chargeCount < 50)
 	{
 		chargeCount = 0;
 		return UP_SHOT;
 	}
-	else if (input->Release(DIK_DOWN) && chargeCount < 50)
+	else if (input->Release(KEY_SHOT_DOWN, m_nInputIdx) && chargeCount < 50)
 	{
 		chargeCount = 0;
 		return DOWN_SHOT;
 	}
-	else if (input->Release(DIK_LEFT) && chargeCount < 50)
+	else if (input->Release(KEY_SHOT_LEFT, m_nInputIdx) && chargeCount < 50)
 	{
 		chargeCount = 0;
 		return LEFT_SHOT;
 	}
-	else if (input->Release(DIK_RIGHT) && chargeCount < 50)
+	else if (input->Release(KEY_SHOT_RIGHT, m_nInputIdx) && chargeCount < 50)
 	{
 		chargeCount = 0;
 		return RIGHT_SHOT;
 	}
-	else if (input->Release(DIK_UP) && chargeCount >= 50)
+	else if (input->Release(KEY_SHOT_UP, m_nInputIdx) && chargeCount >= 50)
 	{
 		chargeCount = 0;
 		return UP_CHARGE_SHOT;
 	}
-	else if (input->Release(DIK_DOWN) && chargeCount >= 50)
+	else if (input->Release(KEY_SHOT_DOWN, m_nInputIdx) && chargeCount >= 50)
 	{
 		chargeCount = 0;
 		return DOWN_CHARGE_SHOT;
 	}
-	else if (input->Release(DIK_LEFT) && chargeCount >= 50)
+	else if (input->Release(KEY_SHOT_LEFT, m_nInputIdx) && chargeCount >= 50)
 	{
 		chargeCount = 0;
 		return LEFT_CHARGE_SHOT;
 	}
-	else if (input->Release(DIK_RIGHT) && chargeCount >= 50)
+	else if (input->Release(KEY_SHOT_RIGHT, m_nInputIdx) && chargeCount >= 50)
 	{
 		chargeCount = 0;
 		return RIGHT_CHARGE_SHOT;

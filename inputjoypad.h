@@ -30,6 +30,7 @@ private:
 		LPDIRECTINPUTDEVICE8 pInputDevice;				//入力デバイスへのポインタ
 		DIJOYSTATE aKeyState;							//ジョイパッドのプレス情報
 		DIJOYSTATE aKeyStateTrigger;					//ジョイパッドのトリガー情報
+		DIJOYSTATE aKeyStateRelease;					//ジョイパッドのリリース情報
 		DirectJoypad aOldKey;							//前回押されたキーの種類
 		int nCrossPressRot;								//ジョイパッドの十字キーの押されている方向
 	};
