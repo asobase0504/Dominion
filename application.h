@@ -15,11 +15,11 @@
 //-----------------------------------------
 class CRenderer;
 class CObject;
-class CInputKeybord;
 class CDirectInput;
 class CTexture;
 class CMode;
 class CThemeColor;
+class CInput;
 
 //-----------------------------------------
 // アプリケーションクラス
@@ -59,8 +59,6 @@ public:	// メンバー関数
 	// Getter
 	CRenderer* GetRenderer() { return renderer; }
 	CObject** GetMyObject() { return &object; }
-	CInputKeybord* GetInput() { return input; }
-	CDirectInput* GetDirectInput() { return directInput; }
 	CTexture* GetTextureClass() { return texture; }
 	CMode* GetMode() { return mode; }
 	D3DXCOLOR GetColor(int inKey);
@@ -71,9 +69,8 @@ public:	// メンバー関数
 
 private: // 動的メンバー変数
 	CMode* mode;
+	CInput* input;
 	CRenderer* renderer;
-	CInputKeybord* input;
-	CDirectInput* directInput;
 	CTexture* texture;
 	CObject* object;
 	CThemeColor* color;

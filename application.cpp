@@ -9,8 +9,7 @@
 //-----------------------------------------------------------------------------
 #include "application.h"
 #include <assert.h>
-#include "input_keybord.h"
-#include "input_directinput.h"
+#include "input.h"
 #include "renderer.h"
 #include "theme_color.h"
 #include "texture.h"
@@ -47,7 +46,6 @@ CApplication::CApplication() :
 	mode(nullptr),
 	renderer(nullptr),
 	input(nullptr),
-	directInput(nullptr),
 	texture(nullptr),
 	object(nullptr),
 	color(nullptr)
@@ -62,7 +60,6 @@ CApplication::~CApplication()
 	assert(mode == nullptr);
 	assert(renderer == nullptr);
 	assert(input == nullptr);
-	assert(directInput == nullptr);
 	assert(texture == nullptr);
 	assert(object == nullptr);
 	assert(color == nullptr);
@@ -74,7 +71,7 @@ CApplication::~CApplication()
 HRESULT CApplication::Init(HWND hWnd, HINSTANCE hInstance)
 {
 	// “ü—Íˆ—
-	input = new CInputKeybord;
+	input = CInput::Create();
 	if (FAILED(input->Init(hInstance, hWnd)))
 	{
 		return E_FAIL;
@@ -146,18 +143,7 @@ void CApplication::Uninit()
 	if (input != nullptr)
 	{
 		input->Uninit();
-
-		delete input;
 		input = nullptr;
-	}
-
-	// “ü—Íˆ—‚Ì‰ð•ú
-	if (directInput != nullptr)
-	{
-		directInput->Uninit();
-
-		delete directInput;
-		directInput = nullptr;
 	}
 
 	// ƒŒƒ“ƒ_ƒ‰[‚Ì‰ð•ú
@@ -184,7 +170,6 @@ void CApplication::Uninit()
 void CApplication::Update()
 {
 	input->Update();
-	//directInput->Update();
 	renderer->Update();
 	mode->Update();
 }

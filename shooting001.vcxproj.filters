@@ -21,9 +21,6 @@
     <Filter Include="FIle">
       <UniqueIdentifier>{d34f2a52-70b7-4c95-bb42-419947bb7574}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\04_Player">
-      <UniqueIdentifier>{38ff11a4-b5d2-43c7-8daa-63f6366c0a9f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\03_Mode">
       <UniqueIdentifier>{48f00a93-53ea-4db8-9029-d9913dbc6a89}</UniqueIdentifier>
     </Filter>
@@ -39,45 +36,45 @@
     <Filter Include="ソース ファイル\05_Cpntroller">
       <UniqueIdentifier>{0d4dda8f-550b-4600-8408-706d6820c1bc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\06_Block">
-      <UniqueIdentifier>{44d867a8-162d-4067-820f-adf507ea2048}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\07_UI">
       <UniqueIdentifier>{a2ea58af-17b6-4e77-ac73-b31195417e8e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\06_Stage">
+      <UniqueIdentifier>{44d867a8-162d-4067-820f-adf507ea2048}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\06_Stage\00_Map">
+      <UniqueIdentifier>{d842f251-8618-4de9-8e3e-52055cf421c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\06_Stage\01_Charctor">
+      <UniqueIdentifier>{8a2841a3-810c-4f0f-926a-73c200fe5ec1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\06_Stage\00_Map\00_Block">
+      <UniqueIdentifier>{0b4eebda-f9f7-45c9-82b9-e3bdabf61d9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\06_Stage\01_Charctor\00_Bullet">
+      <UniqueIdentifier>{1035b6ef-0593-48ed-af41-b8ab1c32a70a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\06_Stage\01_Charctor\01_AddDesign">
+      <UniqueIdentifier>{586cfd30-e0e9-4741-9ef7-61aa9e3adc48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\00_Main\01_OutSide">
+      <UniqueIdentifier>{1e03fd7c-c365-45f1-8f66-0495005d4b8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\00_Main\01_OutSide\00_Texture">
+      <UniqueIdentifier>{2e06e99f-38a5-4cf8-81ab-43afe56d7e38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\00_Main\00_InSide">
+      <UniqueIdentifier>{872de012-cca7-4762-95d4-1a804d9edff7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\06_Stage\02_Item">
+      <UniqueIdentifier>{6f212687-7e29-4343-ad31-bd662820512b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="input_keybord.cpp">
-      <Filter>ソース ファイル\01_Input</Filter>
-    </ClCompile>
     <ClCompile Include="input.cpp">
       <Filter>ソース ファイル\01_Input</Filter>
     </ClCompile>
-    <ClCompile Include="input_xinput.cpp">
-      <Filter>ソース ファイル\01_Input</Filter>
-    </ClCompile>
-    <ClCompile Include="input_directinput.cpp">
-      <Filter>ソース ファイル\01_Input</Filter>
-    </ClCompile>
-    <ClCompile Include="application.cpp">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClCompile>
-    <ClCompile Include="error_warning.cpp">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClCompile>
-    <ClCompile Include="renderer.cpp">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClCompile>
-    <ClCompile Include="texture.cpp">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClCompile>
-    <ClCompile Include="collision.cpp">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClCompile>
-    <ClCompile Include="file.cpp">
       <Filter>ソース ファイル\00_Main</Filter>
     </ClCompile>
     <ClCompile Include="title.cpp">
@@ -104,35 +101,11 @@
     <ClCompile Include="controller.cpp">
       <Filter>ソース ファイル\05_Cpntroller</Filter>
     </ClCompile>
-    <ClCompile Include="theme_color.cpp">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClCompile>
     <ClCompile Include="A-Star.cpp">
       <Filter>ソース ファイル\05_Cpntroller</Filter>
     </ClCompile>
-    <ClCompile Include="bullet.cpp">
-      <Filter>ソース ファイル\04_Player</Filter>
-    </ClCompile>
-    <ClCompile Include="character.cpp">
-      <Filter>ソース ファイル\04_Player</Filter>
-    </ClCompile>
-    <ClCompile Include="remains_bullet.cpp">
-      <Filter>ソース ファイル\04_Player</Filter>
-    </ClCompile>
-    <ClCompile Include="block.cpp">
-      <Filter>ソース ファイル\06_Block</Filter>
-    </ClCompile>
-    <ClCompile Include="map.cpp">
-      <Filter>ソース ファイル\06_Block</Filter>
-    </ClCompile>
     <ClCompile Include="menu.cpp">
       <Filter>ソース ファイル\07_UI</Filter>
-    </ClCompile>
-    <ClCompile Include="block_scraped.cpp">
-      <Filter>ソース ファイル\06_Block</Filter>
-    </ClCompile>
-    <ClCompile Include="block_color_addition.cpp">
-      <Filter>ソース ファイル\06_Block</Filter>
     </ClCompile>
     <ClCompile Include="ui_countdown.cpp">
       <Filter>ソース ファイル\07_UI</Filter>
@@ -140,52 +113,79 @@
     <ClCompile Include="title_status.cpp">
       <Filter>ソース ファイル\03_Mode\02_Title</Filter>
     </ClCompile>
-    <ClCompile Include="stage.cpp">
-      <Filter>ソース ファイル\03_Mode\01_Game</Filter>
-    </ClCompile>
-    <ClCompile Include="sound.cpp">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClCompile>
     <ClCompile Include="ui_obtained_setnumber.cpp">
       <Filter>ソース ファイル\07_UI</Filter>
     </ClCompile>
-    <ClCompile Include="bullet_effect.cpp">
-      <Filter>ソース ファイル\04_Player</Filter>
+    <ClCompile Include="block.cpp">
+      <Filter>ソース ファイル\06_Stage\00_Map\00_Block</Filter>
+    </ClCompile>
+    <ClCompile Include="block_color_addition.cpp">
+      <Filter>ソース ファイル\06_Stage\00_Map\00_Block</Filter>
+    </ClCompile>
+    <ClCompile Include="block_scraped.cpp">
+      <Filter>ソース ファイル\06_Stage\00_Map\00_Block</Filter>
     </ClCompile>
     <ClCompile Include="crush_effect.cpp">
-      <Filter>ソース ファイル\06_Block</Filter>
+      <Filter>ソース ファイル\06_Stage\00_Map\00_Block</Filter>
+    </ClCompile>
+    <ClCompile Include="stage.cpp">
+      <Filter>ソース ファイル\06_Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="character.cpp">
+      <Filter>ソース ファイル\06_Stage\01_Charctor</Filter>
+    </ClCompile>
+    <ClCompile Include="map.cpp">
+      <Filter>ソース ファイル\06_Stage\00_Map</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet.cpp">
+      <Filter>ソース ファイル\06_Stage\01_Charctor\00_Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="bullet_effect.cpp">
+      <Filter>ソース ファイル\06_Stage\01_Charctor\00_Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="remains_bullet.cpp">
+      <Filter>ソース ファイル\06_Stage\01_Charctor\01_AddDesign</Filter>
+    </ClCompile>
+    <ClCompile Include="texture.cpp">
+      <Filter>ソース ファイル\00_Main\01_OutSide\00_Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="file.cpp">
+      <Filter>ソース ファイル\00_Main\01_OutSide</Filter>
+    </ClCompile>
+    <ClCompile Include="sound.cpp">
+      <Filter>ソース ファイル\00_Main\01_OutSide</Filter>
+    </ClCompile>
+    <ClCompile Include="theme_color.cpp">
+      <Filter>ソース ファイル\00_Main\01_OutSide</Filter>
+    </ClCompile>
+    <ClCompile Include="application.cpp">
+      <Filter>ソース ファイル\00_Main\00_InSide</Filter>
+    </ClCompile>
+    <ClCompile Include="collision.cpp">
+      <Filter>ソース ファイル\00_Main\00_InSide</Filter>
+    </ClCompile>
+    <ClCompile Include="error_warning.cpp">
+      <Filter>ソース ファイル\00_Main\00_InSide</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer.cpp">
+      <Filter>ソース ファイル\00_Main\00_InSide</Filter>
+    </ClCompile>
+    <ClCompile Include="appear_item.cpp">
+      <Filter>ソース ファイル\06_Stage\02_Item</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectInput.cpp">
+      <Filter>ソース ファイル\01_Input</Filter>
+    </ClCompile>
+    <ClCompile Include="inputjoypad.cpp">
+      <Filter>ソース ファイル\01_Input</Filter>
+    </ClCompile>
+    <ClCompile Include="inputkeyboard.cpp">
+      <Filter>ソース ファイル\01_Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="input.h">
       <Filter>ソース ファイル\01_Input</Filter>
-    </ClInclude>
-    <ClInclude Include="input_keybord.h">
-      <Filter>ソース ファイル\01_Input</Filter>
-    </ClInclude>
-    <ClInclude Include="input_xinput.h">
-      <Filter>ソース ファイル\01_Input</Filter>
-    </ClInclude>
-    <ClInclude Include="input_directinput.h">
-      <Filter>ソース ファイル\01_Input</Filter>
-    </ClInclude>
-    <ClInclude Include="application.h">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClInclude>
-    <ClInclude Include="error_warning.h">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClInclude>
-    <ClInclude Include="renderer.h">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClInclude>
-    <ClInclude Include="texture.h">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClInclude>
-    <ClInclude Include="collision.h">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClInclude>
-    <ClInclude Include="file.h">
-      <Filter>ソース ファイル\00_Main</Filter>
     </ClInclude>
     <ClInclude Include="title.h">
       <Filter>ソース ファイル\03_Mode\02_Title</Filter>
@@ -211,32 +211,8 @@
     <ClInclude Include="controller.h">
       <Filter>ソース ファイル\05_Cpntroller</Filter>
     </ClInclude>
-    <ClInclude Include="theme_color.h">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClInclude>
     <ClInclude Include="A-Star.h">
       <Filter>ソース ファイル\05_Cpntroller</Filter>
-    </ClInclude>
-    <ClInclude Include="bullet.h">
-      <Filter>ソース ファイル\04_Player</Filter>
-    </ClInclude>
-    <ClInclude Include="character.h">
-      <Filter>ソース ファイル\04_Player</Filter>
-    </ClInclude>
-    <ClInclude Include="remains_bullet.h">
-      <Filter>ソース ファイル\04_Player</Filter>
-    </ClInclude>
-    <ClInclude Include="block.h">
-      <Filter>ソース ファイル\06_Block</Filter>
-    </ClInclude>
-    <ClInclude Include="map.h">
-      <Filter>ソース ファイル\06_Block</Filter>
-    </ClInclude>
-    <ClInclude Include="block_scraped.h">
-      <Filter>ソース ファイル\06_Block</Filter>
-    </ClInclude>
-    <ClInclude Include="block_color_addition.h">
-      <Filter>ソース ファイル\06_Block</Filter>
     </ClInclude>
     <ClInclude Include="menu.h">
       <Filter>ソース ファイル\07_UI</Filter>
@@ -247,20 +223,77 @@
     <ClInclude Include="title_status.h">
       <Filter>ソース ファイル\03_Mode\02_Title</Filter>
     </ClInclude>
-    <ClInclude Include="stage.h">
-      <Filter>ソース ファイル\03_Mode\01_Game</Filter>
-    </ClInclude>
-    <ClInclude Include="sound.h">
-      <Filter>ソース ファイル\00_Main</Filter>
-    </ClInclude>
     <ClInclude Include="ui_obtained_setnumber.h">
       <Filter>ソース ファイル\07_UI</Filter>
     </ClInclude>
-    <ClInclude Include="bullet_effect.h">
-      <Filter>ソース ファイル\04_Player</Filter>
+    <ClInclude Include="block.h">
+      <Filter>ソース ファイル\06_Stage\00_Map\00_Block</Filter>
+    </ClInclude>
+    <ClInclude Include="block_color_addition.h">
+      <Filter>ソース ファイル\06_Stage\00_Map\00_Block</Filter>
+    </ClInclude>
+    <ClInclude Include="block_scraped.h">
+      <Filter>ソース ファイル\06_Stage\00_Map\00_Block</Filter>
     </ClInclude>
     <ClInclude Include="crush_effect.h">
-      <Filter>ソース ファイル\06_Block</Filter>
+      <Filter>ソース ファイル\06_Stage\00_Map\00_Block</Filter>
+    </ClInclude>
+    <ClInclude Include="stage.h">
+      <Filter>ソース ファイル\06_Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="character.h">
+      <Filter>ソース ファイル\06_Stage\01_Charctor</Filter>
+    </ClInclude>
+    <ClInclude Include="map.h">
+      <Filter>ソース ファイル\06_Stage\00_Map</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet_effect.h">
+      <Filter>ソース ファイル\06_Stage\01_Charctor\00_Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet.h">
+      <Filter>ソース ファイル\06_Stage\01_Charctor\00_Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="remains_bullet.h">
+      <Filter>ソース ファイル\06_Stage\01_Charctor\01_AddDesign</Filter>
+    </ClInclude>
+    <ClInclude Include="texture.h">
+      <Filter>ソース ファイル\00_Main\01_OutSide\00_Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="file.h">
+      <Filter>ソース ファイル\00_Main\01_OutSide</Filter>
+    </ClInclude>
+    <ClInclude Include="theme_color.h">
+      <Filter>ソース ファイル\00_Main\01_OutSide</Filter>
+    </ClInclude>
+    <ClInclude Include="sound.h">
+      <Filter>ソース ファイル\00_Main\01_OutSide</Filter>
+    </ClInclude>
+    <ClInclude Include="application.h">
+      <Filter>ソース ファイル\00_Main\00_InSide</Filter>
+    </ClInclude>
+    <ClInclude Include="collision.h">
+      <Filter>ソース ファイル\00_Main\00_InSide</Filter>
+    </ClInclude>
+    <ClInclude Include="error_warning.h">
+      <Filter>ソース ファイル\00_Main\00_InSide</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer.h">
+      <Filter>ソース ファイル\00_Main\00_InSide</Filter>
+    </ClInclude>
+    <ClInclude Include="appear_item.h">
+      <Filter>ソース ファイル\06_Stage\02_Item</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectInput.h">
+      <Filter>ソース ファイル\01_Input</Filter>
+    </ClInclude>
+    <ClInclude Include="inputjoypad.h">
+      <Filter>ソース ファイル\01_Input</Filter>
+    </ClInclude>
+    <ClInclude Include="inputkeyboard.h">
+      <Filter>ソース ファイル\01_Input</Filter>
+    </ClInclude>
+    <ClInclude Include="inputkeydata.h">
+      <Filter>ソース ファイル\01_Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

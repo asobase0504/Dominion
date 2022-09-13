@@ -1,29 +1,65 @@
-//=========================================
+//=============================================================================
+//
+// 入力処理 [input.h]
+// Author : KOZUNA HIROHITO
 // 
-// 入力処理クラス
-// Author YudaKaito
-// 
-//=========================================
-#ifndef _INPUT_H_
-#define _INPUT_H_
+//=============================================================================
 
-#define DIRECTINPUT_VERSION 0x0800
-#include "dinput.h"
-#pragma comment(lib,"dinput8.lib")
+#ifndef _INPUT_H_		//このマクロ定義がされなかったら
+#define _INPUT_H_		//2重インクルード防止のマクロ定義
 
+//*****************************************************************************
+// インクルード
+//*****************************************************************************
+#include "inputkeydata.h"
+#include "DirectInput.h"
+
+//----------------------------------------------------------------------------
+//前方宣言
+//----------------------------------------------------------------------------
+class CInputKeyboard;
+class CInputJoyPad;
+
+//----------------------------------------------------------------------------
+//クラス定義
+//----------------------------------------------------------------------------
 class CInput
 {
 public:
+
 	CInput();
-	virtual ~CInput();
+	~CInput();
 
-	virtual HRESULT Init(HINSTANCE hInstance, HWND hWnd);
-	virtual void Uninit();
-	virtual void Update() = 0;
+	//*アプリケーション処理に書くやつ
+	static CInput *Create();							//入力処理系のクリエイト、Initの前に書く
+	HRESULT Init(HINSTANCE hInstance, HWND hWnd);		//入力処理全部の初期化
+	void Uninit();										//入力処理全部の終了処理
+	void Update();										//入力処理全部の更新処理
+	//*
 
-protected:
-	LPDIRECTINPUTDEVICE8 m_pDevise;
-	LPDIRECTINPUT8 m_pInput;
+	//*インプットが必要な時呼び出す
+	static CInput *GetKey() { return m_pInput; }		//プレイやトリガーなどのアドレスの取得
+
+	bool Press(STAN_DART_INPUT_KEY key);				//総合プレス
+	bool Trigger(STAN_DART_INPUT_KEY key);				//総合トリガー
+	bool Release(STAN_DART_INPUT_KEY key);				//総合リリース
+	bool Press(int nKey);								//キーボードプレス
+	bool Trigger(int nkey);								//キーボードトリガー
+	bool Release(int nkey);								//キーボードリリース
+	bool Press(DirectJoypad key, int nNum = 0);			//ジョイパットプレス
+	bool Trigger(DirectJoypad key, int nNum = 0);		//ジョイパットトリガー
+	bool Release(DirectJoypad key, int nNum = 0);		//ジョイパッドリリース
+
+	D3DXVECTOR3 VectorMoveKey();								//十字キー式のベクトル取得
+	D3DXVECTOR3 VectorMoveJoyStick(int nNum = 0, bool bleftandright = false); //ジョイスティックのベクトル取得
+	//*
+
+private:
+
+	CInputKeyboard *m_pKeyboard;	//キーボードの情報
+	CInputJoyPad *m_pJoyPad;		//ジョイパッドの情報
+	static CInput *m_pInput;		//このクラスの情報
 };
 
-#endif // !_INPUT_H_
+#endif
+

@@ -14,7 +14,6 @@
 #include "object2d.h"
 #include "menu.h"
 #include "input.h"
-#include "input_keybord.h"
 
 //-----------------------------------------------------------------------------
 // コンストラクタ
@@ -37,7 +36,7 @@ CTitle::~CTitle()
 //-----------------------------------------------------------------------------
 HRESULT CTitle::Init()
 {
-	CApplication::GetInstance()->SetThemeColor(6);
+	CApplication::GetInstance()->SetThemeColor(0);
 
 	// 背景の設定
 	{
@@ -125,30 +124,30 @@ void CTitle::Update()
 	{
 	case CTitle::Status::NONE:
 	{
-		CInputKeybord* input = CApplication::GetInstance()->GetInput();
+		CInput* input = CInput::GetKey();
 
 		if (m_manu != nullptr)
 		{
 			m_manu->Update();
-			if (input->GetTrigger(DIK_W))
+			if (input->Trigger(DIK_W))
 			{
 				m_manu->Select(CMenu::TOP);
 			}
-			if (input->GetTrigger(DIK_S))
+			if (input->Trigger(DIK_S))
 			{
 				m_manu->Select(CMenu::DOWN);
 			}
-			if (input->GetTrigger(DIK_A))
+			if (input->Trigger(DIK_A))
 			{
 				m_manu->Select(CMenu::LEFT);
 			}
-			if (input->GetTrigger(DIK_D))
+			if (input->Trigger(DIK_D))
 			{
 				m_manu->Select(CMenu::RIGHT);
 			}
 		}
 
-		if (m_manu->Decision(input->GetTrigger(DIK_RETURN)))
+		if (m_manu->Decision(input->Trigger(DIK_RETURN)))
 		{
 			m_status = (CTitle::Status)m_manu->GetSelectIdx()[0];
 		}

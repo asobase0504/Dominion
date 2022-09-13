@@ -154,6 +154,7 @@
   <ItemGroup>
     <ClCompile Include="A-Star.cpp" />
     <ClCompile Include="AI_controller.cpp" />
+    <ClCompile Include="appear_item.cpp" />
     <ClCompile Include="application.cpp" />
     <ClCompile Include="block.cpp" />
     <ClCompile Include="block_color_addition.cpp" />
@@ -163,6 +164,9 @@
     <ClCompile Include="character.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="crush_effect.cpp" />
+    <ClCompile Include="DirectInput.cpp" />
+    <ClCompile Include="inputjoypad.cpp" />
+    <ClCompile Include="inputkeyboard.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="stage.cpp" />
@@ -172,9 +176,6 @@
     <ClCompile Include="file.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="input.cpp" />
-    <ClCompile Include="input_directinput.cpp" />
-    <ClCompile Include="input_keybord.cpp" />
-    <ClCompile Include="input_xinput.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="map.cpp" />
     <ClCompile Include="mode.cpp" />
@@ -192,6 +193,7 @@
   <ItemGroup>
     <ClInclude Include="A-Star.h" />
     <ClInclude Include="AI_controller.h" />
+    <ClInclude Include="appear_item.h" />
     <ClInclude Include="application.h" />
     <ClInclude Include="block.h" />
     <ClInclude Include="block_color_addition.h" />
@@ -201,6 +203,10 @@
     <ClInclude Include="character.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="crush_effect.h" />
+    <ClInclude Include="DirectInput.h" />
+    <ClInclude Include="inputjoypad.h" />
+    <ClInclude Include="inputkeyboard.h" />
+    <ClInclude Include="inputkeydata.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="stage.h" />
@@ -210,9 +216,6 @@
     <ClInclude Include="file.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="input.h" />
-    <ClInclude Include="input_directinput.h" />
-    <ClInclude Include="input_keybord.h" />
-    <ClInclude Include="input_xinput.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="mode.h" />
     <ClInclude Include="object.h" />
