@@ -181,9 +181,9 @@ void ASTAR::SetCellStage(std::vector<std::vector<CBlock*>>& inStage , CCharacter
 {
 	m_stage = &inStage;
 
-	for (int i = 0; i < m_stage->size(); i++)
+	for (int i = 0; i < (int)m_stage->size(); i++)
 	{
-		for (int j = 0; j < m_stage->at(i).size(); j++)
+		for (int j = 0; j < (int)m_stage->at(i).size(); j++)
 		{
 			CELL cell;
 			cell.ptIndex;			// 番号
@@ -195,14 +195,7 @@ void ASTAR::SetCellStage(std::vector<std::vector<CBlock*>>& inStage , CCharacter
 			// 同じチームか否か
 			bool isSameTeam = (int)inTeam == (int)m_stage->at(i).at(j)->CBlock::GetType();
 
-			if (isSameTeam)
-			{
-				cell.Status = ASTAR_EMPTY;		// ステータスを未探索にする
-			}
-			else
-			{
-				cell.Status = ASTAR_OBSTACLE;	// ステータスを障害物にする
-			}
+			cell.Status = isSameTeam ? ASTAR_EMPTY : ASTAR_OBSTACLE;	// ステータスを設定する
 
 			cell.boRealPath = false;	// 経路の情報の初期化
 
@@ -219,13 +212,12 @@ void ASTAR::SetCellStage(std::vector<std::vector<CBlock*>>& inStage , CCharacter
 //-----------------------------------------------------------------------------
 HRESULT ASTAR::CalcScore(ASTAR_PARAM* pParam)
 {
-
-	POINT ptStart = pParam->ptStartPos;	// スタート位置
-	POINT ptGoal = pParam->ptGoalPos;		// ゴール位置
+	POINT ptStart = pParam->ptStartPos;			// スタート位置
+	POINT ptGoal = pParam->ptGoalPos;			// ゴール位置
 	POINT ptCurrentPos = pParam->ptCurrentPos;	// 現在地
 
 	// 現在地のセルは無条件でクローズドにする
-	CBlock* thisBlock = m_stage->at((int)ptCurrentPos.x).at((int)ptCurrentPos.y);
+	CBlock* thisBlock = m_stage->at(ptCurrentPos.x).at(ptCurrentPos.y);
 	CELL* cell = &m_cell[&thisBlock];	// セル情報
 
 	if (cell->Status != ASTAR_CLOSED)
@@ -244,7 +236,7 @@ HRESULT ASTAR::CalcScore(ASTAR_PARAM* pParam)
 		ptCurrentPos.y += m_ptVolute[i].y;
 
 		//セルマップの範囲外に到達した場合
-		if ((ptCurrentPos.x < 0.0f) || (ptCurrentPos.x > (float)m_widthSize) || (ptCurrentPos.y < 0.0f) || (ptCurrentPos.y >(float)m_heightSize))
+		if ((ptCurrentPos.x < 0) || (ptCurrentPos.x > m_widthSize) || (ptCurrentPos.y < 0) || (ptCurrentPos.y >m_heightSize))
 		{
 			continue;	//処理をスキップする
 		}
@@ -252,7 +244,7 @@ HRESULT ASTAR::CalcScore(ASTAR_PARAM* pParam)
 		/* ↓現在地がセルマップの範囲内だった場合↓ */
 
 		iOffset = ptCurrentPos.x * m_heightSize + ptCurrentPos.y;
-		thisBlock = m_stage->at((int)ptCurrentPos.x).at((int)ptCurrentPos.y);
+		thisBlock = m_stage->at(ptCurrentPos.x).at(ptCurrentPos.y);
 
 		//ゴールセルに到達した場合
 		if (ptCurrentPos.x == ptGoal.x && ptCurrentPos.y == ptGoal.y)
@@ -271,7 +263,7 @@ HRESULT ASTAR::CalcScore(ASTAR_PARAM* pParam)
 			cell->iHeuristic = CalcDistance(&ptGoal, &ptCurrentPos);
 			//コストは親のコストに１を足したもの
 			{
-				cell->iCost = m_pCell[(int)pParam->ptCurrentPos.x * m_heightSize + (int)pParam->ptCurrentPos.y].iCost + 1;
+				cell->iCost = m_pCell[pParam->ptCurrentPos.x * m_heightSize + pParam->ptCurrentPos.y].iCost + 1;
 			}
 			cell->iScore = cell->iCost + cell->iHeuristic;
 			cell->Status = ASTAR_OPEN;
@@ -300,7 +292,7 @@ HRESULT ASTAR::CalcScore(ASTAR_PARAM* pParam)
 	// スコアが最小のセルを探す
 	for (int i = 0; i < m_dwOpenAmt; i++)
 	{
-		thisBlock = m_stage->at((int)m_pOpenList[i].x).at((int)m_pOpenList[i].y);
+		thisBlock = m_stage->at(m_pOpenList[i].x).at(m_pOpenList[i].y);
 
 		iOffset = m_pOpenList[i].x * m_heightSize + m_pOpenList[i].y;
 
@@ -311,7 +303,7 @@ HRESULT ASTAR::CalcScore(ASTAR_PARAM* pParam)
 		}
 	}
 
-	thisBlock = m_stage->at((int)m_pOpenList[dwMinIndex].x).at((int)m_pOpenList[dwMinIndex].y);
+	thisBlock = m_stage->at(m_pOpenList[dwMinIndex].x).at(m_pOpenList[dwMinIndex].y);
 	iOffset = m_pOpenList[dwMinIndex].x * m_heightSize + m_pOpenList[dwMinIndex].y;
 	ptNextCellIndex = m_pCell[iOffset].ptIndex;
 

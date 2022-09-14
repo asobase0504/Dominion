@@ -35,9 +35,10 @@ public:
 	void Load();
 
 	void Delete();
+
 	// Getter
 	CBlock* GetBlock(int indexX, int indexY);
-	static float GetBlockSize() { return BLOCK_SIZE; }
+	float GetBlockSize() { return BLOCK_SIZE; }
 	int GetMaxXBlock() { return MAX_X_BLOCK; }
 	int GetMaxYBlock() { return MAX_Y_BLOCK; }
 
@@ -45,7 +46,7 @@ public:
 	void SetMap(std::vector<std::vector<CBlock::BLOCK_TYPE>> inBlockIdx);
 
 private:
-	static float BLOCK_SIZE;		// ブロックのサイズ
+	float BLOCK_SIZE;		// ブロックのサイズ
 	static const float X_CENTER;	// マップを中央に配置するため(X軸)
 	static const float Y_CENTER;	// マップを中央に配置するため(Y軸)
 	int MAX_X_BLOCK;	// X軸の最大数

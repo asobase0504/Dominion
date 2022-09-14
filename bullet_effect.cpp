@@ -9,6 +9,9 @@
 //-----------------------------------------
 #include "bullet_effect.h"
 #include "application.h"
+#include "game.h"
+#include "stage.h"
+#include "map.h"
 
 //-----------------------------------------
 // ’è‹`
@@ -97,7 +100,10 @@ CBulletEffect* CBulletEffect::Create(const D3DXVECTOR3& inPos)
 
 	bullet->Init();
 	bullet->SetPos(inPos);
-	bullet->SetSize(D3DXVECTOR2(10.0f, 10.0f));
+
+	CGame* gameMode = (CGame*)CApplication::GetInstance()->GetMode();
+	float size = gameMode->GetStage()->GetMap()->GetBlockSize() * 0.25f;						// ‘å‚«‚³‚ÌÝ’è
+	bullet->SetSize(D3DXVECTOR2(size, size));
 
 	return bullet;
 }

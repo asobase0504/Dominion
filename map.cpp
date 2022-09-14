@@ -16,7 +16,6 @@
 
 //const int CMap::MAX_X_BLOCK = 40;	// X軸の最大数
 //const int CMap::MAX_Y_BLOCK = 17;	// Y軸の最大数
-float CMap::BLOCK_SIZE = 34.0f;	// ブロックのサイズ
 const float CMap::X_CENTER = CApplication::GetInstance()->SCREEN_WIDTH * 0.5f ;	// マップを中央に配置するため(X軸)
 const float CMap::Y_CENTER = CApplication::GetInstance()->SCREEN_HEIGHT * 0.5f;	// マップを中央に配置するため(Y軸)
 

@@ -2,6 +2,8 @@
 #include "application.h"
 #include "renderer.h"
 #include "map.h"
+#include "game.h"
+#include "stage.h"
 
 const int CBlockColorAddition::PRIORITY_BELONG = 2;
 const float CBlockColorAddition::SUBTRACT_SPEED = 0.005f;
@@ -81,7 +83,10 @@ CBlockColorAddition * CBlockColorAddition::Create(const D3DXVECTOR3 & inPos, CBl
 	colorAddition->m_parent = inParent;
 	colorAddition->Init();
 	colorAddition->SetPos(inPos);
-	colorAddition->SetSize(D3DXVECTOR2(CMap::GetBlockSize(), CMap::GetBlockSize()));
+	CGame* modeGame = (CGame*)CApplication::GetInstance()->GetMode();
+	CMap* map = modeGame->GetStage()->GetMap();
+
+	colorAddition->SetSize(D3DXVECTOR2(map->GetBlockSize(), map->GetBlockSize()));
 	D3DXCOLOR col(CApplication::GetInstance()->GetColor(2));
 	col.a = BIGIN_ALPHA;
 	colorAddition->SetColor(col);

@@ -107,8 +107,11 @@ void CCharacter::Update()
 		pBlock->SetAdditionColor();
 	}
 
+	/*
+	// バグの温床のため未実装に変更。時間があったらここから解決していきたい。
+	*/
 	// スクリーン外に出た時
-	ScreenFromOutTime();
+	//ScreenFromOutTime();
 }
 
 //-----------------------------------------
@@ -168,16 +171,16 @@ void CCharacter::BulletShot()
 	switch (m_controller->BulletShot())
 	{
 	case CController::UP_SHOT:
-		Shot(D3DXVECTOR3(0.0f, -(CBullet::MOVE_SPEAD), 0.0f));
+		Shot(D3DXVECTOR3(0.0f, -1.0f, 0.0f));
 		break;
 	case CController::DOWN_SHOT:
-		Shot(D3DXVECTOR3(0.0f, CBullet::MOVE_SPEAD, 0.0f));
+		Shot(D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 		break;
 	case CController::LEFT_SHOT:
-		Shot(D3DXVECTOR3(-(CBullet::MOVE_SPEAD), 0.0f, 0.0f));
+		Shot(D3DXVECTOR3(-1.0f, 0.0f, 0.0f));
 		break;
 	case CController::RIGHT_SHOT:
-		Shot(D3DXVECTOR3(CBullet::MOVE_SPEAD, 0.0f, 0.0f));
+		Shot(D3DXVECTOR3(1.0f, 0.0f, 0.0f));
 		break;
 	case CController::UP_CHARGE_SHOT:
 	{
@@ -186,7 +189,7 @@ void CCharacter::BulletShot()
 		CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
 		CBlock* pBlockUp = pMap->GetBlock(m_ofBlockIndexCenter[0] - 1, m_ofBlockIndexCenter[1]);
 		CBlock* pBlockDown = pMap->GetBlock(m_ofBlockIndexCenter[0] + 1, m_ofBlockIndexCenter[1]);
-		D3DXVECTOR3 move = D3DXVECTOR3(0.0f, -(CBullet::MOVE_SPEAD), 0.0f);
+		D3DXVECTOR3 move = D3DXVECTOR3(0.0f, -1.0f, 0.0f);
 
 		CBullet* bullet;
 		bullet = CBullet::Create(pBlock->GetPos(), move, m_team);
@@ -216,7 +219,7 @@ void CCharacter::BulletShot()
 		CBlock* pBlockUp = pMap->GetBlock(m_ofBlockIndexCenter[0] - 1, m_ofBlockIndexCenter[1]);
 		CBlock* pBlockDown = pMap->GetBlock(m_ofBlockIndexCenter[0] + 1, m_ofBlockIndexCenter[1]);
 
-		D3DXVECTOR3 move(0.0f, CBullet::MOVE_SPEAD, 0.0f);	// 移動量
+		D3DXVECTOR3 move(0.0f, 1.0f, 0.0f);	// 移動量
 
 		CBullet* bullet;
 		bullet = CBullet::Create(pBlock->GetPos(), move, m_team);
@@ -243,7 +246,7 @@ void CCharacter::BulletShot()
 		CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
 		CBlock* pBlockUp = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1] - 1);
 		CBlock* pBlockDown = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1] + 1);
-		D3DXVECTOR3 move = D3DXVECTOR3(-CBullet::MOVE_SPEAD, 0.0f, 0.0f);
+		D3DXVECTOR3 move = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
 
 		CBullet* bullet;
 		bullet = CBullet::Create(pBlock->GetPos(), move, m_team);
@@ -270,7 +273,7 @@ void CCharacter::BulletShot()
 		CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
 		CBlock* pBlockUp = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1] - 1);
 		CBlock* pBlockDown = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1] + 1);
-		D3DXVECTOR3 move = D3DXVECTOR3(CBullet::MOVE_SPEAD, 0.0f, 0.0f);
+		D3DXVECTOR3 move = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
 
 		CBullet* bullet;
 		bullet = CBullet::Create(pBlock->GetPos(), move, m_team);

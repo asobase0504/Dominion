@@ -17,11 +17,6 @@
 #include "map.h"
 
 //-----------------------------------------
-// 定義
-//-----------------------------------------
-const float CBullet::MOVE_SPEAD = 10.0f;		// 移動速度
-
-//-----------------------------------------
 // コンストラクタ
 //-----------------------------------------
 CBullet::CBullet(CObject::TYPE type) :
@@ -144,11 +139,19 @@ CBullet* CBullet::Create(const D3DXVECTOR3& inPos, const D3DXVECTOR3& inMove, co
 		return nullptr;
 	}
 
+	CGame* gameMode = (CGame*)CApplication::GetInstance()->GetMode();	// ゲームモード
+	float size = gameMode->GetStage()->GetMap()->GetBlockSize();		// 大きさ取得
+
 	bullet->Init();
 	bullet->SetPos(inPos);
 	bullet->m_move = inMove;
+
+	D3DXVec3Normalize(&bullet->m_move, &bullet->m_move);
+
+	bullet->m_move *= size * 0.25f;
+
 	bullet->SetTeam(inTeam);
-	bullet->SetSize(D3DXVECTOR2(10.0f, 10.0f));
+	bullet->SetSize(D3DXVECTOR2(size * 0.25f, size * 0.25f));
 
 	return bullet;
 }
