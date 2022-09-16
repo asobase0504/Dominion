@@ -69,6 +69,9 @@
     <Filter Include="ソース ファイル\06_Stage\02_Item">
       <UniqueIdentifier>{6f212687-7e29-4343-ad31-bd662820512b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\03_Mode\03_Customize">
+      <UniqueIdentifier>{e70ca64c-1522-47dc-9327-5b03c40361bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="input.cpp">
@@ -182,6 +185,9 @@
     <ClCompile Include="inputkeyboard.cpp">
       <Filter>ソース ファイル\01_Input</Filter>
     </ClCompile>
+    <ClCompile Include="customize.cpp">
+      <Filter>ソース ファイル\03_Mode\03_Customize</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="input.h">
@@ -294,6 +300,9 @@
     </ClInclude>
     <ClInclude Include="inputkeydata.h">
       <Filter>ソース ファイル\01_Input</Filter>
+    </ClInclude>
+    <ClInclude Include="customize.h">
+      <Filter>ソース ファイル\03_Mode\03_Customize</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

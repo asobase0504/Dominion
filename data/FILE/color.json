@@ -50,7 +50,7 @@
         [ 0.45, 0.45, 0.9, 1.0 ],
         [ 1.0, 0.0, 0.0, 1.0 ]
       ],
-      "BG" : "data\/TEXTURE\/bg2.jpg"
+      "BG" : "data\/TEXTURE\/bg5.png"
     },
     {
       "COLOR": [

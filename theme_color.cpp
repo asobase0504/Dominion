@@ -20,7 +20,8 @@ static const nlohmann::json colorFile = LoadJsonStage(L"data/FILE/color.json");
 //-----------------------------------------------------------------------------
 // コンストラクタ
 //-----------------------------------------------------------------------------
-CThemeColor::CThemeColor()
+CThemeColor::CThemeColor() : 
+	typeNumber(0)
 {
 }
 
@@ -36,8 +37,8 @@ CThemeColor::~CThemeColor()
 //-----------------------------------------------------------------------------
 HRESULT CThemeColor::Init()
 {
-	//SetTheme(0);
-
+	SetTheme(0);
+	typeNumber = colorFile["TYPE"].size();
 	return S_OK;
 }
 

@@ -30,6 +30,7 @@ public:
 	enum class MODE_TYPE
 	{
 		TITLE = 0,
+		CUSTUM,
 		GAME,
 		RESULT,
 		MAX
@@ -62,6 +63,7 @@ public:	// ÉÅÉìÉoÅ[ä÷êî
 	CTexture* GetTextureClass() { return texture; }
 	CMode* GetMode() { return mode; }
 	D3DXCOLOR GetColor(int inKey);
+	int GetColorSize();
 	D3DXVECTOR2 GetScreenSize() { return D3DXVECTOR2((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT); }
 	D3DXVECTOR2 GetScreenCenter() { return D3DXVECTOR2(CENTER_X, CENTER_Y); }
 

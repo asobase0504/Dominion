@@ -27,12 +27,14 @@ public:	// メンバー関数
 
 	// Getter
 	D3DXCOLOR GetColor(int inConfig);
+	int GetSize() { return typeNumber; }
 
 	// Setter
 	void SetTheme(int idx);
 
 private: // 動的メンバー変数
 	std::map<int, D3DXCOLOR> m_color;
+	int typeNumber;
 };
 
 #endif // !_COLOR_H_

@@ -164,6 +164,7 @@
     <ClCompile Include="character.cpp" />
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="crush_effect.cpp" />
+    <ClCompile Include="customize.cpp" />
     <ClCompile Include="DirectInput.cpp" />
     <ClCompile Include="inputjoypad.cpp" />
     <ClCompile Include="inputkeyboard.cpp" />
@@ -203,6 +204,7 @@
     <ClInclude Include="character.h" />
     <ClInclude Include="collision.h" />
     <ClInclude Include="crush_effect.h" />
+    <ClInclude Include="customize.h" />
     <ClInclude Include="DirectInput.h" />
     <ClInclude Include="inputjoypad.h" />
     <ClInclude Include="inputkeyboard.h" />

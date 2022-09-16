@@ -46,7 +46,7 @@ public:	// メンバー関数
 
 	// Getter
 	CStage* GetStage() { return m_stage; }	// ステージの情報
-	nlohmann::json GetStageInfo() { return stageInfo[m_stageIndex]; }
+	nlohmann::json GetStageInfo() { return m_stageInfo[m_stageIndex]; }
 	std::vector<int> GetControllerIndex() { return m_controllerIndex; }	// コントローラー番号取得
 	int GetNeedWinNumber() { return m_needWinNumber; }	// ラウンド数の取得
 	int GetWinNumber(int inIndex) { return m_winNumber[inIndex]; }	// 勝利数の取得
@@ -59,7 +59,7 @@ private: // 動的メンバー変数
 
 	/* ステージ選択系統 */
 	CMenu* m_stageSelect;	// ステージ選択
-	nlohmann::json stageInfo;	// ステージ情報の集まり
+	nlohmann::json m_stageInfo;	// ステージ情報の集まり
 	int m_stageIndex;		// ステージ番号
 	CStage* m_stage;		// ステージ
 

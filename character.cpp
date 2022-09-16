@@ -498,10 +498,10 @@ void CCharacter::ScreenFromOutTime()
 //-----------------------------------------
 void CCharacter::Collision()
 {
-	for (int i = 0; i < m_ofBlockIndex.size(); i++)
-	{
-		m_ofBlockIndex[i].clear();
-	}
+	//for (int i = 0; i < m_ofBlockIndex.size(); i++)
+	//{
+	//	m_ofBlockIndex[i].clear();
+	//}
 
 	m_ofBlockCount = 0;
 

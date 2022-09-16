@@ -53,6 +53,7 @@ public:	// パブリック関数
 
 	// Getter
 	const std::vector<int>& GetSelectIdx() { return m_selectIdx; }
+	CMenuFream* GetFream() { return m_fream; }
 
 	static CMenu* Create(D3DXVECTOR2 inPos, D3DXVECTOR2 inArea,CMenuFream* inFream, std::vector<std::vector<CMenuItem*>> inItem);
 private: // プライベート関数

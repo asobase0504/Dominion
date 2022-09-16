@@ -36,8 +36,6 @@ CTitle::~CTitle()
 //-----------------------------------------------------------------------------
 HRESULT CTitle::Init()
 {
-	CApplication::GetInstance()->SetThemeColor(5);
-
 	// ”wŒi‚ÌÝ’è
 	{
 		CObject2D* bg = CObject2D::Create();
@@ -180,7 +178,7 @@ void CTitle::Update()
 		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::GAME);
 		break;
 	case CTitle::Status::CUSTOMIZE:
-		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::GAME);
+		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::CUSTUM);
 		break;
 	case CTitle::Status::OPSITON:
 		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::GAME);

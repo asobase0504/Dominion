@@ -32,7 +32,7 @@ CGame::CGame() :
 	m_needWinNumber(0),
 	m_winnerIndex(0)
 {
-	stageInfo.clear();
+	m_stageInfo.clear();
 	m_controllerIndex.clear();
 	m_winNumber.clear();
 }
@@ -62,7 +62,7 @@ HRESULT CGame::Init()
 	}
 
 	// ステージ情報の取得
-	stageInfo = LoadJsonStage(L"data/FILE/STAGE/stage01.json")["STAGE"];
+	m_stageInfo = LoadJsonStage(L"data/FILE/STAGE/stage01.json")["STAGE"];
 
 	StageSelectInit();
 
@@ -87,7 +87,7 @@ void CGame::StageSelectInit()
 
 	std::vector<std::vector<CMenuItem*>> items;
 	std::vector<CMenuItem*> X;
-	for (int i = 0; i < (int)stageInfo.size(); i++)
+	for (int i = 0; i < (int)m_stageInfo.size(); i++)
 	{
 
 		CMenuItem* item = new CMenuItem;

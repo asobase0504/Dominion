@@ -16,6 +16,7 @@
 #include "object2d.h"
 #include "title.h"
 #include "game.h"
+#include "customize.h"
 
 //-----------------------------------------------------------------------------
 // 静的メンバー変数の初期化
@@ -77,19 +78,6 @@ HRESULT CApplication::Init(HWND hWnd, HINSTANCE hInstance)
 		return E_FAIL;
 	}
 
-	//directInput = new CDirectInput;
-	//if (FAILED(directInput->Init(hInstance, hWnd)))
-	//{
-	//	return E_FAIL;
-	//}
-
-	// 色管理クラス
-	color = new CThemeColor;
-	if (FAILED(color->Init()))
-	{
-		return E_FAIL;
-	}
-
 	// レンダリングクラス
 	renderer = new CRenderer;
 	if (FAILED(renderer->Init(hWnd, true)))
@@ -100,6 +88,13 @@ HRESULT CApplication::Init(HWND hWnd, HINSTANCE hInstance)
 	// テクスチャ
 	texture = new CTexture;
 	texture->LoadAll();
+
+	// 色管理クラス
+	color = new CThemeColor;
+	if (FAILED(color->Init()))
+	{
+		return E_FAIL;
+	}
 
 	// ゲームモード
 	SetMode(MODE_TYPE::TITLE);
@@ -190,6 +185,11 @@ D3DXCOLOR CApplication::GetColor(int inKey)
 	return color->GetColor(inKey);
 }
 
+int CApplication::GetColorSize()
+{
+	return color->GetSize();
+}
+
 //-----------------------------------------------------------------------------
 // モードの設定
 //-----------------------------------------------------------------------------
@@ -207,6 +207,9 @@ void CApplication::SetMode(MODE_TYPE inType)
 	{
 	case CApplication::MODE_TYPE::TITLE:
 		mode = new CTitle;
+		break;
+	case CApplication::MODE_TYPE::CUSTUM:
+		mode = new CCustomize;
 		break;
 	case CApplication::MODE_TYPE::GAME:
 		mode = new CGame;
