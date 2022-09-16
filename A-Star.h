@@ -64,6 +64,7 @@ public:
 	~ASTAR();
 
 	HRESULT Init(std::vector<std::vector<CBlock*>>& inStage, CCharacter::TEAM inTeam);
+	void Uninit();
 	HRESULT CalcPath(ASTAR_PARAM*);	//パス計算関数
 
 	// Getter
@@ -84,8 +85,6 @@ private:
 	std::vector<std::vector<CBlock*>>* m_stage;	// ステージ情報
 	int m_team;
 	std::vector<CELL> m_cell;	// 全てのセル情報
-	CBlock* m_startBlock;		// スタートブロック
-	CBlock* m_goalBlock;		// ゴールブロック
 
 	std::vector<POINT> m_openList;		// オープンリスト
 	std::vector<POINT> m_closedList;	// クロースリスト

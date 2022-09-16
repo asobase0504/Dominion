@@ -39,6 +39,7 @@ CAIController::CAIController() :
 //-----------------------------------------
 CAIController::~CAIController()
 {
+	assert(m_aStar == nullptr);
 }
 
 //-----------------------------------------
@@ -71,6 +72,12 @@ HRESULT CAIController::Init()
 //-----------------------------------------
 void CAIController::Uninit()
 {
+	if (m_aStar != nullptr)
+	{
+		m_aStar->Uninit();
+		delete m_aStar;
+		m_aStar = nullptr;
+	}
 }
 
 //-----------------------------------------

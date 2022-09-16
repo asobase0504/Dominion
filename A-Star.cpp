@@ -96,6 +96,16 @@ HRESULT ASTAR::Init(std::vector<std::vector<CBlock*>>& inStage, CCharacter::TEAM
 }
 
 //-----------------------------------------------------------------------------
+// 終了
+// Author 湯田海都
+//-----------------------------------------------------------------------------
+void ASTAR::Uninit()
+{
+	m_path.clear();
+	m_cell.clear();
+}
+
+//-----------------------------------------------------------------------------
 // リセット
 // Author 磯江寿希亜
 //-----------------------------------------------------------------------------
@@ -108,8 +118,8 @@ HRESULT ASTAR::Reset()
 			CELL cell;
 			cell.ptIndex.x = x;		// 番号
 			cell.ptIndex.y = y;		// 番号
-			cell.ptParent.x = 0;			// 親	
-			cell.ptParent.y = 0;			// 親	
+			cell.ptParent.x = 0;	// 親	
+			cell.ptParent.y = 0;	// 親	
 			cell.iCost = 0;			// 実コスト
 			cell.iHeuristic = 0;	// 推定コスト
 			cell.iScore = 0;		// 合計スコア
