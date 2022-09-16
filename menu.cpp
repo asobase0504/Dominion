@@ -369,7 +369,7 @@ void CMenuItem::Update()
 //-----------------------------------------
 void CMenuItem::SelectUpdate()
 {
-	SetColor(CApplication::GetInstance()->GetColor(3));
+	SetColor(CApplication::GetInstance()->GetColor(0));
 }
 
 //-----------------------------------------
@@ -377,7 +377,7 @@ void CMenuItem::SelectUpdate()
 //-----------------------------------------
 void CMenuItem::NomalUpdate()
 {
-	SetColor(CApplication::GetInstance()->GetColor(0));
+	SetColor(CApplication::GetInstance()->GetColor(2));
 }
 
 //-----------------------------------------

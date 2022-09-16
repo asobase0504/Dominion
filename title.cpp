@@ -36,7 +36,7 @@ CTitle::~CTitle()
 //-----------------------------------------------------------------------------
 HRESULT CTitle::Init()
 {
-	CApplication::GetInstance()->SetThemeColor(0);
+	CApplication::GetInstance()->SetThemeColor(5);
 
 	// 背景の設定
 	{
@@ -46,6 +46,26 @@ HRESULT CTitle::Init()
 		bg->SetTexture("BG");
 		bg->SetPos(pos);
 		bg->SetColor(CApplication::GetInstance()->GetColor(2));
+	}
+
+
+	// タイトル2の設定
+	{
+		CObject2D* title = CObject2D::Create();
+		title->SetSize(D3DXVECTOR2(CApplication::GetInstance()->CENTER_X * 1.2f, CApplication::GetInstance()->CENTER_Y * 0.5f));
+		D3DXVECTOR3 pos(CApplication::GetInstance()->CENTER_X * 0.65f, CApplication::GetInstance()->CENTER_Y * 0.25f, 0.0f);	// 位置の取得
+		title->SetTexture("TEXT_TITLE2");
+		title->SetPos(pos);
+		title->SetColor(CApplication::GetInstance()->GetColor(1));
+	}
+	// タイトル1の設定
+	{
+		CObject2D* title = CObject2D::Create();
+		title->SetSize(D3DXVECTOR2(CApplication::GetInstance()->CENTER_X * 1.2f, CApplication::GetInstance()->CENTER_Y * 0.5f));
+		D3DXVECTOR3 pos(CApplication::GetInstance()->CENTER_X * 0.65f, CApplication::GetInstance()->CENTER_Y * 0.25f, 0.0f);	// 位置の取得
+		title->SetTexture("TEXT_TITLE1");
+		title->SetPos(pos);
+		title->SetColor(CApplication::GetInstance()->GetColor(0));
 	}
 
 	// メニューの設定
@@ -71,19 +91,19 @@ HRESULT CTitle::Init()
 			switch ((CTitle::Status)i)
 			{
 			case CTitle::Status::GAME_STAET:
-				item->SetTexture("MENU_TITLE");
+				item->SetTexture("TEXT_START");
 				break;
 			case CTitle::Status::TUTORIAL:
-				item->SetTexture("MENU_TITLE");
+				item->SetTexture("TEXT_TUTORIAL");
 				break;
 			case CTitle::Status::CUSTOMIZE:
-				item->SetTexture("MENU_TITLE");
+				item->SetTexture("TEXT_CUSTOM");
 				break;
 			case CTitle::Status::OPSITON:
-				item->SetTexture("MENU_TITLE");
+				item->SetTexture("TEXT_OPTION");
 				break;
 			case CTitle::Status::EXIT:
-				item->SetTexture("MENU_TITLE");
+				item->SetTexture("TEXT_EXIT");
 				break;
 			default:
 				assert(false);
@@ -94,7 +114,7 @@ HRESULT CTitle::Init()
 			items.push_back(X);
 		}
 
-		D3DXVECTOR2 pos(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y);
+		D3DXVECTOR2 pos(CApplication::GetInstance()->CENTER_X * 1.55f, CApplication::GetInstance()->CENTER_Y * 1.2f);
 		D3DXVECTOR2 area(500.0f, 550.0f);
 		m_manu = CMenu::Create(pos, area, fream, items);
 	}
