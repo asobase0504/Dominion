@@ -162,7 +162,7 @@ void CCharacter::BulletShot()
 		CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
 
 		CBullet* bullet = CBullet::Create(pBlock->GetPos(), inMove, m_team);
-		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
+		bullet->SetBlockIndex(0, m_ofBlockIndexCenter);
 		m_remainsBulletDisplay[m_remainsBulletCount - 1]->SetColorAlpha(0.0f);
 		m_remainsBulletCount--;
 	};
@@ -193,7 +193,7 @@ void CCharacter::BulletShot()
 
 		CBullet* bullet;
 		bullet = CBullet::Create(pBlock->GetPos(), move, m_team);
-		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
+		bullet->SetBlockIndex(0, m_ofBlockIndexCenter);
 		if (pBlockUp->GetType() != CBlock::BLOCK_TYPE::NONE)
 		{
 			bullet = CBullet::Create(pBlockUp->GetPos(), move, m_team);
@@ -223,7 +223,7 @@ void CCharacter::BulletShot()
 
 		CBullet* bullet;
 		bullet = CBullet::Create(pBlock->GetPos(), move, m_team);
-		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
+		bullet->SetBlockIndex(0, m_ofBlockIndexCenter);
 		if (pBlockUp->GetType() != CBlock::BLOCK_TYPE::NONE)
 		{
 			bullet = CBullet::Create(pBlockUp->GetPos(), move, m_team);
@@ -250,7 +250,7 @@ void CCharacter::BulletShot()
 
 		CBullet* bullet;
 		bullet = CBullet::Create(pBlock->GetPos(), move, m_team);
-		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
+		bullet->SetBlockIndex(0, m_ofBlockIndexCenter);
 		if (pBlockUp->GetType() != CBlock::BLOCK_TYPE::NONE)
 		{
 			bullet = CBullet::Create(pBlockUp->GetPos(), move, m_team);
@@ -277,7 +277,7 @@ void CCharacter::BulletShot()
 
 		CBullet* bullet;
 		bullet = CBullet::Create(pBlock->GetPos(), move, m_team);
-		bullet->SetBlockIndex(0, m_ofBlockIndex[0]);
+		bullet->SetBlockIndex(0, m_ofBlockIndexCenter);
 		if (pBlockUp->GetType() != CBlock::BLOCK_TYPE::NONE)
 		{
 			bullet = CBullet::Create(pBlockUp->GetPos(), move, m_team);
@@ -498,6 +498,11 @@ void CCharacter::ScreenFromOutTime()
 //-----------------------------------------
 void CCharacter::Collision()
 {
+	for (int i = 0; i < m_ofBlockIndex.size(); i++)
+	{
+		m_ofBlockIndex[i].clear();
+	}
+
 	m_ofBlockCount = 0;
 
 	// ˆê‚Â‚ÌƒuƒƒbƒN‚Æ‚Ì“–‚½‚è”»’èˆ—

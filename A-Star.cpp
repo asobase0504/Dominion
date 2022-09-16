@@ -13,17 +13,12 @@
 	頑張って説明してみたけど分からなかったら調べてみてくれ
 */
 
-
-//ディファインデリート
-#define SAFE_DELETE(p)       { if(p) { delete (p);		(p) = nullptr; } }
-#define SAFE_DELETE_ARRAY(p) { if(p) { delete[] (p);	(p) = nullptr; } }
-#define SAFE_RELEASE(p)      { if(p) { (p)->Release();	(p) = nullptr; } }
-
 //-----------------------------------------------------------------------------
 // include
 //-----------------------------------------------------------------------------
 #include "A-Star.h"
 #include "block.h"
+#include <assert.h>
 
 //-----------------------------------------------------------------------------
 // コンストラクタ
@@ -75,9 +70,8 @@ ASTAR::ASTAR()
 //-----------------------------------------------------------------------------
 ASTAR::~ASTAR()
 {
-	SAFE_DELETE_ARRAY(m_pOpenList);
-	SAFE_DELETE_ARRAY(m_pClosedList);
-	SAFE_DELETE_ARRAY(m_ptPath);
+	assert(m_openList.empty());
+	assert(m_closedList.empty());
 }
 
 //-----------------------------------------------------------------------------
@@ -85,31 +79,19 @@ ASTAR::~ASTAR()
 // Author 磯江寿希亜
 // 説明：最終的なパスを格納するバッファのメモリ確保
 //-----------------------------------------------------------------------------
-HRESULT ASTAR::Init(ASTAR_INIT* pai)
+HRESULT ASTAR::Init(std::vector<std::vector<CBlock*>>& inStage, CCharacter::TEAM inTeam)
 {
-	//
-	m_widthSize = pai->dwCellWidth;
-	m_heightSize = pai->dwCellHeight;
-	m_pCell = pai->pCell;
+	m_stage = &inStage;
+	m_team = inTeam;
 
-	//動的確保
-	m_pOpenList = (POINT*) new POINT[m_widthSize * m_heightSize];
-	if(!m_pOpenList)
-	{//メモリ不足のエラー
-		return E_OUTOFMEMORY;
-	}
+	// 大きさの取得
+	m_widthSize = m_stage->at(0).size();
+	m_heightSize = m_stage->size();
 
-	m_pClosedList = (POINT*) new POINT[m_widthSize * m_heightSize];
-	if(!m_pClosedList)
-	{//メモリ不足のエラー
-		return E_OUTOFMEMORY;
-	}
+	m_openList.clear();
+	m_closedList.clear();
 
-	m_ptPath = (POINT*) new POINT[m_widthSize * m_heightSize];
-	if(!m_ptPath)
-	{//メモリ不足のエラー
-		return E_OUTOFMEMORY;
-	}
+	Reset();
 	return S_OK;
 }
 
@@ -119,27 +101,59 @@ HRESULT ASTAR::Init(ASTAR_INIT* pai)
 //-----------------------------------------------------------------------------
 HRESULT ASTAR::Reset()
 {
-	int dwMaxAmt = m_widthSize * m_heightSize;
-
-	for (int i = 0; i < dwMaxAmt; i++)
+	for (int y = 0; y < (int)m_stage->size(); y++)
 	{
-		m_pCell[i].iCost = 0;
-		m_pCell[i].iHeuristic = 0;
-		m_pCell[i].iScore = 0;
-		m_pCell[i].boRealPath = FALSE;
-		ZeroMemory(&m_pCell[i].ptParent, sizeof(D3DXVECTOR2));
-		if (m_pCell[i].Status != ASTAR_OBSTACLE)
+		for (int x = 0; x < (int)m_stage->at(y).size(); x++)
 		{
-			m_pCell[i].Status = ASTAR_EMPTY;
+			CELL cell;
+			cell.ptIndex.x = x;		// 番号
+			cell.ptIndex.y = y;		// 番号
+			cell.ptParent.x = 0;			// 親	
+			cell.ptParent.y = 0;			// 親	
+			cell.iCost = 0;			// 実コスト
+			cell.iHeuristic = 0;	// 推定コスト
+			cell.iScore = 0;		// 合計スコア
+
+			// 同じチームか否か
+			//CBlock** block = &m_stage->at(i).at(j);
+			bool isSameTeam = (int)m_team == (int)m_stage->at(y).at(x)->CBlock::GetType();
+			cell.Status = isSameTeam ? ASTAR_EMPTY : ASTAR_OBSTACLE;	// ステータスを設定する
+
+			cell.boRealPath = false;	// 経路の情報の初期化
+
+			// セルの追加
+			m_cell.push_back(cell);
+			//m_cell.insert(std::make_pair(GetIndexToBlock(x,y), ));
 		}
 	}
 
-	m_dwOpenAmt = 0;
-	m_dwClosedAmt = 0;
-	m_dwPathList = 0;
-	ZeroMemory(m_ptPath, sizeof(D3DXVECTOR2) * m_widthSize * m_heightSize);
+	m_openList.clear();
+	m_closedList.clear();
 
 	return S_OK;
+}
+
+//-----------------------------------------------------------------------------
+// 番号からブロックを取得
+// Author 湯田海都
+//-----------------------------------------------------------------------------
+int ASTAR::GetIndexToBlock(POINT inPoint)
+{
+	if ((int)m_stage->size() <= inPoint.y)
+	{
+		return m_stage->at(m_stage->size() - 1).size() * m_stage->size() - 1 + inPoint.x;
+	}
+
+	return m_stage->at(inPoint.y).size() * inPoint.y + inPoint.x;
+}
+
+//-----------------------------------------------------------------------------
+// 番号からブロックを取得
+// Author 湯田海都
+//-----------------------------------------------------------------------------
+int ASTAR::GetIndexToBlock(int X, int Y)
+{
+	return 	m_stage->at(Y).size() * Y + X;
 }
 
 //-----------------------------------------------------------------------------
@@ -148,10 +162,8 @@ HRESULT ASTAR::Reset()
 //-----------------------------------------------------------------------------
 HRESULT ASTAR::CalcPath(ASTAR_PARAM* pParam)
 {
-	int idx = (int)pParam->ptGoalPos.y * m_widthSize + (int)pParam->ptGoalPos.x;	// ゴールに指定されたセルの番号
-
 	//ゴールが適正な場所か（ゴールが障害物の内部になっていないか）
-	if (m_pCell[idx].Status == ASTAR_OBSTACLE)
+	if (m_cell[GetIndexToBlock(pParam->ptGoalPos)].Status == ASTAR_OBSTACLE)
 	{
 		MessageBox(0, "obstacle", "", MB_OK);	// MB_OKはテキストボックスでokボタンを出させるための引数
 		return E_FAIL;	// 失敗したならS_OK出なくE_FAILを返す事になりエラーを吐く
@@ -174,38 +186,6 @@ HRESULT ASTAR::CalcPath(ASTAR_PARAM* pParam)
 }
 
 //-----------------------------------------------------------------------------
-// ステージ情報の設定
-// Author 湯田 海都
-//-----------------------------------------------------------------------------
-void ASTAR::SetCellStage(std::vector<std::vector<CBlock*>>& inStage , CCharacter::TEAM inTeam)
-{
-	m_stage = &inStage;
-
-	for (int i = 0; i < (int)m_stage->size(); i++)
-	{
-		for (int j = 0; j < (int)m_stage->at(i).size(); j++)
-		{
-			CELL cell;
-			cell.ptIndex;			// 番号
-			cell.ptParent;			// 親	
-			cell.iCost = 0;			// 実コスト
-			cell.iHeuristic = 0;	// 推定コスト
-			cell.iScore = 0;		// 合計スコア
-
-			// 同じチームか否か
-			bool isSameTeam = (int)inTeam == (int)m_stage->at(i).at(j)->CBlock::GetType();
-
-			cell.Status = isSameTeam ? ASTAR_EMPTY : ASTAR_OBSTACLE;	// ステータスを設定する
-
-			cell.boRealPath = false;	// 経路の情報の初期化
-
-			// セルの追加
-			m_cell.insert(std::make_pair(&m_stage->at(i).at(j), cell));
-		}
-	}
-}
-
-//-----------------------------------------------------------------------------
 // １回の呼び出しで8方向セルの調査を行う
 // Author 磯江寿希亜
 // 説明：再帰しながらゴールまでの計算をすべて行う
@@ -217,16 +197,13 @@ HRESULT ASTAR::CalcScore(ASTAR_PARAM* pParam)
 	POINT ptCurrentPos = pParam->ptCurrentPos;	// 現在地
 
 	// 現在地のセルは無条件でクローズドにする
-	CBlock* thisBlock = m_stage->at(ptCurrentPos.x).at(ptCurrentPos.y);
-	CELL* cell = &m_cell[&thisBlock];	// セル情報
+	CELL* cell = &m_cell[GetIndexToBlock(ptCurrentPos)];	// セル情報
 
 	if (cell->Status != ASTAR_CLOSED)
 	{
 		cell->Status = ASTAR_CLOSED;
-		m_dwClosedAmt++;
+		m_closedList.push_back(cell->ptIndex);
 	}
-
-	int iOffset;
 
 	// 隣接8セルのスコアリング　進めるマスを検索中
 	for (int i = 1; i <= 8; i++)
@@ -235,6 +212,8 @@ HRESULT ASTAR::CalcScore(ASTAR_PARAM* pParam)
 		ptCurrentPos.x += m_ptVolute[i].x;
 		ptCurrentPos.y += m_ptVolute[i].y;
 
+		cell = &m_cell[GetIndexToBlock(ptCurrentPos)];
+
 		//セルマップの範囲外に到達した場合
 		if ((ptCurrentPos.x < 0) || (ptCurrentPos.x > m_widthSize) || (ptCurrentPos.y < 0) || (ptCurrentPos.y >m_heightSize))
 		{
@@ -242,9 +221,6 @@ HRESULT ASTAR::CalcScore(ASTAR_PARAM* pParam)
 		}
 
 		/* ↓現在地がセルマップの範囲内だった場合↓ */
-
-		iOffset = ptCurrentPos.x * m_heightSize + ptCurrentPos.y;
-		thisBlock = m_stage->at(ptCurrentPos.x).at(ptCurrentPos.y);
 
 		//ゴールセルに到達した場合
 		if (ptCurrentPos.x == ptGoal.x && ptCurrentPos.y == ptGoal.y)
@@ -263,12 +239,11 @@ HRESULT ASTAR::CalcScore(ASTAR_PARAM* pParam)
 			cell->iHeuristic = CalcDistance(&ptGoal, &ptCurrentPos);
 			//コストは親のコストに１を足したもの
 			{
-				cell->iCost = m_pCell[pParam->ptCurrentPos.x * m_heightSize + pParam->ptCurrentPos.y].iCost + 1;
+				cell->iCost = m_cell[GetIndexToBlock(pParam->ptCurrentPos)].iCost + 1;
 			}
 			cell->iScore = cell->iCost + cell->iHeuristic;
 			cell->Status = ASTAR_OPEN;
-			m_pOpenList[m_dwOpenAmt] = ptCurrentPos;
-			m_dwOpenAmt++;
+			m_openList.push_back(ptCurrentPos);
 			//８セルの親を現在セルにする
 			{
 				cell->ptParent = pParam->ptCurrentPos;//
@@ -286,35 +261,30 @@ HRESULT ASTAR::CalcScore(ASTAR_PARAM* pParam)
 
 	//オープンリストを含めて最小スコアを、新たな起点セルにする　（クローズドリストの作成）
 	int iMinScore = INT_MAX;
-	POINT ptNextCellIndex = { 0 ,0 };
 	DWORD dwMinIndex = 0;
 
 	// スコアが最小のセルを探す
-	for (int i = 0; i < m_dwOpenAmt; i++)
+	for (int i = 0; i < (int)m_openList.size(); i++)
 	{
-		thisBlock = m_stage->at(m_pOpenList[i].x).at(m_pOpenList[i].y);
+		CELL minCell = m_cell[GetIndexToBlock(m_openList[i])];
 
-		iOffset = m_pOpenList[i].x * m_heightSize + m_pOpenList[i].y;
-
-		if (m_pCell[iOffset].iScore < iMinScore && m_pCell[iOffset].Status == ASTAR_OPEN)
+		if (minCell.iScore < iMinScore && minCell.Status == ASTAR_OPEN)
 		{
-			iMinScore = m_pCell[iOffset].iScore;
+			iMinScore = minCell.iScore;
 			dwMinIndex = i;
 		}
 	}
 
-	thisBlock = m_stage->at(m_pOpenList[dwMinIndex].x).at(m_pOpenList[dwMinIndex].y);
-	iOffset = m_pOpenList[dwMinIndex].x * m_heightSize + m_pOpenList[dwMinIndex].y;
-	ptNextCellIndex = m_pCell[iOffset].ptIndex;
-
-	m_pClosedList[m_dwClosedAmt] = ptNextCellIndex;
+	// クローズに入力
+	POINT ptNextCellIndex = { 0 ,0 };
+	ptNextCellIndex = m_cell[GetIndexToBlock(m_openList[dwMinIndex])].ptIndex;
+	m_closedList.push_back(ptNextCellIndex);
 
 	//新たな起点セルによる再帰呼び出し
 	ASTAR_PARAM Param;
 	Param.ptStartPos = pParam->ptStartPos;
 	Param.ptGoalPos = pParam->ptGoalPos;
-	Param.ptCurrentPos = m_pOpenList[dwMinIndex];
-	Param.pCell = pParam->pCell;
+	Param.ptCurrentPos = m_openList[dwMinIndex];
 
 	return CalcScore(&Param);
 }
@@ -326,10 +296,12 @@ HRESULT ASTAR::MakePathFromClosedList(ASTAR_PARAM* pParam)
 {
 	int iBreak = 0;
 	int iMaxStep = m_widthSize * m_heightSize;	//総合のマス
-	m_dwPathList = 0;
+
 	// クローズドセル上で、ゴール地点からスタート地点まで親を辿った経路を最終的なパスとする
 
-	int iOffset = m_ptGoal.x*m_heightSize + m_ptGoal.y;	// 番号のID
+	POINT iOffset;
+	iOffset.x = m_ptGoal.x;
+	iOffset.y = m_ptGoal.y;	// 番号のID
 
 	//whileと違い１回は必ず通る
 	do
@@ -340,14 +312,16 @@ HRESULT ASTAR::MakePathFromClosedList(ASTAR_PARAM* pParam)
 			break;
 		}
 		iBreak++;
-		m_pCell[iOffset].boRealPath = true;
 
-		iOffset = m_pCell[iOffset].ptParent.x * m_heightSize + m_pCell[iOffset].ptParent.y;
-
+		POINT parentPoint = m_cell[GetIndexToBlock(iOffset)].ptParent;
+		m_cell[GetIndexToBlock(parentPoint)].boRealPath = true;
+		
 		//パスリストに記録（呼び出し元の利便性)	クリアリング
-		m_ptPath[m_dwPathList] = m_pCell[iOffset].ptIndex;
-		m_dwPathList++;
-	} while (m_pCell[iOffset].ptIndex.x != pParam->ptStartPos.x || m_pCell[iOffset].ptIndex.y != pParam->ptStartPos.y);
+		m_path.push_back(m_cell[GetIndexToBlock(parentPoint)].ptIndex);
+
+		iOffset = parentPoint;
+
+	} while (m_cell[GetIndexToBlock(iOffset)].ptIndex.x != pParam->ptStartPos.x || m_cell[GetIndexToBlock(iOffset)].ptIndex.y != pParam->ptStartPos.y);
 
 	return S_OK;
 }

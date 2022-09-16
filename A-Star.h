@@ -50,7 +50,6 @@ struct ASTAR_INIT
 
 struct ASTAR_PARAM	// マップ情報的な？
 {
-	CELL* pCell;	// セル
 	POINT ptStartPos;	// スタートの位置
 	POINT ptGoalPos;	// ゴールの位置
 	POINT ptCurrentPos;		//現在地
@@ -64,37 +63,32 @@ public:
 	//デストラクタ
 	~ASTAR();
 
-	HRESULT Init(ASTAR_INIT*);
+	HRESULT Init(std::vector<std::vector<CBlock*>>& inStage, CCharacter::TEAM inTeam);
 	HRESULT CalcPath(ASTAR_PARAM*);	//パス計算関数
 
 	// Getter
-	POINT* GetPath() { return m_ptPath; }
-	int GetPathList() { return m_dwPathList; }
+	std::vector<POINT> GetPath() { return m_path; }
 
-	// Setter
-	void SetCellStage(std::vector<std::vector<CBlock*>>& , CCharacter::TEAM);
-
-protected: // 引継ぎ可能な関数
 	HRESULT CalcScore(ASTAR_PARAM*);	// 最重要関数これが消えたら終わり	（スコアの計算、ゴールまでのクロースドリストを作る）
 	HRESULT MakePathFromClosedList(ASTAR_PARAM*);	// 最終パスの制作
 	int CalcDistance(POINT*, POINT*);	// プレイヤーと敵の距離を求めているだけ
 	HRESULT Reset();	// 再検索が可能になるため
 
 private:
-	POINT* m_ptPath;	// 最終的に検索した最短経路セル群へのpointer
-	int m_dwPathList;		// 最終パスを形成するセルの個数
+	int GetIndexToBlock(POINT inPoint);
+	int GetIndexToBlock(int X, int Y);
+private:
+	std::vector<POINT> m_path;	// 最終的に検索した最短経路セル群
 
 	// ブロック情報
 	std::vector<std::vector<CBlock*>>* m_stage;	// ステージ情報
-	std::map<CBlock**, CELL> m_cell;	// 全てのセル情報
+	int m_team;
+	std::vector<CELL> m_cell;	// 全てのセル情報
 	CBlock* m_startBlock;		// スタートブロック
 	CBlock* m_goalBlock;		// ゴールブロック
 
-	CELL* m_pCell;				// すべてのセルの先頭セル
-	POINT* m_pOpenList;	// オープンリストの先頭pointer
-	int m_dwOpenAmt;			// オープンリスト内のセルの数
-	POINT* m_pClosedList;	// クロースリストの先頭pointer
-	int m_dwClosedAmt;		// クロースリスト内のセルの数
+	std::vector<POINT> m_openList;		// オープンリスト
+	std::vector<POINT> m_closedList;	// クロースリスト
 
 	int m_widthSize;		// 幅のサイズ数
 	int m_heightSize;		// 高さのサイズ数

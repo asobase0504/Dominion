@@ -70,6 +70,7 @@ public:
 
 	// Getter
 	std::vector<std::vector<int>> GetOfBlock() { return m_ofBlockIndex; }
+	std::vector<int> GetCenterBlock() { return m_ofBlockIndexCenter; }
 	TEAM GetTeam() { return m_team; }
 
 	static CCharacter* Create(TEAM inTeam);

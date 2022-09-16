@@ -11,7 +11,7 @@
 // include
 //-----------------------------------------
 #include <d3dx9.h>
-#include "object.h"
+#include "character.h"
 
 //-----------------------------------------
 // オペレータークラス
@@ -50,9 +50,9 @@ public:
 	virtual SHOT_TYPE BulletShot() = 0;
 
 	// Setter
-	void SetToOrder(CObject* inOrder) { m_toOrder = inOrder; }
+	void SetToOrder(CCharacter* inOrder) { m_toOrder = inOrder; }
 protected:
-	CObject* m_toOrder;	// 命令先
+	CCharacter* m_toOrder;	// 命令先
 	int chargeCount;
 };
 

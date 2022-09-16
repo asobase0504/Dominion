@@ -8,7 +8,11 @@
 #define _AI_OPERATE_H_
 
 #include "controller.h"
-#include "A-Star.h"
+
+//-----------------------------------------
+// 前方宣言
+//-----------------------------------------
+class ASTAR;
 
 //-----------------------------------------
 // プレイヤークラス
@@ -36,6 +40,10 @@ private: // プライベート関数
 	CController::SHOT_TYPE ShootToOffsetBullet();
 private:
 	bool isBulletShot;
+	ASTAR* m_aStar;
+	std::vector<POINT> m_path;
+	int m_cellIndex;
+	int m_isCellMove;
 };
 
 #endif // !_AI_OPERATE_H_

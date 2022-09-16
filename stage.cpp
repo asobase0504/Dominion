@@ -171,11 +171,15 @@ void CStage::PassOnceCreatePlater()
 	{
 		if (charcterIndex[i] != -2)
 		{
-			playerSet(i, new CPlayerController(charcterIndex[i]));
+			CPlayerController* incontroller = new CPlayerController(charcterIndex[i]);
+			playerSet(i, incontroller);
+			incontroller->Init();
 		}
 		else
 		{
-			playerSet(i, new CAIController);
+			CAIController* incontroller = new CAIController;
+			playerSet(i, incontroller);
+			incontroller->Init();
 		}
 	}
 

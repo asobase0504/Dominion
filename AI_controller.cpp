@@ -10,13 +10,27 @@
 #include "AI_controller.h"
 #include "object.h"
 #include "bullet.h"
+#include "A-Star.h"
+#include "application.h"
+#include "game.h"
+#include "stage.h"
+#include "map.h"
 #include <vector>
+
+#include <crtdbg.h>
+#ifdef _DEBUG
+#define DEBUG_PRINT(...) _RPT_BASE(_CRT_WARN, __FILE__, __LINE__, NULL, __VA_ARGS__)
+#else
+#define DEBUG_PRINT(...) ((void)0)
+#endif
 
 //-----------------------------------------
 // コンストラクタ
 //-----------------------------------------
 CAIController::CAIController() : 
-	isBulletShot(false)
+	isBulletShot(false),
+	m_aStar(nullptr),
+	m_isCellMove(false)
 {
 }
 
@@ -32,6 +46,23 @@ CAIController::~CAIController()
 //-----------------------------------------
 HRESULT CAIController::Init()
 {
+	m_aStar = new ASTAR;
+
+	CGame* modeGame = (CGame*)CApplication::GetInstance()->GetMode();
+	std::vector<std::vector<CBlock*>> map = modeGame->GetStage()->GetMap()->GetBlockAll();
+	m_aStar->Init(map, m_toOrder->GetTeam());
+	ASTAR_PARAM status;
+	status.ptStartPos.x = m_toOrder->GetCenterBlock()[0];
+	status.ptStartPos.y = m_toOrder->GetCenterBlock()[1];
+	status.ptGoalPos.x = m_toOrder->GetCenterBlock()[0] - 10;
+	status.ptGoalPos.y = m_toOrder->GetCenterBlock()[1] - 3;
+	status.ptCurrentPos.x = m_toOrder->GetCenterBlock()[0];
+	status.ptCurrentPos.y = m_toOrder->GetCenterBlock()[1];
+
+	//m_aStar->CalcScore(&status);
+	//m_aStar->MakePathFromClosedList(&status);
+	//m_path = m_aStar->GetPath();
+
 	return S_OK;
 }
 
@@ -54,7 +85,62 @@ void CAIController::Update()
 //-----------------------------------------
 D3DXVECTOR3 CAIController::Move()
 {
-	return D3DXVECTOR3(-0.0f,0.0f,0.0f);
+	return D3DXVECTOR3(-0.0f, 0.0f, 0.0f);
+
+	//if (m_isCellMove)
+	//{
+	//	bool isCenterHit = (m_path[m_cellIndex - 1].x == m_toOrder->GetCenterBlock()[0]) && (m_path[m_cellIndex - 1].y == m_toOrder->GetCenterBlock()[1]);
+
+	//	int ofBlock = 0;
+
+	//	for (int i = 0; i < m_toOrder->GetOfBlock().size(); i++)
+	//	{
+	//		if (!m_toOrder->GetOfBlock()[i].empty())
+	//		{
+	//			ofBlock++;
+	//		}
+	//	}
+
+	//	if (isCenterHit && ofBlock <= 1)
+	//	{
+	//		m_isCellMove = false;
+	//	}
+	//}
+
+	//if (!m_isCellMove)
+	//{
+	//	m_cellIndex = 0;
+
+	//	DEBUG_PRINT("Order : x = %d,y = %d\n", m_toOrder->GetCenterBlock()[0], m_toOrder->GetCenterBlock()[1]);	// 出力にデバッグ表示
+	//	for (int i = 0; i < (int)m_path.size(); i++)
+	//	{
+	//		bool isCenterHit = (m_path[i].x == m_toOrder->GetCenterBlock()[0]) && (m_path[i].y == m_toOrder->GetCenterBlock()[1]);
+
+	//		DEBUG_PRINT("path  : x = %d,y = %d\n", m_path[i].x, m_path[i].y);	// 出力にデバッグ表示
+
+	//		if (!(isCenterHit))
+	//		{
+	//			continue;
+	//		}
+
+	//		DEBUG_PRINT("success : x = %d,y = %d\n", m_toOrder->GetCenterBlock()[0], m_toOrder->GetCenterBlock()[1]);	// 出力にデバッグ表示
+	//		m_cellIndex = i;
+	//		break;
+	//	}
+	//	m_isCellMove = true;
+	//}
+
+	//if (m_cellIndex == 0)
+	//{
+	//	return D3DXVECTOR3(-0.0f, 0.0f, 0.0f);
+	//}
+
+	//D3DXVECTOR3 move;
+	//move.x = m_path[m_cellIndex - 1].x - m_path[m_cellIndex].x;
+	//move.y = m_path[m_cellIndex - 1].y - m_path[m_cellIndex].y;
+	//move.z = 0.0f;
+
+	//return move;
 }
 
 //-----------------------------------------
@@ -67,9 +153,9 @@ CController::SHOT_TYPE CAIController::BulletShot()
 	std::vector<std::vector<int>> ofBlockCharcter = charcter->GetOfBlock();
 
 	// オブジェクトを全てチェックする
-	for (int i = 0; i < CObject::GetPrioritySize(); i++)
+	for (int cnt = 0; cnt < CObject::GetPrioritySize(); cnt++)
 	{
-		for (auto it = CObject::GetMyObject(i)->begin(); it != CObject::GetMyObject(i)->end(); it++)
+		for (auto it = CObject::GetMyObject(cnt)->begin(); it != CObject::GetMyObject(cnt)->end(); it++)
 		{
 			if ((*it)->GetIsDeleted())
 			{
