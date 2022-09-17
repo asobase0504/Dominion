@@ -86,6 +86,8 @@ void CCharacter::Update()
 		return;
 	}
 
+	m_controller->Update();
+
 	m_spead = MOVE_SPEAD;
 	// 移動
 	Move();
@@ -389,16 +391,6 @@ void CCharacter::BulletReload()
 	{
 		m_reloadCount++;
 
-		
-		/*
-		// バグがあるため一時コメントアウト、処理を大きく変える必要あり
-		*/
-		// 回復中の弾をうっすらと表示する
-		//if (m_reloadCount % (int)(RELOAD_TIME * 0.5f) == 0)
-		//{
-		//	m_remainsBulletDisplay[m_remainsBulletCount]->SetColorAlpha(0.5f);
-		//}
-
 		// 回復した弾を残弾数に表記する
 		if (m_reloadCount % RELOAD_TIME == 0)
 		{
@@ -500,10 +492,10 @@ void CCharacter::ScreenFromOutTime()
 //-----------------------------------------
 void CCharacter::Collision()
 {
-	//for (int i = 0; i < m_ofBlockIndex.size(); i++)
-	//{
-	//	m_ofBlockIndex[i].clear();
-	//}
+	for (int i = 0; i < m_ofBlockIndex.size(); i++)
+	{
+		m_ofBlockIndex[i].clear();
+	}
 
 	m_ofBlockCount = 0;
 
@@ -516,10 +508,14 @@ void CCharacter::Collision()
 
 		if ((int)m_team == (int)block->CBlock::GetType())
 		{
+			/* ↓同じチームのブロックだったら↓ */
+
 			if (!HitWithBlock(block))
 			{
 				return;
 			}
+
+			/* ↓ブロックに接触していたら↓ */
 
 			pMap->GetBlock(x, y)->SetRidingObject(this);	// ブロック側に自身を保存する
 			SetBlockIndex(m_ofBlockCount, { x, y });
@@ -529,14 +525,17 @@ void CCharacter::Collision()
 			D3DXVECTOR3 blockSize = D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f);	// ブロックの大きさ
 
 			D3DXVECTOR3 movePlanPos = m_pos + m_move;
+
 			if (Collision::RectangleAndRectangle(movePlanPos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), block->GetPos(), blockSize))
 			{
+				/* ↓キャラクターの中心が所属していた場合↓ */
 				m_ofBlockIndexCenter = { x, y };
 			}
 		}
 		else
 		{
-			// 別チームとの当たり判定
+			/* ↓別チームのブロックだったら↓ */
+
 			HitWithAnotherTeamBlock(block, inDirection, inAround);
 		}
 	};
@@ -601,6 +600,7 @@ void CCharacter::Collision()
 		HitBlock(CenterX, TopY, CenterTop, inAround);		// 上
 		HitBlock(CenterX, BottomY, CenterBottom, inAround);	// 下
 		HitBlock(LeftX, CenterY, LeftCenter, inAround);		// 左真ん中
+		HitBlock(CenterX, CenterY, CenterCenter, inAround);		// 真ん中
 		HitBlock(RightX, CenterY, RightCenter, inAround);	// 右真ん中
 		HitBlock(LeftX, TopY, LeftTop, inAround);			// 左上
 		HitBlock(RightX, TopY, RightTop, inAround);			// 右上
@@ -641,7 +641,7 @@ void CCharacter::Collision()
 bool CCharacter::HitWithBlock(CBlock* inBlock)
 {
 	D3DXVECTOR3 movePlanPos = m_pos + m_move;
-	D3DXVECTOR3 blockSize = D3DXVECTOR3(inBlock->GetSize().x, inBlock->GetSize().y, 0.0f) * 0.5f;	// ブロックの大きさ
+	D3DXVECTOR3 blockSize = D3DXVECTOR3(inBlock->GetSize().x, inBlock->GetSize().y, 0.0f);	// ブロックの大きさ
 
 	if (Collision::RectangleAndRectangle(movePlanPos, D3DXVECTOR3(m_size.x, m_size.y, 0.0f), inBlock->GetPos(), blockSize))
 	{

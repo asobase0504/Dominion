@@ -41,18 +41,11 @@ struct CELL
 	bool boRealPath;		// 調査が完了したときに経路上にあるセルにおいて、このフラグがTRUEになる。つまりこのフラグが１の時セルを並べると経路になる
 };
 
-struct ASTAR_INIT
-{
-	CELL* pCell;
-	int dwCellWidth;
-	int dwCellHeight;
-};
-
 struct ASTAR_PARAM	// マップ情報的な？
 {
 	POINT ptStartPos;	// スタートの位置
 	POINT ptGoalPos;	// ゴールの位置
-	POINT ptCurrentPos;		//現在地
+	POINT ptCurrentPos;		// 現在地
 };
 
 class ASTAR

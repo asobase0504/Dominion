@@ -30,7 +30,8 @@
 CAIController::CAIController() : 
 	isBulletShot(false),
 	m_aStar(nullptr),
-	m_isCellMove(false)
+	m_isCellMove(false),
+	m_shotType(NONE_SHOT)
 {
 }
 
@@ -47,11 +48,11 @@ CAIController::~CAIController()
 //-----------------------------------------
 HRESULT CAIController::Init()
 {
-	//m_aStar = new ASTAR;
+	m_aStar = new ASTAR;
 
 	CGame* modeGame = (CGame*)CApplication::GetInstance()->GetMode();
 	std::vector<std::vector<CBlock*>> map = modeGame->GetStage()->GetMap()->GetBlockAll();
-	//m_aStar->Init(map, m_toOrder->GetTeam());
+	m_aStar->Init(map, m_toOrder->GetTeam());
 	ASTAR_PARAM status;
 	status.ptStartPos.x = m_toOrder->GetCenterBlock()[0];
 	status.ptStartPos.y = m_toOrder->GetCenterBlock()[1];
@@ -60,9 +61,32 @@ HRESULT CAIController::Init()
 	status.ptCurrentPos.x = m_toOrder->GetCenterBlock()[0];
 	status.ptCurrentPos.y = m_toOrder->GetCenterBlock()[1];
 
-	//m_aStar->CalcScore(&status);
-	//m_aStar->MakePathFromClosedList(&status);
-	//m_path = m_aStar->GetPath();
+	if (SUCCEEDED(m_aStar->CalcPath(&status)))
+	{
+	}
+	else
+	{
+		int distX = m_toOrder->GetCenterBlock()[0] - status.ptStartPos.x;
+		int distY = m_toOrder->GetCenterBlock()[1] - status.ptStartPos.y;
+
+		if (distX == 0 && distY < 0)
+		{
+
+		}
+		if (distX == 0 && distY > 0)
+		{
+
+		}
+		if (distY == 0 && distX < 0)
+		{
+
+		}
+		if (distY == 0 && distX > 0)
+		{
+
+		}
+	}
+	m_path = m_aStar->GetPath();
 
 	return S_OK;
 }
@@ -92,62 +116,63 @@ void CAIController::Update()
 //-----------------------------------------
 D3DXVECTOR3 CAIController::Move()
 {
-	return D3DXVECTOR3(-0.0f, 0.0f, 0.0f);
+	if (m_isCellMove)
+	{
+		if (m_cellIndex != 0)
+		{
+			bool isCenterHit = (m_path[m_cellIndex - 1].x == m_toOrder->GetCenterBlock()[0]) && (m_path[m_cellIndex - 1].y == m_toOrder->GetCenterBlock()[1]);
 
-	//if (m_isCellMove)
-	//{
-	//	bool isCenterHit = (m_path[m_cellIndex - 1].x == m_toOrder->GetCenterBlock()[0]) && (m_path[m_cellIndex - 1].y == m_toOrder->GetCenterBlock()[1]);
+			int ofBlock = 0;
 
-	//	int ofBlock = 0;
+			for (int i = 0; i < m_toOrder->GetOfBlock().size(); i++)
+			{
+				if (!m_toOrder->GetOfBlock()[i].empty())
+				{
+					ofBlock++;
+				}
+			}
 
-	//	for (int i = 0; i < m_toOrder->GetOfBlock().size(); i++)
-	//	{
-	//		if (!m_toOrder->GetOfBlock()[i].empty())
-	//		{
-	//			ofBlock++;
-	//		}
-	//	}
+			if (isCenterHit && ofBlock <= 1)
+			{
+				m_isCellMove = false;
+			}
+		}
+	}
 
-	//	if (isCenterHit && ofBlock <= 1)
-	//	{
-	//		m_isCellMove = false;
-	//	}
-	//}
+	if (!m_isCellMove)
+	{
+		m_cellIndex = 0;
 
-	//if (!m_isCellMove)
-	//{
-	//	m_cellIndex = 0;
+		DEBUG_PRINT("Order : x = %d,y = %d\n", m_toOrder->GetCenterBlock()[0], m_toOrder->GetCenterBlock()[1]);	// 移動先をデバッグ表示
+		for (int i = 0; i < (int)m_path.size(); i++)
+		{
+			bool isCenterHit = (m_path[i].x == m_toOrder->GetCenterBlock()[0]) && (m_path[i].y == m_toOrder->GetCenterBlock()[1]);
 
-	//	DEBUG_PRINT("Order : x = %d,y = %d\n", m_toOrder->GetCenterBlock()[0], m_toOrder->GetCenterBlock()[1]);	// 出力にデバッグ表示
-	//	for (int i = 0; i < (int)m_path.size(); i++)
-	//	{
-	//		bool isCenterHit = (m_path[i].x == m_toOrder->GetCenterBlock()[0]) && (m_path[i].y == m_toOrder->GetCenterBlock()[1]);
+			DEBUG_PRINT("path  : x = %d,y = %d\n", m_path[i].x, m_path[i].y);	// 検索を掛けたパスをデバッグ表示
 
-	//		DEBUG_PRINT("path  : x = %d,y = %d\n", m_path[i].x, m_path[i].y);	// 出力にデバッグ表示
+			if (!(isCenterHit))
+			{
+				continue;
+			}
 
-	//		if (!(isCenterHit))
-	//		{
-	//			continue;
-	//		}
+			DEBUG_PRINT("success : x = %d,y = %d\n", m_toOrder->GetCenterBlock()[0], m_toOrder->GetCenterBlock()[1]);	// 出力にデバッグ表示
+			m_cellIndex = i;
+			break;
+		}
+		m_isCellMove = true;
+	}
 
-	//		DEBUG_PRINT("success : x = %d,y = %d\n", m_toOrder->GetCenterBlock()[0], m_toOrder->GetCenterBlock()[1]);	// 出力にデバッグ表示
-	//		m_cellIndex = i;
-	//		break;
-	//	}
-	//	m_isCellMove = true;
-	//}
+	if (m_cellIndex == 0)
+	{
+		return D3DXVECTOR3(-0.0f, 0.0f, 0.0f);
+	}
 
-	//if (m_cellIndex == 0)
-	//{
-	//	return D3DXVECTOR3(-0.0f, 0.0f, 0.0f);
-	//}
+	D3DXVECTOR3 move;
+	move.x = m_path[m_cellIndex - 1].x - m_path[m_cellIndex].x;
+	move.y = m_path[m_cellIndex - 1].y - m_path[m_cellIndex].y;
+	move.z = 0.0f;
 
-	//D3DXVECTOR3 move;
-	//move.x = m_path[m_cellIndex - 1].x - m_path[m_cellIndex].x;
-	//move.y = m_path[m_cellIndex - 1].y - m_path[m_cellIndex].y;
-	//move.z = 0.0f;
-
-	//return move;
+	return move;
 }
 
 //-----------------------------------------

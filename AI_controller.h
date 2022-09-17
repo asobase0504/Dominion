@@ -41,6 +41,7 @@ private: // プライベート関数
 private:
 	bool isBulletShot;
 	ASTAR* m_aStar;
+	SHOT_TYPE m_shotType;
 	std::vector<POINT> m_path;
 	int m_cellIndex;
 	int m_isCellMove;
