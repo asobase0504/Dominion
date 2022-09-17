@@ -36,10 +36,10 @@ public:	// パブリック関数
 	CMenu();
 	~CMenu();
 
-	HRESULT Init();
-	void Uninit();
-	void Update();
-	void Draw();
+	virtual HRESULT Init();
+	virtual void Uninit();
+	virtual void Update();
+	virtual void Draw();
 
 	void Select(SELECT_DIRECTION inDirection);
 	bool Decision(bool inDecison);
@@ -78,12 +78,12 @@ class CMenuFream : public CObject2D
 {
 public:	// パブリック関数
 	CMenuFream(CObject::TYPE type = CObject::TYPE::NONE);
-	~CMenuFream() override;
+	virtual ~CMenuFream() override;
 
-	HRESULT Init() override;
-	void Uninit() override;
-	void Update() override;
-	void Draw() override;
+	virtual HRESULT Init() override;
+	virtual void Uninit() override;
+	virtual void Update() override;
+	virtual void Draw() override;
 
 private: // プライベート関数
 
@@ -92,21 +92,18 @@ private: // メンバー変数
 };
 
 //-----------------------------------------
-// 項目クラス
+// 基本項目クラス
 //-----------------------------------------
 class CMenuItem : public CObject2D
 {
 public:	// パブリック関数
 	CMenuItem(CObject::TYPE type = CObject::TYPE::NONE);
-	~CMenuItem() override;
+	virtual ~CMenuItem() override;
 
-	HRESULT Init() override;
-	void Uninit() override;
-	void Update() override;
-	void Draw() override;
-
-	void SelectUpdate();
-	void NomalUpdate();
+	virtual void PopUpdate();
+	virtual void SelectUpdate();
+	virtual void NomalUpdate();
+	virtual void EndUpdate();
 private: // プライベート関数
 
 private: // メンバー変数

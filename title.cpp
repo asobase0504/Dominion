@@ -14,6 +14,7 @@
 #include "object2d.h"
 #include "menu.h"
 #include "input.h"
+#include "menu_item.h"
 
 //-----------------------------------------------------------------------------
 // コンストラクタ
@@ -81,7 +82,7 @@ HRESULT CTitle::Init()
 		{
 			std::vector<CMenuItem*> X;
 
-			CMenuItem* item = new CMenuItem;
+			CMenuItem* item = new CPauseMenuItem;
 			item->Init();
 			item->SetSize(D3DXVECTOR2(465.0f, 80.0f));			// 大きさの設定
 			item->SetColor(CApplication::GetInstance()->GetColor(0));			// 色の設定

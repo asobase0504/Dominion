@@ -72,6 +72,9 @@
     <Filter Include="ソース ファイル\03_Mode\03_Customize">
       <UniqueIdentifier>{e70ca64c-1522-47dc-9327-5b03c40361bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\07_UI\00_Menu">
+      <UniqueIdentifier>{a55cf54c-2661-4b69-873f-9824b18bc7d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="input.cpp">
@@ -106,9 +109,6 @@
     </ClCompile>
     <ClCompile Include="A-Star.cpp">
       <Filter>ソース ファイル\05_Cpntroller</Filter>
-    </ClCompile>
-    <ClCompile Include="menu.cpp">
-      <Filter>ソース ファイル\07_UI</Filter>
     </ClCompile>
     <ClCompile Include="ui_countdown.cpp">
       <Filter>ソース ファイル\07_UI</Filter>
@@ -191,6 +191,15 @@
     <ClCompile Include="ui_end_game.cpp">
       <Filter>ソース ファイル\07_UI</Filter>
     </ClCompile>
+    <ClCompile Include="pause.cpp">
+      <Filter>ソース ファイル\03_Mode\01_Game</Filter>
+    </ClCompile>
+    <ClCompile Include="menu.cpp">
+      <Filter>ソース ファイル\07_UI\00_Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="menu_item.cpp">
+      <Filter>ソース ファイル\07_UI\00_Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="input.h">
@@ -222,9 +231,6 @@
     </ClInclude>
     <ClInclude Include="A-Star.h">
       <Filter>ソース ファイル\05_Cpntroller</Filter>
-    </ClInclude>
-    <ClInclude Include="menu.h">
-      <Filter>ソース ファイル\07_UI</Filter>
     </ClInclude>
     <ClInclude Include="ui_countdown.h">
       <Filter>ソース ファイル\07_UI</Filter>
@@ -309,6 +315,15 @@
     </ClInclude>
     <ClInclude Include="ui_end_game.h">
       <Filter>ソース ファイル\07_UI</Filter>
+    </ClInclude>
+    <ClInclude Include="pause.h">
+      <Filter>ソース ファイル\03_Mode\01_Game</Filter>
+    </ClInclude>
+    <ClInclude Include="menu.h">
+      <Filter>ソース ファイル\07_UI\00_Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="menu_item.h">
+      <Filter>ソース ファイル\07_UI\00_Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
