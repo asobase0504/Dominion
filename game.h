@@ -21,6 +21,7 @@ class CController;
 class CMap;
 class CCountDownUI;
 class CObtainedSetNumberUI;
+class CEndGameUI;
 class CMenu;
 
 //-----------------------------------------
@@ -35,9 +36,12 @@ public:	// メンバー関数
 	HRESULT Init() override;
 	void StageSelectInit();
 	void Uninit() override;
+
+	// 更新処理
 	void Update() override;
 	void StageSelectUpdate();
 	void PeopleNumberSelectUpdate();
+
 	void CharctorSelect();
 	void BattleUpdate();
 	void BattleEnd();
@@ -45,12 +49,12 @@ public:	// メンバー関数
 	void Draw() override;
 
 	// Getter
-	CStage* GetStage() { return m_stage; }	// ステージの情報
-	nlohmann::json GetStageInfo() { return m_stageInfo[m_stageIndex]; }
+	CStage* GetStage() { return m_stage; }	// ステージ取得
+	nlohmann::json GetStageInfo() { return m_stageInfo[m_stageIndex]; }	// ステージ情報取得
 	std::vector<int> GetControllerIndex() { return m_controllerIndex; }	// コントローラー番号取得
-	int GetNeedWinNumber() { return m_needWinNumber; }	// ラウンド数の取得
-	int GetWinNumber(int inIndex) { return m_winNumber[inIndex]; }	// 勝利数の取得
-	int GetWinner() { return m_winnerIndex; }						// 勝利したチームの番号取得
+	int GetNeedWinNumber() { return m_needWinNumber; }	// ラウンド数取得
+	int GetWinNumber(int inIndex) { return m_winNumber[inIndex]; }	// 勝利数取得
+	int GetWinner() { return m_winnerIndex; }						// 勝利したチーム番号取得
 
 private: // 動的プライベート関数
 	void ResetStage();
@@ -58,23 +62,24 @@ private: // 動的プライベート関数
 private: // 動的メンバー変数
 
 	/* ステージ選択系統 */
-	CMenu* m_stageSelect;	// ステージ選択
+	CMenu* m_stageSelect;		// ステージ選択
 	nlohmann::json m_stageInfo;	// ステージ情報の集まり
-	int m_stageIndex;		// ステージ番号
-	CStage* m_stage;		// ステージ
+	int m_stageIndex;			// ステージ番号
+	CStage* m_stage;			// ステージ
 
 	/* 人数選択系統 */
 	CMenu* m_peopleNumberSelect;	// 人数選択
 	int m_peopleNumber;				// 今回の人数
 	
 	/* キャラクター選択系統 */
-	CMenu* m_charcterSelect;		// キャラクター選択
+	CMenu* m_charcterSelect;			// キャラクター選択
 	std::vector<int> m_controllerIndex;	// コントローラーの番号
 
 	/* 戦闘系統 */
 	// UI関係
-	CCountDownUI* m_countDownUI;	// カウントダウンUI
+	CCountDownUI* m_countDownUI;					// カウントダウンUI
 	CObtainedSetNumberUI* m_obtainedSetNumberUI;	// ラウンド終了時のUI
+	CEndGameUI* m_endGameUI;						// エンドゲームUI
 
 	// ラウンド勝利関係
 	int m_winnerIndex;				// ラウンド勝利チームの番号

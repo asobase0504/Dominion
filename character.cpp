@@ -46,7 +46,7 @@ CCharacter::CCharacter(CObject::TYPE type) :
 //-----------------------------------------
 CCharacter::~CCharacter()
 {
-	//assert(m_controller == nullptr);
+	assert(m_remainsBulletDisplay.empty());
 }
 
 //-----------------------------------------
@@ -70,6 +70,8 @@ void CCharacter::Uninit()
 	{
 		(*it)->SetIsDeleted(true);
 	}
+
+	m_remainsBulletDisplay.clear();
 
 	CObject2D::Uninit();
 }

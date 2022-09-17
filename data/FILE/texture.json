@@ -10,6 +10,7 @@
     [ "TEXT_TUTORIAL", "data\/TEXTURE\/TEXT\/TUTORIAL2.png" ],
     [ "TEXT_CUSTOM", "data\/TEXTURE\/TEXT\/CUSTOM2.png" ],
     [ "TEXT_OPTION", "data\/TEXTURE\/TEXT\/OPTION2.png" ],
+    [ "TEXT_RETRY", "data\/TEXTURE\/TEXT\/RETRY.png" ],
     [ "TEXT_EXIT", "data\/TEXTURE\/TEXT\/EXIT2.png" ],
     [ "TEXT_TITLE1", "data\/TEXTURE\/TEXT\/title1_2.png" ],
     [ "TEXT_TITLE2", "data\/TEXTURE\/TEXT\/title2_2.png" ],

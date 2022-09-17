@@ -40,14 +40,16 @@ CCustomize::~CCustomize()
 //-----------------------------------------------------------------------------
 HRESULT CCustomize::Init()
 {
+	CApplication* application = CApplication::GetInstance();
+
 	// 背景の設定
 	{
 		m_bg = CObject2D::Create(CObject::TYPE::NONE,1);
-		m_bg->SetSize(D3DXVECTOR2((float)CApplication::GetInstance()->SCREEN_WIDTH, (float)CApplication::GetInstance()->SCREEN_HEIGHT));
-		D3DXVECTOR3 pos(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y, 0.0f);	// 位置の取得
+		m_bg->SetSize(D3DXVECTOR2((float)application->SCREEN_WIDTH, (float)application->SCREEN_HEIGHT));
+		D3DXVECTOR3 pos(application->CENTER_X, application->CENTER_Y, 0.0f);	// 位置の取得
 		m_bg->SetTexture("BG");
 		m_bg->SetPos(pos);
-		m_bg->SetColor(CApplication::GetInstance()->GetColor(2));
+		m_bg->SetColor(application->GetColor(2));
 	}
 
 	// メニューの設定
@@ -56,26 +58,26 @@ HRESULT CCustomize::Init()
 		CMenuFream* fream = new CMenuFream;
 		{
 			fream->Init();
-			fream->SetColor(CApplication::GetInstance()->GetColor(1));
+			fream->SetColor(application->GetColor(1));
 		}
 
 		// 項目の設定
 		std::vector<std::vector<CMenuItem*>> items;
 		std::vector<CMenuItem*> X;
-		for (int i = 0; i < CApplication::GetInstance()->GetColorSize(); i++)
+		for (int i = 0; i < application->GetColorSize(); i++)
 		{
 
 			CMenuItem* item = new CMenuItem;
 			item->Init();
 			item->SetSize(D3DXVECTOR2(80.0f, 80.0f));			// 大きさの設定
-			item->SetColor(CApplication::GetInstance()->GetColor(0));			// 色の設定
+			item->SetColor(application->GetColor(0));			// 色の設定
 
 			X.push_back(item);
 		}
 		items.push_back(X);
 
-		D3DXVECTOR2 pos(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y);
-		D3DXVECTOR2 area = CApplication::GetInstance()->GetScreenSize();
+		D3DXVECTOR2 pos(application->CENTER_X, application->CENTER_Y);
+		D3DXVECTOR2 area = application->GetScreenSize();
 		area.y *= 0.25f;
 		m_manu = CMenu::Create(pos, area, fream, items);
 	}
@@ -147,28 +149,28 @@ void CCustomize::Update()
 	if (m_manu != nullptr)
 	{
 		m_manu->Update();
-		if (input->Trigger(DIK_W))
+		if (input->Trigger(KEY_UP))
 		{
 			m_manu->Select(CMenu::TOP);
 			SetColor();
 		}
-		if (input->Trigger(DIK_S))
+		if (input->Trigger(KEY_DOWN))
 		{
 			m_manu->Select(CMenu::DOWN);
 			SetColor();
 		}
-		if (input->Trigger(DIK_A))
+		if (input->Trigger(KEY_LEFT))
 		{
 			m_manu->Select(CMenu::LEFT);
 			SetColor();
 		}
-		if (input->Trigger(DIK_D))
+		if (input->Trigger(KEY_RIGHT))
 		{
 			m_manu->Select(CMenu::RIGHT);
 			SetColor();
 		}
 	}
-	if (CInput::GetKey()->Trigger(KEY_BACK) || input->Trigger(DIK_RETURN))
+	if (CInput::GetKey()->Trigger(KEY_BACK) || input->Trigger(KEY_DECISION))
 	{
 		m_manu->Uninit();
 		delete m_manu;

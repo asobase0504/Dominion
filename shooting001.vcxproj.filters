@@ -188,6 +188,9 @@
     <ClCompile Include="customize.cpp">
       <Filter>ソース ファイル\03_Mode\03_Customize</Filter>
     </ClCompile>
+    <ClCompile Include="ui_end_game.cpp">
+      <Filter>ソース ファイル\07_UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="input.h">
@@ -303,6 +306,9 @@
     </ClInclude>
     <ClInclude Include="customize.h">
       <Filter>ソース ファイル\03_Mode\03_Customize</Filter>
+    </ClInclude>
+    <ClInclude Include="ui_end_game.h">
+      <Filter>ソース ファイル\07_UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

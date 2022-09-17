@@ -47,11 +47,11 @@ CAIController::~CAIController()
 //-----------------------------------------
 HRESULT CAIController::Init()
 {
-	m_aStar = new ASTAR;
+	//m_aStar = new ASTAR;
 
 	CGame* modeGame = (CGame*)CApplication::GetInstance()->GetMode();
 	std::vector<std::vector<CBlock*>> map = modeGame->GetStage()->GetMap()->GetBlockAll();
-	m_aStar->Init(map, m_toOrder->GetTeam());
+	//m_aStar->Init(map, m_toOrder->GetTeam());
 	ASTAR_PARAM status;
 	status.ptStartPos.x = m_toOrder->GetCenterBlock()[0];
 	status.ptStartPos.y = m_toOrder->GetCenterBlock()[1];
@@ -156,7 +156,7 @@ D3DXVECTOR3 CAIController::Move()
 CController::SHOT_TYPE CAIController::BulletShot()
 {
 	static int count = 0;	// 弾発射の間隔。
-	CCharacter* charcter = (CCharacter*)m_toOrder;
+	CCharacter* charcter = m_toOrder;
 	std::vector<std::vector<int>> ofBlockCharcter = charcter->GetOfBlock();
 
 	// オブジェクトを全てチェックする

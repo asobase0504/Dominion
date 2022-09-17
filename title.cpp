@@ -147,25 +147,25 @@ void CTitle::Update()
 		if (m_manu != nullptr)
 		{
 			m_manu->Update();
-			if (input->Trigger(DIK_W))
+			if (input->Trigger(KEY_UP))
 			{
 				m_manu->Select(CMenu::TOP);
 			}
-			if (input->Trigger(DIK_S))
+			if (input->Trigger(KEY_DOWN))
 			{
 				m_manu->Select(CMenu::DOWN);
 			}
-			if (input->Trigger(DIK_A))
+			if (input->Trigger(KEY_LEFT))
 			{
 				m_manu->Select(CMenu::LEFT);
 			}
-			if (input->Trigger(DIK_D))
+			if (input->Trigger(KEY_RIGHT))
 			{
 				m_manu->Select(CMenu::RIGHT);
 			}
 		}
 
-		if (m_manu->Decision(input->Trigger(DIK_RETURN)))
+		if (m_manu->Decision(input->Trigger(KEY_DECISION)))
 		{
 			m_status = (CTitle::Status)m_manu->GetSelectIdx()[0];
 		}
