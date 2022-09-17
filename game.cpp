@@ -12,6 +12,7 @@
 #include "ui_countdown.h"
 #include "ui_obtained_setnumber.h"
 #include "ui_end_game.h"
+#include "pause.h"
 #include "menu.h"
 #include "input.h"
 #include <assert.h>
@@ -23,6 +24,7 @@
 // コンストラクタ
 //-----------------------------------------------------------------------------
 CGame::CGame() :
+	m_pause(nullptr),
 	m_stageSelect(nullptr),
 	m_stageIndex(0),
 	m_stage(nullptr),
@@ -144,6 +146,13 @@ void CGame::Uninit()
 		m_endGameUI->Uninit();
 		delete m_endGameUI;
 		m_endGameUI = nullptr;
+	}
+
+	if (m_pause != nullptr)
+	{
+		m_pause->Uninit();
+		delete m_pause;
+		m_pause = nullptr;
 	}
 }
 
@@ -289,6 +298,42 @@ void CGame::CharctorSelect()
 //-----------------------------------------------------------------------------
 void CGame::BattleUpdate()
 {
+	if (m_pause != nullptr)
+	{
+		m_pause->Update();
+		if (m_pause->GetIsDeleted())
+		{
+			CPause::Status status = m_pause->GetStatus();
+
+			m_pause->Uninit();
+			delete m_pause;
+			m_pause = nullptr;
+
+			switch (status)
+			{
+			case CPause::RESTART:
+			{
+				for (int i = 0; i < (int)m_winNumber.size(); i++)
+				{
+					m_winNumber[i] = 0;
+				}
+				// もう一度ゲームを行う
+				ResetStage();
+				// カウントダウンの初期化
+				D3DXVECTOR2 pos(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y);	// 位置を設定
+				m_countDownUI = CCountDownUI::Create(pos);	// カウントダウンの開始
+			}
+				break;
+			case CPause::END:
+				CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::TITLE);
+				break;
+			default:
+				break;
+			}
+		}
+		return;
+	}
+
 	if (m_endGameUI != nullptr)
 	{
 		m_endGameUI->Update();
@@ -367,6 +412,15 @@ void CGame::BattleUpdate()
 
 	// 戦闘中
 	m_stage->Update();
+	
+	if (CInput::GetKey()->Trigger(KEY_PAUSE))
+	{
+		if (m_pause == nullptr)
+		{
+			m_pause = new CPause;
+			m_pause->Init();
+		}
+	}
 
 	if (m_stage->GetEndSet())
 	{ // 戦闘終了後

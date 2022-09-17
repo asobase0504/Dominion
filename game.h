@@ -23,6 +23,7 @@ class CCountDownUI;
 class CObtainedSetNumberUI;
 class CEndGameUI;
 class CMenu;
+class CPause;
 
 //-----------------------------------------
 // アプリケーションクラス
@@ -60,6 +61,8 @@ private: // 動的プライベート関数
 	void ResetStage();
 
 private: // 動的メンバー変数
+
+	CPause* m_pause;
 
 	/* ステージ選択系統 */
 	CMenu* m_stageSelect;		// ステージ選択
