@@ -100,9 +100,6 @@ HRESULT CTitle::Init()
 			case CTitle::Status::OPSITON:
 				item->SetTexture("TEXT_OPTION");
 				break;
-			case CTitle::Status::EXIT:
-				item->SetTexture("TEXT_EXIT");
-				break;
 			default:
 				assert(false);
 				break;
@@ -181,9 +178,6 @@ void CTitle::Update()
 		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::CUSTUM);
 		break;
 	case CTitle::Status::OPSITON:
-		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::GAME);
-		break;
-	case CTitle::Status::EXIT:
 		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::GAME);
 		break;
 	default:

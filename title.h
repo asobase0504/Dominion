@@ -27,7 +27,6 @@ public: // —ñ‹“Œ^
 		TUTORIAL,
 		CUSTOMIZE,
 		OPSITON,
-		EXIT,
 		MAX,
 		NONE
 	};
