@@ -82,6 +82,9 @@ private:
 	std::vector<POINT> m_openList;		// オープンリスト
 	std::vector<POINT> m_closedList;	// クロースリスト
 
+	POINT m_startIndex;
+	POINT m_goalIndex;
+
 	int m_widthSize;		// 幅のサイズ数
 	int m_heightSize;		// 高さのサイズ数
 

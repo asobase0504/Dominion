@@ -91,7 +91,7 @@ HRESULT ASTAR::Init(std::vector<std::vector<CBlock*>>& inStage, CCharacter::TEAM
 	m_openList.clear();
 	m_closedList.clear();
 
-	Reset();
+	//Reset();
 	return S_OK;
 }
 
@@ -122,8 +122,20 @@ HRESULT ASTAR::Reset()
 			cell.ptIndex.y = y;		// 番号
 			cell.ptParent.x = 0;	// 親	
 			cell.ptParent.y = 0;	// 親	
-			cell.iCost = 0;			// 実コスト
-			cell.iHeuristic = 0;	// 推定コスト
+			cell.iCost = 1;			// 実コスト
+
+			int distX = m_startIndex.x - cell.ptIndex.x;
+			int distY = m_startIndex.y - cell.ptIndex.y;
+
+			if (distX >= distY)
+			{
+				cell.iHeuristic = distX;	// 推定コスト
+			}
+			else
+			{
+				cell.iHeuristic = distY;	// 推定コスト
+			}
+
 			cell.iScore = 0;		// 合計スコア
 
 			// 同じチームか否か
@@ -172,6 +184,11 @@ int ASTAR::GetIndexToBlock(int X, int Y)
 //-----------------------------------------------------------------------------
 HRESULT ASTAR::CalcPath(ASTAR_PARAM* pParam)
 {
+	m_startIndex = pParam->ptStartPos;
+	m_goalIndex = pParam->ptGoalPos;
+
+	Reset();	// リセット
+
 	// ゴールが適正な場所か（ゴールが障害物の内部になっていないか）
 	if (m_cell[GetIndexToBlock(pParam->ptGoalPos)].Status == ASTAR_OBSTACLE)
 	{
@@ -180,8 +197,6 @@ HRESULT ASTAR::CalcPath(ASTAR_PARAM* pParam)
 	}
 
 	/* ↓ゴールが適切だった場合↓ */
-
-	Reset();	// リセット
 
 	// A*での調査
 	if (SUCCEEDED(CalcScore(pParam)))
@@ -210,6 +225,11 @@ HRESULT ASTAR::CalcScore(ASTAR_PARAM* pParam)
 
 	// 現在地のセルは無条件でクローズドにする
 	CELL* cell = &m_cell[GetIndexToBlock(ptCurrentPos)];	// セル情報
+
+	if (cell->Status == ASTAR_CLOSED)
+	{
+		return E_FAIL;
+	}
 
 	if (cell->Status != ASTAR_CLOSED)
 	{
@@ -248,7 +268,7 @@ HRESULT ASTAR::CalcScore(ASTAR_PARAM* pParam)
 		switch (cell->Status)
 		{
 		case ASTAR_EMPTY:	// 進むとき
-			cell->iHeuristic = CalcDistance(&ptGoal, &ptCurrentPos);
+			//cell->iHeuristic = CalcDistance(&ptGoal, &ptCurrentPos);
 			// コストは親のコストに１を足したもの
 			{
 				cell->iCost = m_cell[GetIndexToBlock(pParam->ptCurrentPos)].iCost + 1;
@@ -262,17 +282,13 @@ HRESULT ASTAR::CalcScore(ASTAR_PARAM* pParam)
 			}
 			break;
 		case ASTAR_OPEN:
+			break;
 		case ASTAR_CLOSED:
 		case ASTAR_OBSTACLE:
 			end++;
 			continue;
 			break;
 		}
-	}
-
-	if (end >= 4)
-	{
-		return E_FAIL;
 	}
 
 	/* ↓新たなCELLからルート検索を行う↓ */
