@@ -19,6 +19,7 @@
 #include "collision.h"
 #include "block.h"
 #include "crush_effect.h"
+#include "sound.h"
 #include <assert.h>
 #include <functional>
 
@@ -484,6 +485,7 @@ void CCharacter::ScreenFromOutTime()
 	{
 		// Ž©g‚Ìíœ
 		m_isDeleted = true;
+		CApplication::GetInstance()->GetSound()->Play(CSound::LABEL_SE_DEAD);
 	}
 }
 
@@ -492,7 +494,7 @@ void CCharacter::ScreenFromOutTime()
 //-----------------------------------------
 void CCharacter::Collision()
 {
-	for (int i = 0; i < m_ofBlockIndex.size(); i++)
+	for (int i = 0; i < (int)m_ofBlockIndex.size(); i++)
 	{
 		m_ofBlockIndex[i].clear();
 	}
@@ -631,6 +633,8 @@ void CCharacter::Collision()
 			}
 
 			m_isDeleted = true;	// Ž€–Só‘Ô‚É‚·‚é
+			CApplication::GetInstance()->GetSound()->Play(CSound::LABEL_SE_DEAD);
+
 		}
 	}
 }

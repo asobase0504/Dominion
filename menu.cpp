@@ -10,6 +10,7 @@
 #include "menu.h"
 #include "menu_item.h"
 #include "application.h"
+#include "sound.h"
 
 //-----------------------------------------
 // ’è‹`
@@ -114,6 +115,7 @@ void CMenu::Draw()
 //-----------------------------------------
 void CMenu::Select(SELECT_DIRECTION inDirection)
 {
+	CApplication::GetInstance()->GetSound()->Play(CSound::LABEL_SE_SELECT);
 	switch (inDirection)
 	{
 	case CMenu::TOP:
@@ -176,6 +178,7 @@ bool CMenu::Decision(bool inDecison)
 	bool check = m_decisionAfterglowCount >= DECISION_AFTERGLOW_TIME;
 	if (check)
 	{
+		CApplication::GetInstance()->GetSound()->Play(CSound::LABEL_SE_DECISION);
 		m_isDexision = false;
 	}
 	return check;

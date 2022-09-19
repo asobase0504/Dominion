@@ -15,6 +15,7 @@
 #include "game.h"
 #include "stage.h"
 #include "map.h"
+#include "sound.h"
 
 //-----------------------------------------
 // コンストラクタ
@@ -152,6 +153,7 @@ CBullet* CBullet::Create(const D3DXVECTOR3& inPos, const D3DXVECTOR3& inMove, co
 
 	bullet->SetTeam(inTeam);
 	bullet->SetSize(D3DXVECTOR2(size * 0.25f, size * 0.25f));
+	CApplication::GetInstance()->GetSound()->Play(CSound::LABEL_SE_SHOT);
 
 	return bullet;
 }

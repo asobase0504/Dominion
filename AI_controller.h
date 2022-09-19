@@ -30,6 +30,12 @@ public:
 	D3DXVECTOR3 Move() override;
 	SHOT_TYPE BulletShot() override;
 private: // プライベート関数
+
+	// 状況を把握する関数
+	void FindClosestEnemy();
+	bool IsBulletHitPos();
+	bool ExistsAvoidableSpace();
+
 	// 移動時の条件動作
 	D3DXVECTOR3 MoveToAvoid();
 	D3DXVECTOR3 MoveToChase();

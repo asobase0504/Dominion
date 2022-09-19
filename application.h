@@ -20,6 +20,7 @@ class CTexture;
 class CMode;
 class CThemeColor;
 class CInput;
+class CSound;
 
 //-----------------------------------------
 // アプリケーションクラス
@@ -62,6 +63,7 @@ public:	// メンバー関数
 	CObject** GetMyObject() { return &object; }
 	CTexture* GetTextureClass() { return texture; }
 	CMode* GetMode() { return mode; }
+	CSound* GetSound() { return sound; }
 	D3DXCOLOR GetColor(int inKey);
 	int GetColorSize();
 	D3DXVECTOR2 GetScreenSize() { return D3DXVECTOR2((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT); }
@@ -78,6 +80,7 @@ private: // 動的メンバー変数
 	CTexture* texture;
 	CObject* object;
 	CThemeColor* color;
+	CSound* sound;
 };
 
 #endif // !_APPLICATION_H_

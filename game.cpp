@@ -17,6 +17,7 @@
 #include "input.h"
 #include <assert.h>
 #include <functional>
+#include "sound.h"
 
 #include "application.h"
 
@@ -127,6 +128,13 @@ void CGame::Uninit()
 		m_countDownUI = nullptr;
 	}
 
+	if (m_obtainedSetNumberUI != nullptr)
+	{
+		m_obtainedSetNumberUI->Uninit();
+		delete m_obtainedSetNumberUI;
+		m_obtainedSetNumberUI = nullptr;
+	}
+
 	if (m_stage != nullptr)
 	{
 		m_stage->Uninit();
@@ -171,6 +179,7 @@ void CGame::Update()
 			delete m_stageSelect;
 			m_stageSelect = nullptr;
 			
+			CApplication::GetInstance()->GetSound()->Play(CSound::LABEL_SE_DECISION);
 			//	画面の遷移
 			CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::TITLE);
 			return;
@@ -226,6 +235,7 @@ void CGame::StageSelectUpdate()
 
 	if (input->Trigger(KEY_DECISION))
 	{
+		CApplication::GetInstance()->GetSound()->Play(CSound::LABEL_SE_DECISION);
 		m_stageSelect->SetIsDeleted();
 		m_stageSelect->Uninit();
 		delete m_stageSelect;
@@ -238,7 +248,7 @@ void CGame::StageSelectUpdate()
 			m_winNumber[i] = 0;
 		}
 
-		m_needWinNumber = 1;	// 勝利に必要なラウンド数の設定
+		m_needWinNumber = 3;	// 勝利に必要なラウンド数の設定
 
 		// コントローラーの番号をプレイヤー数分作成する
 		m_controllerIndex.resize(2);

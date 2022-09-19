@@ -17,6 +17,7 @@
 #include "title.h"
 #include "game.h"
 #include "customize.h"
+#include "sound.h"
 
 //-----------------------------------------------------------------------------
 // 静的メンバー変数の初期化
@@ -96,6 +97,14 @@ HRESULT CApplication::Init(HWND hWnd, HINSTANCE hInstance)
 		return E_FAIL;
 	}
 
+	// サウンドクラス
+	sound = new CSound;
+	if (FAILED(sound->Init(hWnd)))
+	{
+		return E_FAIL;
+	}
+	sound->Play(CSound::LABEL_BGM_TITLE);
+
 	// ゲームモード
 	SetMode(MODE_TYPE::TITLE);
 
@@ -117,6 +126,14 @@ void CApplication::Uninit()
 
 		delete mode;
 		mode = nullptr;
+	}
+
+	// サウンドの解放
+	if (sound != nullptr)
+	{
+		sound->Uninit();
+		delete sound;
+		sound = nullptr;
 	}
 
 	// テクスチャの解放

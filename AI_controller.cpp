@@ -125,7 +125,7 @@ D3DXVECTOR3 CAIController::Move()
 
 			int ofBlock = 0;
 
-			for (int i = 0; i < m_toOrder->GetOfBlock().size(); i++)
+			for (int i = 0; i < (int)m_toOrder->GetOfBlock().size(); i++)
 			{
 				if (!m_toOrder->GetOfBlock()[i].empty())
 				{
@@ -169,8 +169,8 @@ D3DXVECTOR3 CAIController::Move()
 	}
 
 	D3DXVECTOR3 move;
-	move.x = m_path[m_cellIndex - 1].x - m_path[m_cellIndex].x;
-	move.y = m_path[m_cellIndex - 1].y - m_path[m_cellIndex].y;
+	move.x = (float)(m_path[m_cellIndex - 1].x - m_path[m_cellIndex].x);
+	move.y = (float)(m_path[m_cellIndex - 1].y - m_path[m_cellIndex].y);
 	move.z = 0.0f;
 
 	return move;

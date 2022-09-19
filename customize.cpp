@@ -16,6 +16,7 @@
 #include "input.h"
 #include "map.h"
 #include "file.h"
+#include "sound.h"
 
 //-----------------------------------------------------------------------------
 // コンストラクタ
@@ -176,6 +177,7 @@ void CCustomize::Update()
 		delete m_manu;
 		m_manu = nullptr;
 
+		CApplication::GetInstance()->GetSound()->Play(CSound::LABEL_SE_DECISION);
 		//	画面の遷移
 		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::TITLE);
 		return;

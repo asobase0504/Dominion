@@ -15,6 +15,7 @@
 #include "menu.h"
 #include "input.h"
 #include "menu_item.h"
+#include "sound.h"
 
 //-----------------------------------------------------------------------------
 // コンストラクタ
