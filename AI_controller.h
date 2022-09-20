@@ -8,6 +8,7 @@
 #define _AI_OPERATE_H_
 
 #include "controller.h"
+#include "A-Star.h"
 
 //-----------------------------------------
 // 前方宣言
@@ -31,6 +32,10 @@ public:
 	SHOT_TYPE BulletShot() override;
 private: // プライベート関数
 
+	//A*の情報代入関数
+	ASTAR_PARAM SetAStarParam(POINT inGoal);
+	ASTAR_PARAM SetAStarParam(int inX,int inY);
+
 	// 状況を把握する関数
 	void FindClosestEnemy();
 	bool IsBulletHitPos();
@@ -38,7 +43,7 @@ private: // プライベート関数
 
 	// 移動時の条件動作
 	D3DXVECTOR3 MoveToAvoid();
-	D3DXVECTOR3 MoveToChase();
+	void MoveToChase();
 
 	// 弾を撃つときの条件動作
 	CController::SHOT_TYPE ShootToSpreadWay();
@@ -49,8 +54,10 @@ private:
 	ASTAR* m_aStar;
 	SHOT_TYPE m_shotType;
 	std::vector<POINT> m_path;
+	CCharacter* m_enemy;
 	int m_cellIndex;
-	int m_isCellMove;
+	bool m_isCellMove;
+	bool m_isEndMove;
 };
 
 #endif // !_AI_OPERATE_H_

@@ -174,7 +174,7 @@ void CTitle::Update()
 		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::GAME);
 		break;
 	case CTitle::Status::TUTORIAL:
-		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::GAME);
+		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::TUTORIAL);
 		break;
 	case CTitle::Status::CUSTOMIZE:
 		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::CUSTUM);

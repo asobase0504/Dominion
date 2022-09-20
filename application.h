@@ -31,6 +31,7 @@ public:
 	enum class MODE_TYPE
 	{
 		TITLE = 0,
+		TUTORIAL,
 		CUSTUM,
 		GAME,
 		RESULT,

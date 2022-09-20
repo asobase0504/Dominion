@@ -423,7 +423,7 @@ void CGame::BattleUpdate()
 	// í“¬’†
 	m_stage->Update();
 	
-	if (CInput::GetKey()->Trigger(KEY_PAUSE))
+	if (CInput::GetKey()->Trigger(KEY_PAUSE) && m_countDownUI == nullptr)
 	{
 		if (m_pause == nullptr)
 		{
@@ -490,5 +490,5 @@ void CGame::ResetStage()
 	}
 
 	m_stage = new CStage;
-	m_stage->Init();	// ‰Šú‰»
+	m_stage->Init(GetStageInfo());	// ‰Šú‰»
 }

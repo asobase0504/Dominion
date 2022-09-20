@@ -38,7 +38,7 @@ public:
 
 	// Getter
 	CBlock* GetBlock(int indexX, int indexY);
-	std::vector<std::vector<CBlock*>> GetBlockAll() { return m_block; }
+	std::vector<std::vector<CBlock*>>& GetBlockAll() { return m_block; }
 	float GetBlockSize() { return BLOCK_SIZE; }
 	int GetMaxXBlock() { return MAX_X_BLOCK; }
 	int GetMaxYBlock() { return MAX_Y_BLOCK; }

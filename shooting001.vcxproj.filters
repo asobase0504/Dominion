@@ -24,15 +24,6 @@
     <Filter Include="ソース ファイル\03_Mode">
       <UniqueIdentifier>{48f00a93-53ea-4db8-9029-d9913dbc6a89}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\03_Mode\01_Game">
-      <UniqueIdentifier>{4c881af5-b061-444d-9fb7-b7421a8acc50}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\03_Mode\02_Title">
-      <UniqueIdentifier>{5948040f-2933-4137-9606-0409f344630f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\03_Mode\03_Result">
-      <UniqueIdentifier>{104c158d-21c7-4f09-a2f8-c232e9da0e0d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\05_Cpntroller">
       <UniqueIdentifier>{0d4dda8f-550b-4600-8408-706d6820c1bc}</UniqueIdentifier>
     </Filter>
@@ -69,11 +60,20 @@
     <Filter Include="ソース ファイル\06_Stage\02_Item">
       <UniqueIdentifier>{6f212687-7e29-4343-ad31-bd662820512b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\03_Mode\03_Customize">
-      <UniqueIdentifier>{e70ca64c-1522-47dc-9327-5b03c40361bf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\07_UI\00_Menu">
       <UniqueIdentifier>{a55cf54c-2661-4b69-873f-9824b18bc7d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\03_Mode\02_Customize">
+      <UniqueIdentifier>{e70ca64c-1522-47dc-9327-5b03c40361bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\03_Mode\01_Title">
+      <UniqueIdentifier>{5948040f-2933-4137-9606-0409f344630f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\03_Mode\00_Game">
+      <UniqueIdentifier>{4c881af5-b061-444d-9fb7-b7421a8acc50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\03_Mode\03_Tutorial">
+      <UniqueIdentifier>{104c158d-21c7-4f09-a2f8-c232e9da0e0d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -84,7 +84,7 @@
       <Filter>ソース ファイル\00_Main</Filter>
     </ClCompile>
     <ClCompile Include="title.cpp">
-      <Filter>ソース ファイル\03_Mode\02_Title</Filter>
+      <Filter>ソース ファイル\03_Mode\01_Title</Filter>
     </ClCompile>
     <ClCompile Include="player_controller.cpp">
       <Filter>ソース ファイル\05_Cpntroller</Filter>
@@ -102,7 +102,7 @@
       <Filter>ソース ファイル\03_Mode</Filter>
     </ClCompile>
     <ClCompile Include="game.cpp">
-      <Filter>ソース ファイル\03_Mode\01_Game</Filter>
+      <Filter>ソース ファイル\03_Mode\00_Game</Filter>
     </ClCompile>
     <ClCompile Include="controller.cpp">
       <Filter>ソース ファイル\05_Cpntroller</Filter>
@@ -114,7 +114,7 @@
       <Filter>ソース ファイル\07_UI</Filter>
     </ClCompile>
     <ClCompile Include="title_status.cpp">
-      <Filter>ソース ファイル\03_Mode\02_Title</Filter>
+      <Filter>ソース ファイル\03_Mode\01_Title</Filter>
     </ClCompile>
     <ClCompile Include="ui_obtained_setnumber.cpp">
       <Filter>ソース ファイル\07_UI</Filter>
@@ -186,13 +186,13 @@
       <Filter>ソース ファイル\01_Input</Filter>
     </ClCompile>
     <ClCompile Include="customize.cpp">
-      <Filter>ソース ファイル\03_Mode\03_Customize</Filter>
+      <Filter>ソース ファイル\03_Mode\02_Customize</Filter>
     </ClCompile>
     <ClCompile Include="ui_end_game.cpp">
       <Filter>ソース ファイル\07_UI</Filter>
     </ClCompile>
     <ClCompile Include="pause.cpp">
-      <Filter>ソース ファイル\03_Mode\01_Game</Filter>
+      <Filter>ソース ファイル\03_Mode\00_Game</Filter>
     </ClCompile>
     <ClCompile Include="menu.cpp">
       <Filter>ソース ファイル\07_UI\00_Menu</Filter>
@@ -200,13 +200,16 @@
     <ClCompile Include="menu_item.cpp">
       <Filter>ソース ファイル\07_UI\00_Menu</Filter>
     </ClCompile>
+    <ClCompile Include="tutorial.cpp">
+      <Filter>ソース ファイル\03_Mode\03_Tutorial</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="input.h">
       <Filter>ソース ファイル\01_Input</Filter>
     </ClInclude>
     <ClInclude Include="title.h">
-      <Filter>ソース ファイル\03_Mode\02_Title</Filter>
+      <Filter>ソース ファイル\03_Mode\01_Title</Filter>
     </ClInclude>
     <ClInclude Include="player_controller.h">
       <Filter>ソース ファイル\05_Cpntroller</Filter>
@@ -224,7 +227,7 @@
       <Filter>ソース ファイル\03_Mode</Filter>
     </ClInclude>
     <ClInclude Include="game.h">
-      <Filter>ソース ファイル\03_Mode\01_Game</Filter>
+      <Filter>ソース ファイル\03_Mode\00_Game</Filter>
     </ClInclude>
     <ClInclude Include="controller.h">
       <Filter>ソース ファイル\05_Cpntroller</Filter>
@@ -234,9 +237,6 @@
     </ClInclude>
     <ClInclude Include="ui_countdown.h">
       <Filter>ソース ファイル\07_UI</Filter>
-    </ClInclude>
-    <ClInclude Include="title_status.h">
-      <Filter>ソース ファイル\03_Mode\02_Title</Filter>
     </ClInclude>
     <ClInclude Include="ui_obtained_setnumber.h">
       <Filter>ソース ファイル\07_UI</Filter>
@@ -311,19 +311,25 @@
       <Filter>ソース ファイル\01_Input</Filter>
     </ClInclude>
     <ClInclude Include="customize.h">
-      <Filter>ソース ファイル\03_Mode\03_Customize</Filter>
+      <Filter>ソース ファイル\03_Mode\02_Customize</Filter>
     </ClInclude>
     <ClInclude Include="ui_end_game.h">
       <Filter>ソース ファイル\07_UI</Filter>
     </ClInclude>
     <ClInclude Include="pause.h">
-      <Filter>ソース ファイル\03_Mode\01_Game</Filter>
+      <Filter>ソース ファイル\03_Mode\00_Game</Filter>
     </ClInclude>
     <ClInclude Include="menu.h">
       <Filter>ソース ファイル\07_UI\00_Menu</Filter>
     </ClInclude>
     <ClInclude Include="menu_item.h">
       <Filter>ソース ファイル\07_UI\00_Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="title_status.h">
+      <Filter>ソース ファイル\03_Mode\02_Customize</Filter>
+    </ClInclude>
+    <ClInclude Include="tutorial.h">
+      <Filter>ソース ファイル\03_Mode\03_Tutorial</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -334,6 +340,9 @@
       <Filter>FIle</Filter>
     </None>
     <None Include="data\FILE\texture.json">
+      <Filter>FIle</Filter>
+    </None>
+    <None Include="data\FILE\STAGE\stage02.json">
       <Filter>FIle</Filter>
     </None>
   </ItemGroup>

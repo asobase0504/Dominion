@@ -29,7 +29,7 @@ public:	// ƒƒ“ƒo[ŠÖ”
 	CStage();
 	~CStage();
 
-	HRESULT Init();
+	HRESULT Init(nlohmann::json inStage);
 	void Uninit();
 	void Update();
 	void Draw();

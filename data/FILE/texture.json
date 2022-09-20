@@ -12,6 +12,8 @@
     [ "TEXT_OPTION", "data\/TEXTURE\/TEXT\/OPTION2.png" ],
     [ "TEXT_RETRY", "data\/TEXTURE\/TEXT\/RETRY.png" ],
     [ "TEXT_EXIT", "data\/TEXTURE\/TEXT\/EXIT2.png" ],
+    [ "TEXT_END", "data\/TEXTURE\/TEXT\/END.png" ],
+    [ "TEXT_RESTART", "data\/TEXTURE\/TEXT\/RESTART.png" ],
     [ "TEXT_TITLE1", "data\/TEXTURE\/TEXT\/title1_2.png" ],
     [ "TEXT_TITLE2", "data\/TEXTURE\/TEXT\/title2_2.png" ],
     [ "MENU_TITLE", "data\/TEXTURE\/title.png" ]

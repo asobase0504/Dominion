@@ -34,11 +34,10 @@ CStage::~CStage()
 //-----------------------------------------------------------------------------
 // 初期化
 //-----------------------------------------------------------------------------
-HRESULT CStage::Init()
+HRESULT CStage::Init(nlohmann::json inStage)
 {
 	// マップクラス
-	CGame* gameMode = (CGame*)CApplication::GetInstance()->GetMode();
-	stage = gameMode->GetStageInfo();
+	stage = inStage;
 
 	map = new CMap;
 	if (FAILED(map->Init()))

@@ -41,7 +41,7 @@ void CPauseMenuItem::PopUpdate()
 //-----------------------------------------
 void CPauseMenuItem::SelectUpdate()
 {
-	SetColor(CApplication::GetInstance()->GetColor(3));
+	SetColor(CApplication::GetInstance()->GetColor(0));
 }
 
 //-----------------------------------------

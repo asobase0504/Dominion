@@ -31,6 +31,17 @@ HRESULT CPause::Init()
 {
 	CObject::SetStopUpdate(true);
 
+	// 背景の設定
+	{
+		m_bg = CObject2D::Create(CObject::TYPE::NONE, 2);
+		m_bg->SetSize(CApplication::GetInstance()->GetScreenSize());
+		D3DXVECTOR3 pos(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y, 0.0f);	// 位置の取得
+		m_bg->SetTexture("BG");
+		m_bg->SetPos(pos);
+		m_bg->SetColor(CApplication::GetInstance()->GetColor(0));
+		m_bg->SetColorAlpha(0.25f);
+	}
+
 	// メニューの設定
 	{
 		// フレームの設定
@@ -38,6 +49,7 @@ HRESULT CPause::Init()
 		{
 			fream->Init();
 			fream->SetColor(CApplication::GetInstance()->GetColor(1));
+			fream->SetColorAlpha(0.75f);
 		}
 
 		// 項目の設定
@@ -55,13 +67,13 @@ HRESULT CPause::Init()
 			switch ((CPause::Status)i)
 			{
 			case CPause::Status::BACK:
-				item->SetTexture("TEXT_START");
+				item->SetTexture("TEXT_EXIT");
 				break;
 			case CPause::Status::RESTART:
-				item->SetTexture("TEXT_TUTORIAL");
+				item->SetTexture("TEXT_RESTART");
 				break;
 			case CPause::Status::END:
-				item->SetTexture("TEXT_CUSTOM");
+				item->SetTexture("TEXT_END");
 				break;
 			default:
 				assert(false);
@@ -72,8 +84,8 @@ HRESULT CPause::Init()
 			items.push_back(X);
 		}
 
-		D3DXVECTOR2 pos(CApplication::GetInstance()->CENTER_X * 1.55f, CApplication::GetInstance()->CENTER_Y * 1.2f);
-		D3DXVECTOR2 area(500.0f, 550.0f);
+		D3DXVECTOR2 pos(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y);
+		D3DXVECTOR2 area((float)CApplication::GetInstance()->SCREEN_WIDTH, (float)CApplication::GetInstance()->CENTER_Y * 0.8f);
 		m_menu = CMenu::Create(pos, area, fream, items);
 	}
 

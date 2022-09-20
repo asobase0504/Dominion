@@ -190,6 +190,7 @@
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="title.cpp" />
     <ClCompile Include="title_status.cpp" />
+    <ClCompile Include="tutorial.cpp" />
     <ClCompile Include="ui_countdown.cpp" />
     <ClCompile Include="ui_end_game.cpp" />
     <ClCompile Include="ui_obtained_setnumber.cpp" />
@@ -233,6 +234,7 @@
     <ClInclude Include="texture.h" />
     <ClInclude Include="title.h" />
     <ClInclude Include="title_status.h" />
+    <ClInclude Include="tutorial.h" />
     <ClInclude Include="ui_countdown.h" />
     <ClInclude Include="ui_end_game.h" />
     <ClInclude Include="ui_obtained_setnumber.h" />
@@ -240,6 +242,7 @@
   <ItemGroup>
     <None Include="data\FILE\color.json" />
     <None Include="data\FILE\STAGE\stage01.json" />
+    <None Include="data\FILE\STAGE\stage02.json" />
     <None Include="data\FILE\texture.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

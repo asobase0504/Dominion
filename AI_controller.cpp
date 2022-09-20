@@ -30,7 +30,9 @@
 CAIController::CAIController() : 
 	isBulletShot(false),
 	m_aStar(nullptr),
+	m_enemy(nullptr),
 	m_isCellMove(false),
+	m_isEndMove(true),
 	m_shotType(NONE_SHOT)
 {
 }
@@ -51,41 +53,7 @@ HRESULT CAIController::Init()
 	m_aStar = new ASTAR;
 
 	CGame* modeGame = (CGame*)CApplication::GetInstance()->GetMode();
-	std::vector<std::vector<CBlock*>> map = modeGame->GetStage()->GetMap()->GetBlockAll();
-	m_aStar->Init(map, m_toOrder->GetTeam());
-	ASTAR_PARAM status;
-	status.ptStartPos.x = m_toOrder->GetCenterBlock()[0];
-	status.ptStartPos.y = m_toOrder->GetCenterBlock()[1];
-	status.ptGoalPos.x = m_toOrder->GetCenterBlock()[0] - 10;
-	status.ptGoalPos.y = m_toOrder->GetCenterBlock()[1] - 3;
-	status.ptCurrentPos.x = m_toOrder->GetCenterBlock()[0];
-	status.ptCurrentPos.y = m_toOrder->GetCenterBlock()[1];
-
-	if (SUCCEEDED(m_aStar->CalcPath(&status)))
-	{
-	}
-	else
-	{
-		int distX = m_toOrder->GetCenterBlock()[0] - status.ptStartPos.x;
-		int distY = m_toOrder->GetCenterBlock()[1] - status.ptStartPos.y;
-
-		if (distX == 0 && distY < 0)
-		{
-
-		}
-		if (distX == 0 && distY > 0)
-		{
-
-		}
-		if (distY == 0 && distX < 0)
-		{
-
-		}
-		if (distY == 0 && distX > 0)
-		{
-
-		}
-	}
+	m_aStar->Init(modeGame->GetStage()->GetMap()->GetBlockAll(), m_toOrder->GetTeam());
 	m_path = m_aStar->GetPath();
 
 	return S_OK;
@@ -109,7 +77,24 @@ void CAIController::Uninit()
 //-----------------------------------------
 void CAIController::Update()
 {
-	m_shotType = ShootToOffsetBullet();
+	m_shotType = NONE_SHOT;
+	FindClosestEnemy();
+
+	if (m_enemy == nullptr)
+	{
+		return;
+	}
+
+	if (m_isEndMove)
+	{
+		m_isEndMove = false;
+		MoveToChase();
+	}
+
+	if (m_shotType == NONE_SHOT)
+	{
+		m_shotType = ShootToOffsetBullet();
+	}
 }
 
 //-----------------------------------------
@@ -165,6 +150,8 @@ D3DXVECTOR3 CAIController::Move()
 
 	if (m_cellIndex == 0)
 	{
+		m_isCellMove = false;
+		m_isEndMove = true;
 		return D3DXVECTOR3(-0.0f, 0.0f, 0.0f);
 	}
 
@@ -184,6 +171,77 @@ CController::SHOT_TYPE CAIController::BulletShot()
 	return m_shotType;
 }
 
+ASTAR_PARAM CAIController::SetAStarParam(POINT inGoal)
+{
+	ASTAR_PARAM status;
+	status.ptStartPos.x = m_toOrder->GetCenterBlock()[0];
+	status.ptStartPos.y = m_toOrder->GetCenterBlock()[1];
+	status.ptCurrentPos.x = m_toOrder->GetCenterBlock()[0];
+	status.ptCurrentPos.y = m_toOrder->GetCenterBlock()[1];
+
+	status.ptGoalPos.x = inGoal.x;
+	status.ptGoalPos.y = inGoal.y;
+
+	return status;
+}
+
+ASTAR_PARAM CAIController::SetAStarParam(int inX, int inY)
+{
+	ASTAR_PARAM status;
+	status.ptStartPos.x = m_toOrder->GetCenterBlock()[0];
+	status.ptStartPos.y = m_toOrder->GetCenterBlock()[1];
+	status.ptCurrentPos.x = m_toOrder->GetCenterBlock()[0];
+	status.ptCurrentPos.y = m_toOrder->GetCenterBlock()[1];
+
+	status.ptGoalPos.x = inX;
+	status.ptGoalPos.y = inY;
+
+	return status;
+}
+
+//-----------------------------------------------------------------------------
+// 一番近い敵を探す
+//-----------------------------------------------------------------------------
+void CAIController::FindClosestEnemy()
+{
+	CGame* modeGame = (CGame*)CApplication::GetInstance()->GetMode();
+	std::vector<CCharacter*> character = *modeGame->GetStage()->GetCharacter();
+	int dist = 999;
+
+	for (int i = 0; i < (int)character.size(); i++)
+	{
+		if (m_toOrder->GetTeam() == character[i]->GetTeam())
+		{
+			continue;
+		}
+
+		int distX = m_toOrder->GetCenterBlock()[0] - character[i]->GetCenterBlock()[0];
+		int distY = m_toOrder->GetCenterBlock()[1] - character[i]->GetCenterBlock()[1];
+
+		if (dist > distX + distY)
+		{
+			dist = distX + distY;
+			m_enemy = character[i];
+		}
+	}
+}
+
+//-----------------------------------------------------------------------------
+// 弾が当たる位置にいる
+//-----------------------------------------------------------------------------
+bool CAIController::IsBulletHitPos()
+{
+	return false;
+}
+
+//-----------------------------------------------------------------------------
+// 避けるためのスペースが存在する
+//-----------------------------------------------------------------------------
+bool CAIController::ExistsAvoidableSpace()
+{
+	return false;
+}
+
 //-----------------------------------------------------------------------------
 // 避けるために移動する
 //-----------------------------------------------------------------------------
@@ -195,9 +253,65 @@ D3DXVECTOR3 CAIController::MoveToAvoid()
 //-----------------------------------------------------------------------------
 // 追うために移動する
 //-----------------------------------------------------------------------------
-D3DXVECTOR3 CAIController::MoveToChase()
+void CAIController::MoveToChase()
 {
-	return D3DXVECTOR3();
+	ASTAR_PARAM status = SetAStarParam(m_toOrder->GetCenterBlock()[0], m_enemy->GetCenterBlock()[1]);
+
+	std::vector<POINT> routePlanX;
+	bool isConnectX;
+	if (SUCCEEDED(m_aStar->CalcPath(&status)))
+	{
+		isConnectX = true;
+		routePlanX = m_aStar->GetPath();
+	}
+	else
+	{
+		isConnectX = false;
+	}
+
+	status = SetAStarParam(m_enemy->GetCenterBlock()[0], m_toOrder->GetCenterBlock()[1]);
+
+	std::vector<POINT> routePlanY;
+	bool isConnectY;
+	if (SUCCEEDED(m_aStar->CalcPath(&status)))
+	{
+		isConnectY = true;
+		routePlanY = m_aStar->GetPath();
+	}
+	else
+	{
+		isConnectY = false;
+
+	}
+
+	if (!isConnectX && !isConnectY)
+	{
+		/* ↓パスが作れなかった場合↓ */
+		m_shotType = LEFT_SHOT;
+		return;
+	}
+
+	/* ↓パスが作れた場合↓ */
+
+	if (isConnectX && !isConnectY)
+	{
+		m_path = routePlanX;
+	}
+	if (!isConnectX && isConnectY)
+	{
+		m_path = routePlanY;
+	}
+	if (isConnectX && isConnectY)
+	{
+		if (routePlanX.size() <= routePlanY.size())
+		{
+			m_path = routePlanX;
+		}
+		else
+		{
+			m_path = routePlanY;
+		}
+	}
 }
 
 //-----------------------------------------------------------------------------

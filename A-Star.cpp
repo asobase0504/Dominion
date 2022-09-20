@@ -20,6 +20,13 @@
 #include "block.h"
 #include <assert.h>
 
+#include <crtdbg.h>
+#ifdef _DEBUG
+#define DEBUG_PRINT(...) _RPT_BASE(_CRT_WARN, __FILE__, __LINE__, NULL, __VA_ARGS__)
+#else
+#define DEBUG_PRINT(...) ((void)0)
+#endif
+
 //-----------------------------------------------------------------------------
 // コンストラクタ
 // Author 磯江寿希亜
@@ -113,6 +120,7 @@ void ASTAR::Uninit()
 //-----------------------------------------------------------------------------
 HRESULT ASTAR::Reset()
 {
+	m_cell.clear();
 	for (int y = 0; y < (int)m_stage->size(); y++)
 	{
 		for (int x = 0; x < (int)m_stage->at(y).size(); x++)
@@ -151,6 +159,7 @@ HRESULT ASTAR::Reset()
 
 	m_openList.clear();
 	m_closedList.clear();
+	m_path.clear();
 
 	return S_OK;
 }
@@ -161,6 +170,11 @@ HRESULT ASTAR::Reset()
 //-----------------------------------------------------------------------------
 int ASTAR::GetIndexToBlock(POINT inPoint)
 {
+	if (m_stage == nullptr)
+	{
+		assert(false);
+	}
+
 	if ((int)m_stage->size() <= inPoint.y)
 	{
 		return m_stage->at(m_stage->size() - 1).size() * m_stage->size() - 1 + inPoint.x;
@@ -192,7 +206,7 @@ HRESULT ASTAR::CalcPath(ASTAR_PARAM* pParam)
 	// ゴールが適正な場所か（ゴールが障害物の内部になっていないか）
 	if (m_cell[GetIndexToBlock(pParam->ptGoalPos)].Status == ASTAR_OBSTACLE)
 	{
-		MessageBox(0, "obstacle", "", MB_OK);	// MB_OKはテキストボックスでokボタンを出させるための引数
+		DEBUG_PRINT("ゴールが障害物になってます\n");
 		return E_FAIL;	// 失敗したならS_OK出なくE_FAILを返す事になりエラーを吐く
 	}
 
@@ -205,7 +219,7 @@ HRESULT ASTAR::CalcPath(ASTAR_PARAM* pParam)
 	}
 	else
 	{
-		MessageBox(0, "動けない", "", MB_OK);
+		DEBUG_PRINT("ルート構築が出来ません\n");
 		return E_FAIL;
 	}
 	return S_OK;	// 成功したときにS_OKを返す
@@ -309,10 +323,10 @@ HRESULT ASTAR::CalcScore(ASTAR_PARAM* pParam)
 		}
 	}
 
-	// クローズに入力
-	POINT ptNextCellIndex = { 0 ,0 };
-	ptNextCellIndex = m_cell[GetIndexToBlock(m_openList[dwMinIndex])].ptIndex;
-	m_closedList.push_back(ptNextCellIndex);
+	//// クローズに入力
+	//POINT ptNextCellIndex = { 0 ,0 };
+	//ptNextCellIndex = m_cell[GetIndexToBlock(m_openList[dwMinIndex])].ptIndex;
+	//m_closedList.push_back(ptNextCellIndex);
 
 	// 新たな起点セルによる再帰呼び出し
 	ASTAR_PARAM Param;
@@ -336,6 +350,8 @@ HRESULT ASTAR::MakePathFromClosedList(ASTAR_PARAM* pParam)
 	POINT iOffset;	// 番号のID
 	iOffset.x = m_ptGoal.x;
 	iOffset.y = m_ptGoal.y;
+
+	m_path.push_back(m_cell[GetIndexToBlock(iOffset)].ptIndex);
 
 	// whileと違い１回は必ず通る
 	do
