@@ -14,6 +14,7 @@
 // 前方宣言
 //-----------------------------------------
 class ASTAR;
+class CBullet;
 
 //-----------------------------------------
 // プレイヤークラス
@@ -40,6 +41,7 @@ private: // プライベート関数
 	void FindClosestEnemy();
 	bool IsBulletHitPos();
 	bool ExistsAvoidableSpace();
+	bool IsPathCutting();
 
 	// 移動時の条件動作
 	D3DXVECTOR3 MoveToAvoid();
@@ -55,7 +57,9 @@ private:
 	SHOT_TYPE m_shotType;
 	std::vector<POINT> m_path;
 	CCharacter* m_enemy;
+	CBullet* m_hitBullet;	// 当たる予定のブロック
 	int m_cellIndex;
+	int m_attackCoolDownCount;
 	bool m_isCellMove;
 	bool m_isEndMove;
 };

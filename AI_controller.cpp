@@ -16,6 +16,7 @@
 #include "stage.h"
 #include "map.h"
 #include <vector>
+#include <cstdlib>
 
 #include <crtdbg.h>
 #ifdef _DEBUG
@@ -31,9 +32,11 @@ CAIController::CAIController() :
 	isBulletShot(false),
 	m_aStar(nullptr),
 	m_enemy(nullptr),
+	m_hitBullet(nullptr),
 	m_isCellMove(false),
 	m_isEndMove(true),
-	m_shotType(NONE_SHOT)
+	m_shotType(NONE_SHOT),
+	m_attackCoolDownCount(0)
 {
 }
 
@@ -79,13 +82,14 @@ void CAIController::Update()
 {
 	m_shotType = NONE_SHOT;
 	FindClosestEnemy();
+	IsBulletHitPos();
 
 	if (m_enemy == nullptr)
 	{
 		return;
 	}
 
-	if (m_isEndMove)
+	if (m_isEndMove || IsPathCutting())
 	{
 		m_isEndMove = false;
 		MoveToChase();
@@ -94,6 +98,11 @@ void CAIController::Update()
 	if (m_shotType == NONE_SHOT)
 	{
 		m_shotType = ShootToOffsetBullet();
+
+		if (m_shotType == NONE_SHOT)
+		{
+			m_shotType = ShootToAttack();
+		}
 	}
 }
 
@@ -171,6 +180,9 @@ CController::SHOT_TYPE CAIController::BulletShot()
 	return m_shotType;
 }
 
+//-----------------------------------------
+// A*Paramの情報を設定する
+//-----------------------------------------
 ASTAR_PARAM CAIController::SetAStarParam(POINT inGoal)
 {
 	ASTAR_PARAM status;
@@ -185,6 +197,9 @@ ASTAR_PARAM CAIController::SetAStarParam(POINT inGoal)
 	return status;
 }
 
+//-----------------------------------------
+// A*Paramの情報を設定する
+//-----------------------------------------
 ASTAR_PARAM CAIController::SetAStarParam(int inX, int inY)
 {
 	ASTAR_PARAM status;
@@ -231,6 +246,71 @@ void CAIController::FindClosestEnemy()
 //-----------------------------------------------------------------------------
 bool CAIController::IsBulletHitPos()
 {
+	std::vector<std::vector<int>> ofBlockCharcter = m_toOrder->GetOfBlock();
+
+	// オブジェクトを全てチェックする
+	for (int cnt = 0; cnt < CObject::GetPrioritySize(); cnt++)
+	{
+		for (auto it = CObject::GetMyObject(cnt)->begin(); it != CObject::GetMyObject(cnt)->end(); it++)
+		{
+			if ((*it)->GetIsDeleted())
+			{
+				continue;
+			}
+
+			/* ↓オブジェクトが死ぬ予定がない場合↓ */
+
+			if (!((*it)->CObject::GetType() == CObject::TYPE::BULLET))
+			{
+				continue;
+			}
+
+			/* ↓オブジェクトが弾の場合↓ */
+
+			CBullet* bullet = (CBullet*)(*it);
+
+			if ((int)bullet->GetTeam() == (int)m_toOrder->GetTeam())
+			{
+				continue;
+			}
+
+			/* ↓自身と違うチームの弾だった場合↓ */
+
+			// 対象所属のブロック取得
+			std::vector<std::vector<int>> ofBlockTarget = bullet->GetOfBlock();
+
+			// 自身が所属しているブロックを全部チェックする
+			for (int i = 0; i < (int)ofBlockCharcter.size(); i++)
+			{
+				if (ofBlockCharcter[i].empty())
+				{
+					continue;
+				}
+
+				/* ↓所属ブロックがあった場合↓ */
+
+				// 対象が所属しているブロックを全部チェックする
+				for (int j = 0; j < 4; j++)
+				{
+					if (ofBlockTarget[j].empty())
+					{
+						continue;
+					}
+
+					/* ↓所属ブロックがあった場合↓ */
+
+					bool isXAxisMatched = ofBlockCharcter[i][0] == ofBlockTarget[j][0];	// X軸の一致
+					bool isYAxisMatched = ofBlockCharcter[i][1] == ofBlockTarget[j][1];	// Y軸の一致
+					if (isXAxisMatched || isYAxisMatched)
+					{
+						m_hitBullet = bullet;
+						return true;
+					}
+				}
+			}
+		}
+	}
+	m_hitBullet = nullptr;
 	return false;
 }
 
@@ -239,6 +319,24 @@ bool CAIController::IsBulletHitPos()
 //-----------------------------------------------------------------------------
 bool CAIController::ExistsAvoidableSpace()
 {
+	return false;
+}
+
+//-----------------------------------------------------------------------------
+// パスが切断されているか調べる
+//-----------------------------------------------------------------------------
+bool CAIController::IsPathCutting()
+{
+	CGame* modeGame = (CGame*)CApplication::GetInstance()->GetMode();
+	CMap* mapStage = modeGame->GetStage()->GetMap();
+
+	for (int i = 0; i < m_path.size(); i++)
+	{
+		if (mapStage->GetBlock(m_path[i].x, m_path[i].y)->GetType() != m_toOrder->GetTeam())
+		{
+			return true;
+		}
+	}
 	return false;
 }
 
@@ -269,6 +367,11 @@ void CAIController::MoveToChase()
 		isConnectX = false;
 	}
 
+	if (routePlanX.size() > 15)
+	{
+		isConnectX = false;
+	}
+
 	status = SetAStarParam(m_enemy->GetCenterBlock()[0], m_toOrder->GetCenterBlock()[1]);
 
 	std::vector<POINT> routePlanY;
@@ -284,10 +387,42 @@ void CAIController::MoveToChase()
 
 	}
 
+	if (routePlanY.size() > 15)
+	{
+		isConnectY = false;
+	}
+
 	if (!isConnectX && !isConnectY)
 	{
+		int distX = m_enemy->GetCenterBlock()[0] - m_toOrder->GetCenterBlock()[0];
+		int distY = m_enemy->GetCenterBlock()[1] - m_toOrder->GetCenterBlock()[1];
+		
 		/* ↓パスが作れなかった場合↓ */
-		m_shotType = LEFT_SHOT;
+		if (m_toOrder->GetRemainsBullet() > 3)
+		{
+			if (std::abs(distX) < std::abs(distY))
+			{
+				if (distX <= 0)
+				{
+					m_shotType = LEFT_SHOT;
+				}
+				else
+				{
+					m_shotType = RIGHT_SHOT;
+				}
+			}
+			else
+			{
+				if (distY <= 0)
+				{
+					m_shotType = UP_SHOT;
+				}
+				else
+				{
+					m_shotType = DOWN_SHOT;
+				}
+			}
+		}
 		return;
 	}
 
@@ -295,14 +430,19 @@ void CAIController::MoveToChase()
 
 	if (isConnectX && !isConnectY)
 	{
+		/* ↓X軸のみパスが作れた場合↓ */
+
 		m_path = routePlanX;
 	}
 	if (!isConnectX && isConnectY)
 	{
+		/* ↓Y軸のみパスが作れた場合↓ */
 		m_path = routePlanY;
 	}
 	if (isConnectX && isConnectY)
 	{
+		/* ↓両方のパスが作れた場合↓ */
+
 		if (routePlanX.size() <= routePlanY.size())
 		{
 			m_path = routePlanX;
@@ -327,6 +467,40 @@ CController::SHOT_TYPE CAIController::ShootToSpreadWay()
 //-----------------------------------------------------------------------------
 CController::SHOT_TYPE CAIController::ShootToAttack()
 {
+	if (m_attackCoolDownCount < 15)
+	{
+		m_attackCoolDownCount++;
+		return NONE_SHOT;
+	}
+
+	m_attackCoolDownCount = 0;
+
+	int distX = m_enemy->GetCenterBlock()[0] - m_toOrder->GetCenterBlock()[0];
+	int distY = m_enemy->GetCenterBlock()[1] - m_toOrder->GetCenterBlock()[1];
+
+	if (distX == 0)
+	{
+		if (m_enemy->GetCenterBlock()[1] < m_toOrder->GetCenterBlock()[1])
+		{
+			return UP_SHOT;
+		}
+		else
+		{
+			return DOWN_SHOT;
+		}
+	}
+
+	if (distY == 0)
+	{
+		if (m_enemy->GetCenterBlock()[0] < m_toOrder->GetCenterBlock()[0])
+		{
+			return LEFT_SHOT;
+		}
+		else
+		{
+			return RIGHT_SHOT;
+		}
+	}
 	return NONE_SHOT;
 }
 
@@ -336,98 +510,67 @@ CController::SHOT_TYPE CAIController::ShootToAttack()
 CController::SHOT_TYPE CAIController::ShootToOffsetBullet()
 {
 	static int count = 0;	// 弾発射の間隔。
-	CCharacter* charcter = m_toOrder;
-	std::vector<std::vector<int>> ofBlockCharcter = charcter->GetOfBlock();
 
-	// オブジェクトを全てチェックする
-	for (int cnt = 0; cnt < CObject::GetPrioritySize(); cnt++)
+	if (m_hitBullet == nullptr)
 	{
-		for (auto it = CObject::GetMyObject(cnt)->begin(); it != CObject::GetMyObject(cnt)->end(); it++)
+		return NONE_SHOT;
+	}
+
+	if (isBulletShot)
+	{
+		count++;
+		if (count >= 15)
 		{
-			if ((*it)->GetIsDeleted())
+			isBulletShot = false;
+			count = 0;
+		}
+		return NONE_SHOT;
+	}
+
+	std::vector<std::vector<int>> ofBlockCharcter = m_toOrder->GetOfBlock();	// キャラクターが乗ってるブロック
+	std::vector<std::vector<int>> ofBlockTarget = m_hitBullet->GetOfBlock();	// 弾が乗ってるブロック
+
+	for (int i = 0; i < (int)ofBlockCharcter.size(); i++)
+	{
+		if (ofBlockCharcter[i].empty())
+		{
+			continue;
+		}
+
+		for (int j = 0; j < ofBlockTarget.size(); j++)
+		{
+			if (ofBlockTarget[j].empty())
 			{
 				continue;
 			}
 
-			/* ↓オブジェクトが死ぬ予定がない場合↓ */
+			bool isXAxisMatched = ofBlockCharcter[i][0] == ofBlockTarget[j][0];	// X軸の一致
+			bool isYAxisMatched = ofBlockCharcter[i][1] == ofBlockTarget[j][1];	// Y軸の一致
 
-			if (!((*it)->CObject::GetType() == CObject::TYPE::BULLET))
+			if (isXAxisMatched)
 			{
-				continue;
-			}
-
-			/* ↓オブジェクトが弾の場合↓ */
-
-			CBullet* bullet = (CBullet*)(*it);
-
-			if ((int)bullet->GetTeam() == (int)charcter->GetTeam())
-			{
-				continue;
-			}
-
-			if (isBulletShot)
-			{
-				count++;
-				if (count >= 15)
+				if ((ofBlockCharcter[i][1] - 5 < ofBlockTarget[j][1]) && (ofBlockCharcter[i][1] > ofBlockTarget[j][1]))
 				{
-					isBulletShot = false;
-					count = 0;
+					isBulletShot = true;
+					return UP_SHOT;
 				}
-				continue;
-			}
-
-			// 対象所属のブロック取得
-			std::vector<std::vector<int>> ofBlockTarget = bullet->GetOfBlock();
-
-			// 自身が所属しているブロックを全部チェックする
-			for (int i = 0; i < 4; i++)
-			{
-				if (ofBlockCharcter[i].empty())
+				else if ((ofBlockCharcter[i][1] + 5 > ofBlockTarget[j][1]) && (ofBlockCharcter[i][1] < ofBlockTarget[j][1]))
 				{
-					continue;
+					isBulletShot = true;
+					return DOWN_SHOT;
 				}
-
-				/* ↓所属ブロックがあった場合↓ */
-
-				// 対象が所属しているブロックを全部チェックする
-				for (int j = 0; j < 4; j++)
+			}
+			else if (isYAxisMatched)
+			{
+				if ((ofBlockCharcter[i][0] - 5 < ofBlockTarget[j][0]) && (ofBlockCharcter[i][0] > ofBlockTarget[j][0]))
 				{
-					if (ofBlockTarget[j].empty())
-					{
-						continue;
-					}
-
-					/* ↓所属ブロックがあった場合↓ */
-
-					bool isXAxisMatched = ofBlockCharcter[i][0] == ofBlockTarget[j][0];	// X軸の一致
-					bool isYAxisMatched = ofBlockCharcter[i][1] == ofBlockTarget[j][1];	// Y軸の一致
-
-					if (isXAxisMatched)
-					{
-						if ((ofBlockCharcter[i][1] - 5 < ofBlockTarget[j][1]) && (ofBlockCharcter[i][1] > ofBlockTarget[j][1]))
-						{
-							isBulletShot = true;
-							return UP_SHOT;
-						}
-						else if ((ofBlockCharcter[i][1] + 5 > ofBlockTarget[j][1]) && (ofBlockCharcter[i][1] < ofBlockTarget[j][1]))
-						{
-							isBulletShot = true;
-							return DOWN_SHOT;
-						}
-					}
-					else if (isYAxisMatched)
-					{
-						if ((ofBlockCharcter[i][0] - 5 < ofBlockTarget[j][0]) && (ofBlockCharcter[i][0] > ofBlockTarget[j][0]))
-						{
-							isBulletShot = true;
-							return LEFT_SHOT;
-						}
-						else if ((ofBlockCharcter[i][0] + 5 > ofBlockTarget[j][0]) && (ofBlockCharcter[i][0] < ofBlockTarget[j][0]))
-						{
-							isBulletShot = true;
-							return RIGHT_SHOT;
-						}
-					}
+					isBulletShot = true;
+					return LEFT_SHOT;
+				}
+				else if ((ofBlockCharcter[i][0] + 5 > ofBlockTarget[j][0]) && (ofBlockCharcter[i][0] < ofBlockTarget[j][0]))
+				{
+					isBulletShot = true;
+					return RIGHT_SHOT;
 				}
 			}
 		}

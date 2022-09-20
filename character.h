@@ -72,6 +72,7 @@ public:
 	std::vector<std::vector<int>> GetOfBlock() { return m_ofBlockIndex; }
 	std::vector<int> GetCenterBlock() { return m_ofBlockIndexCenter; }
 	TEAM GetTeam() { return m_team; }
+	int GetRemainsBullet() { return m_remainsBulletCount; }
 
 	static CCharacter* Create(TEAM inTeam);
 

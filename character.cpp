@@ -82,6 +82,11 @@ void CCharacter::Uninit()
 //-----------------------------------------
 void CCharacter::Update()
 {
+	if (m_isDeleted)
+	{
+		return;
+	}
+
 	if (!m_isOperationState)
 	{
 		return;

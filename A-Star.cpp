@@ -323,11 +323,6 @@ HRESULT ASTAR::CalcScore(ASTAR_PARAM* pParam)
 		}
 	}
 
-	//// クローズに入力
-	//POINT ptNextCellIndex = { 0 ,0 };
-	//ptNextCellIndex = m_cell[GetIndexToBlock(m_openList[dwMinIndex])].ptIndex;
-	//m_closedList.push_back(ptNextCellIndex);
-
 	// 新たな起点セルによる再帰呼び出し
 	ASTAR_PARAM Param;
 	Param.ptStartPos = pParam->ptStartPos;
