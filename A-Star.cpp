@@ -290,7 +290,7 @@ HRESULT ASTAR::CalcScore(ASTAR_PARAM* pParam)
 			cell->iScore = cell->iCost + cell->iHeuristic;
 			cell->Status = ASTAR_OPEN;
 			m_openList.push_back(ptCurrentPos);
-			// ８セルの親を現在セルにする
+			// 4セルの親を現在セルにする
 			{
 				cell->ptParent = pParam->ptCurrentPos;	// 
 			}

@@ -36,6 +36,7 @@ public:	// メンバー関数
 
 	HRESULT Init() override;
 	void StageSelectInit();
+	void PeopleNumberSelectInit();
 	void Uninit() override;
 
 	// 更新処理

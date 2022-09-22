@@ -35,7 +35,8 @@ CGame::CGame() :
 	m_obtainedSetNumberUI(nullptr),
 	m_endGameUI(nullptr),
 	m_needWinNumber(0),
-	m_winnerIndex(0)
+	m_winnerIndex(0),
+	m_peopleNumber(0)
 {
 	m_stageInfo.clear();
 	m_controllerIndex.clear();
@@ -117,6 +118,37 @@ void CGame::StageSelectInit()
 }
 
 //-----------------------------------------------------------------------------
+// 人数選択
+//-----------------------------------------------------------------------------
+void CGame::PeopleNumberSelectInit()
+{
+	// フレームの設定
+	CMenuFream* fream = new CMenuFream;
+	{
+		fream->Init();
+		fream->SetColor(CApplication::GetInstance()->GetColor(0));
+		fream->SetColorAlpha(0.55f);
+	}
+
+	std::vector<std::vector<CMenuItem*>> items;
+	std::vector<CMenuItem*> X;
+	for (int i = 0; i < 2; i++)
+	{
+		CMenuItem* item = new CMenuItem;
+		item->Init();
+		item->SetSize(D3DXVECTOR2(80.0f, 80.0f));					// 大きさの設定
+		item->SetColor(CApplication::GetInstance()->GetColor(0));	// 色の設定
+
+		X.push_back(item);
+	}
+	items.push_back(X);
+
+	D3DXVECTOR2 area = CApplication::GetInstance()->GetScreenSize();
+	area.y *= 0.25f;
+	m_peopleNumberSelect = CMenu::Create(CApplication::GetInstance()->GetScreenCenter(), area, fream, items);
+}
+
+//-----------------------------------------------------------------------------
 // 終了
 //-----------------------------------------------------------------------------
 void CGame::Uninit()
@@ -156,6 +188,13 @@ void CGame::Uninit()
 		m_endGameUI = nullptr;
 	}
 
+	if (m_peopleNumberSelect != nullptr)
+	{
+		m_peopleNumberSelect->Uninit();
+		delete m_peopleNumberSelect;
+		m_peopleNumberSelect = nullptr;
+	}
+
 	if (m_pause != nullptr)
 	{
 		m_pause->Uninit();
@@ -169,6 +208,16 @@ void CGame::Uninit()
 //-----------------------------------------------------------------------------
 void CGame::Update()
 {
+
+	// バトル中
+	BattleUpdate();
+
+	// キャラクター選択中
+	CharctorSelect();
+
+	// 人数選択中
+	PeopleNumberSelectUpdate();
+
 	// ステージ選択中
 	StageSelectUpdate();
 	if (m_stageSelect != nullptr)
@@ -180,20 +229,11 @@ void CGame::Update()
 			m_stageSelect = nullptr;
 			
 			CApplication::GetInstance()->GetSound()->Play(CSound::LABEL_SE_DECISION);
-			//	画面の遷移
+			// 画面の遷移
 			CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::TITLE);
 			return;
 		}
 	}
-
-	// 人数選択中
-	PeopleNumberSelectUpdate();
-
-	// キャラクター選択中
-	CharctorSelect();
-
-	// バトル中
-	BattleUpdate();
 }
 
 //-----------------------------------------------------------------------------
@@ -208,24 +248,6 @@ void CGame::StageSelectUpdate()
 
 	m_stageSelect->Update();
 
-	CInput* input = CInput::GetKey();
-	if (input->Trigger(KEY_UP))
-	{
-		m_stageSelect->Select(CMenu::TOP);
-	}
-	if (input->Trigger(KEY_DOWN))
-	{
-		m_stageSelect->Select(CMenu::DOWN);
-	}
-	if (input->Trigger(KEY_LEFT))
-	{
-		m_stageSelect->Select(CMenu::LEFT);
-	}
-	if (input->Trigger(KEY_RIGHT))
-	{
-		m_stageSelect->Select(CMenu::RIGHT);
-	}
-
 	if (m_stageIndex != m_stageSelect->GetSelectIdx()[1])
 	{
 		m_stageIndex = m_stageSelect->GetSelectIdx()[1];
@@ -233,6 +255,7 @@ void CGame::StageSelectUpdate()
 		ResetStage();
 	}
 
+	CInput* input = CInput::GetKey();
 	if (input->Trigger(KEY_DECISION))
 	{
 		CApplication::GetInstance()->GetSound()->Play(CSound::LABEL_SE_DECISION);
@@ -241,24 +264,14 @@ void CGame::StageSelectUpdate()
 		delete m_stageSelect;
 		m_stageSelect = nullptr;
 
-		// 勝ちをカウントするint型をチーム数分作成する。
-		m_winNumber.resize(2);
-		for (int i = 0; i < (int)m_winNumber.size(); i++)
+		if (m_peopleNumberSelect == nullptr)
 		{
-			m_winNumber[i] = 0;
+			PeopleNumberSelectInit();
 		}
-
-		m_needWinNumber = 3;	// 勝利に必要なラウンド数の設定
-
-		// コントローラーの番号をプレイヤー数分作成する
-		m_controllerIndex.resize(2);
-		m_controllerIndex[0] = -1;
-		m_controllerIndex[1] = -2;
-
-		// カウントダウンの初期化
-		D3DXVECTOR2 pos(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y);	// 位置を設定
-		m_countDownUI = CCountDownUI::Create(pos);	// カウントダウンの開始
-
+		else
+		{
+			assert(false);
+		}
 	}
 }
 
@@ -272,15 +285,41 @@ void CGame::PeopleNumberSelectUpdate()
 		return;
 	}
 
-	// 勝ちをカウントするint型をチーム数分作成する。
-	m_winNumber.resize(2);
-	for (int i = 0; i < (int)m_winNumber.size(); i++)
+	m_peopleNumberSelect->Update();
+
+	CInput* input = CInput::GetKey();
+
+	if (input->Trigger(KEY_DECISION))
 	{
-		m_winNumber[i] = 0;
+		CApplication::GetInstance()->GetSound()->Play(CSound::LABEL_SE_DECISION);
+
+		// 人数の設定
+		m_peopleNumber = m_peopleNumberSelect->GetSelectIdx()[1] * 2 + 2;
+
+		// 終了処理
+		m_peopleNumberSelect->SetIsDeleted();
+		m_peopleNumberSelect->Uninit();
+		delete m_peopleNumberSelect;
+		m_peopleNumberSelect = nullptr;
+
+		// 勝ちをカウントするint型をチーム数分作成する。
+		m_winNumber.resize(m_peopleNumber);
+		for (int i = 0; i < (int)m_winNumber.size(); i++)
+		{
+			m_winNumber[i] = 0;
+		}
+
+		// コントローラーの番号をプレイヤー数分作成する
+		m_controllerIndex.resize(m_peopleNumber);
+		m_controllerIndex[0] = -1;
+		m_controllerIndex[1] = -2;
+
+		m_needWinNumber = 3;	// 勝利に必要なラウンド数の設定
+
+		// カウントダウンの初期化
+		D3DXVECTOR2 pos(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y);	// 位置を設定
+		m_countDownUI = CCountDownUI::Create(pos);	// カウントダウンの開始
 	}
-
-	m_needWinNumber = 5;	// 勝利に必要なラウンド数の設定
-
 }
 
 //-----------------------------------------------------------------------------

@@ -243,22 +243,6 @@ void CEndGameUI::Update()
 	if (selectMenu != nullptr)
 	{
 		selectMenu->Update();
-		if (input->Trigger(KEY_UP))
-		{
-			selectMenu->Select(CMenu::TOP);
-		}
-		if (input->Trigger(KEY_DOWN))
-		{
-			selectMenu->Select(CMenu::DOWN);
-		}
-		if (input->Trigger(KEY_LEFT))
-		{
-			selectMenu->Select(CMenu::LEFT);
-		}
-		if (input->Trigger(KEY_RIGHT))
-		{
-			selectMenu->Select(CMenu::RIGHT);
-		}
 	}
 
 	if (input->Trigger(KEY_DECISION))

@@ -150,28 +150,13 @@ void CCustomize::Update()
 	if (m_manu != nullptr)
 	{
 		m_manu->Update();
-		if (input->Trigger(KEY_UP))
-		{
-			m_manu->Select(CMenu::TOP);
-			SetColor();
-		}
-		if (input->Trigger(KEY_DOWN))
-		{
-			m_manu->Select(CMenu::DOWN);
-			SetColor();
-		}
-		if (input->Trigger(KEY_LEFT))
-		{
-			m_manu->Select(CMenu::LEFT);
-			SetColor();
-		}
-		if (input->Trigger(KEY_RIGHT))
-		{
-			m_manu->Select(CMenu::RIGHT);
-			SetColor();
-		}
 	}
-	if (CInput::GetKey()->Trigger(KEY_BACK) || input->Trigger(KEY_DECISION))
+
+	if (input->Trigger(KEY_DECISION))
+	{
+		SetColor();
+	}
+	if (CInput::GetKey()->Trigger(KEY_BACK))
 	{
 		m_manu->Uninit();
 		delete m_manu;

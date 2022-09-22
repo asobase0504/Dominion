@@ -123,22 +123,6 @@ void CPause::Update()
 	if (m_menu != nullptr)
 	{
 		m_menu->Update();
-		if (input->Trigger(KEY_UP))
-		{
-			m_menu->Select(CMenu::TOP);
-		}
-		if (input->Trigger(KEY_DOWN))
-		{
-			m_menu->Select(CMenu::DOWN);
-		}
-		if (input->Trigger(KEY_LEFT))
-		{
-			m_menu->Select(CMenu::LEFT);
-		}
-		if (input->Trigger(KEY_RIGHT))
-		{
-			m_menu->Select(CMenu::RIGHT);
-		}
 		if (input->Trigger(KEY_DECISION))
 		{
 			m_status = (Status)m_menu->GetSelectIdx()[0];

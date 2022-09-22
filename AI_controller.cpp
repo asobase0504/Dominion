@@ -123,7 +123,7 @@ D3DXVECTOR3 CAIController::Move()
 {
 	if (m_isCellMove)
 	{
-		if (m_cellIndex != 0)
+		if (m_cellIndex < 0)
 		{
 			bool isCenterHit = (m_path[m_cellIndex - 1].x == m_toOrder->GetCenterBlock()[0]) && (m_path[m_cellIndex - 1].y == m_toOrder->GetCenterBlock()[1]);
 

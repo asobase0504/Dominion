@@ -11,6 +11,7 @@
 #include "menu_item.h"
 #include "application.h"
 #include "sound.h"
+#include "input.h"
 
 //-----------------------------------------
 // ’è‹`
@@ -63,6 +64,24 @@ void CMenu::Uninit()
 //-----------------------------------------
 void CMenu::Update()
 {
+	CInput* input = CInput::GetKey();
+	if (input->Trigger(KEY_UP))
+	{
+		Select(CMenu::TOP);
+	}
+	if (input->Trigger(KEY_DOWN))
+	{
+		Select(CMenu::DOWN);
+	}
+	if (input->Trigger(KEY_LEFT))
+	{
+		Select(CMenu::LEFT);
+	}
+	if (input->Trigger(KEY_RIGHT))
+	{
+		Select(CMenu::RIGHT);
+	}
+
 	if (!m_isDexision)
 	{
 		UpdateBeforeDecision();
