@@ -22,6 +22,12 @@ class CBullet;
 class CAIController : public CController
 {
 public:
+	enum AttackWorkaroundMethod
+	{
+		DODGE,		// ‰ñ”ð
+		OFFSETTING,	// ”½Œ‚
+	};
+public:
 	CAIController();
 	~CAIController() override;
 

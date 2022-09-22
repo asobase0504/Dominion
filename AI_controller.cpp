@@ -82,7 +82,6 @@ void CAIController::Update()
 {
 	m_shotType = NONE_SHOT;
 	FindClosestEnemy();
-	IsBulletHitPos();
 
 	if (m_enemy == nullptr)
 	{
@@ -95,14 +94,25 @@ void CAIController::Update()
 		MoveToChase();
 	}
 
+	bool hitBulletPlan = IsBulletHitPos();
+	DEBUG_PRINT("HitBullet : %s\n", hitBulletPlan ? "true" : "false");	// 移動先をデバッグ表示
+
+	if (hitBulletPlan)
+	{
+		bool existsShootPlan = m_shotType == NONE_SHOT;	// 弾を撃つ予定はあるか
+		bool existsBulletCountAllowance = m_toOrder->GetRemainsBullet() > 3;	// 弾数の余裕はあるか
+		bool existsAroundSpaceAllowance;	// 周りのスペースに余裕はあるか
+
+		if (existsShootPlan && existsBulletCountAllowance)
+		{
+			m_shotType = ShootToOffsetBullet();
+		}
+	}
+
+	/* ↓射撃が決定してなかったら↓ */
 	if (m_shotType == NONE_SHOT)
 	{
-		m_shotType = ShootToOffsetBullet();
-
-		if (m_shotType == NONE_SHOT)
-		{
-			m_shotType = ShootToAttack();
-		}
+		m_shotType = ShootToAttack();
 	}
 }
 
@@ -138,6 +148,7 @@ D3DXVECTOR3 CAIController::Move()
 	{
 		m_cellIndex = 0;
 
+		DEBUG_PRINT("MovingSearch\n");	// 移動先をデバッグ表示
 		DEBUG_PRINT("Order : x = %d,y = %d\n", m_toOrder->GetCenterBlock()[0], m_toOrder->GetCenterBlock()[1]);	// 移動先をデバッグ表示
 		for (int i = 0; i < (int)m_path.size(); i++)
 		{
@@ -330,7 +341,7 @@ bool CAIController::IsPathCutting()
 	CGame* modeGame = (CGame*)CApplication::GetInstance()->GetMode();
 	CMap* mapStage = modeGame->GetStage()->GetMap();
 
-	for (int i = 0; i < m_path.size(); i++)
+	for (int i = 0; i < (int)m_path.size(); i++)
 	{
 		if (mapStage->GetBlock(m_path[i].x, m_path[i].y)->GetType() != m_toOrder->GetTeam())
 		{
@@ -537,7 +548,7 @@ CController::SHOT_TYPE CAIController::ShootToOffsetBullet()
 			continue;
 		}
 
-		for (int j = 0; j < ofBlockTarget.size(); j++)
+		for (int j = 0; j < (int)ofBlockTarget.size(); j++)
 		{
 			if (ofBlockTarget[j].empty())
 			{
