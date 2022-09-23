@@ -31,44 +31,19 @@
 // コンストラクタ
 // Author 磯江寿希亜
 //-----------------------------------------------------------------------------
-ASTAR::ASTAR()
-{	
-	//初期化
-	ZeroMemory(this,sizeof(ASTAR));
-
-	//座標の周り8方向　周囲8セルに移動する際に利用
-	m_ptVolute[0].x = 0;	//移動なし 
-	m_ptVolute[0].y = 0;
-
-	//m_ptVolute[1].x = -1;
-	//m_ptVolute[1].y = 1;
-
-	m_ptVolute[1].x = 0;
-	m_ptVolute[1].y = 1;
-
-	//m_ptVolute[3].x = 1;
-	//m_ptVolute[3].y = 1;
-
-	m_ptVolute[2].x = 1;
-	m_ptVolute[2].y = 0;
-
-	//m_ptVolute[5].x = 1;
-	//m_ptVolute[5].y = -1;
-
-	m_ptVolute[3].x = 0;
-	m_ptVolute[3].y = -1;
-
-	//m_ptVolute[7].x = -1;
-	//m_ptVolute[7].y = -1;
-
-	m_ptVolute[4].x = -1;
-	m_ptVolute[4].y = 0;
-	
-	/* 番号と座標の対応
-	1 2 3
-	8 0 4
-	7 6 5
-	*/
+ASTAR::ASTAR() :
+	m_stage(nullptr),
+	m_team(0),
+	m_startIndex({0,0}),
+	m_goalIndex({0,0}),
+	m_widthSize(0),
+	m_heightSize(0),
+	m_ptGoal({ 0,0 })
+{
+	m_path.clear();
+	m_cell.clear();
+	m_openList.clear();
+	m_closedList.clear();
 }
 
 //-----------------------------------------------------------------------------
@@ -88,6 +63,27 @@ ASTAR::~ASTAR()
 //-----------------------------------------------------------------------------
 HRESULT ASTAR::Init(std::vector<std::vector<CBlock*>>& inStage, CCharacter::TEAM inTeam)
 {
+	//座標の周り8方向　周囲8セルに移動する際に利用
+	/* 番号と座標の対応
+	  1  
+	4 0 1
+	  3  
+	*/
+	m_ptVolute[0].x = 0;	//移動なし 
+	m_ptVolute[0].y = 0;
+
+	m_ptVolute[1].x = 0;
+	m_ptVolute[1].y = 1;
+
+	m_ptVolute[2].x = 1;
+	m_ptVolute[2].y = 0;
+
+	m_ptVolute[3].x = 0;
+	m_ptVolute[3].y = -1;
+
+	m_ptVolute[4].x = -1;
+	m_ptVolute[4].y = 0;
+
 	m_stage = &inStage;
 	m_team = inTeam;
 
@@ -108,6 +104,7 @@ HRESULT ASTAR::Init(std::vector<std::vector<CBlock*>>& inStage, CCharacter::TEAM
 //-----------------------------------------------------------------------------
 void ASTAR::Uninit()
 {
+	m_stage = nullptr;
 	m_path.clear();
 	m_cell.clear();
 	m_openList.clear();
