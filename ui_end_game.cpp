@@ -53,10 +53,12 @@ CEndGameUI * CEndGameUI::Create(const D3DXVECTOR2 & inPos)
 
 		setCountUI.resize(teem);	// チームの数分大きさを確保
 
+		// 勝利に必要な数を取得
 		int needWinNumber = modeGame->GetNeedWinNumber();
 
 		for (int i = 0; i < (int)setCountUI.size(); i++)
 		{
+			// 配列の大きさをチーム数分に変更
 			setCountUI[i].resize(needWinNumber);
 
 			for (int j = 0; j < (int)setCountUI[i].size(); j++)
@@ -68,8 +70,6 @@ CEndGameUI * CEndGameUI::Create(const D3DXVECTOR2 & inPos)
 				{
 					return nullptr;
 				}
-
-				/* ↓２個目移行のオブジェクトだった場合↓ */
 
 				D3DXVECTOR3 pos = (D3DXVECTOR3)inPos;
 				pos.x = 0.0f;
@@ -111,6 +111,7 @@ CEndGameUI * CEndGameUI::Create(const D3DXVECTOR2 & inPos)
 				tookSetUI[i][j]->SetPos(pos);
 				D3DXCOLOR color = CApplication::GetInstance()->GetColor(3);
 				tookSetUI[i][j]->SetColor(color);
+
 				if ((modeGame->GetWinner() == i) && ((int)tookSetUI[i].size() == j))
 				{ // 勝者の場合
 					tookSetUI[i][j]->SetSize({ 0.0f,0.0f });
