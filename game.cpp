@@ -54,7 +54,6 @@ CGame::~CGame()
 	assert(m_peopleNumberSelect == nullptr);
 	assert(m_charcterSelect == nullptr);
 	assert(m_countDownUI == nullptr);
-	assert(m_charcterSelect == nullptr);
 	assert(m_obtainedSetNumberUI == nullptr);
 	assert(m_stage == nullptr);
 }
@@ -149,6 +148,45 @@ void CGame::PeopleNumberSelectInit()
 }
 
 //-----------------------------------------------------------------------------
+// キャラクター選択
+//-----------------------------------------------------------------------------
+void CGame::CharcterSelectInit()
+{
+	// フレームの設定
+	CMenuFream* fream = new CMenuFream;
+	{
+		fream->Init();
+		fream->SetColor(CApplication::GetInstance()->GetColor(0));
+		fream->SetColorAlpha(0.55f);
+	}
+
+	std::vector<std::vector<CMenuItem*>> items;
+	std::vector<CMenuItem*> X;
+	for (int i = 0; i < m_peopleNumber; i++)
+	{
+		CMenuItem* item = new CMenuItem;
+		item->Init();
+		item->SetSize(D3DXVECTOR2(80.0f, 80.0f));					// 大きさの設定
+		item->SetColor(CApplication::GetInstance()->GetColor(0));	// 色の設定
+
+		X.push_back(item);
+	}
+	items.push_back(X);
+
+	D3DXVECTOR2 area = CApplication::GetInstance()->GetScreenSize();
+	area.y *= 0.25f;
+	m_charcterSelect = CMenu::Create(CApplication::GetInstance()->GetScreenCenter(), area, fream, items);
+
+	// コントローラーの番号をプレイヤー数分作成する
+	m_controllerIndex.resize(m_peopleNumber);
+
+	for (int i = 0; i < (int)m_controllerIndex.size(); i++)
+	{
+		m_controllerIndex[i] = -2;
+	}
+}
+
+//-----------------------------------------------------------------------------
 // 終了
 //-----------------------------------------------------------------------------
 void CGame::Uninit()
@@ -195,6 +233,13 @@ void CGame::Uninit()
 		m_peopleNumberSelect = nullptr;
 	}
 
+	if (m_charcterSelect != nullptr)
+	{
+		m_charcterSelect->Uninit();
+		delete m_charcterSelect;
+		m_charcterSelect = nullptr;
+	}
+
 	if (m_pause != nullptr)
 	{
 		m_pause->Uninit();
@@ -208,10 +253,6 @@ void CGame::Uninit()
 //-----------------------------------------------------------------------------
 void CGame::Update()
 {
-
-	// バトル中
-	BattleUpdate();
-
 	// キャラクター選択中
 	CharctorSelect();
 
@@ -233,6 +274,12 @@ void CGame::Update()
 			CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::TITLE);
 			return;
 		}
+	}
+
+	if (m_charcterSelect == nullptr && m_peopleNumberSelect == nullptr && m_stageSelect == nullptr)
+	{
+		// バトル中
+		BattleUpdate();
 	}
 }
 
@@ -314,11 +361,14 @@ void CGame::PeopleNumberSelectUpdate()
 		m_controllerIndex[0] = -1;
 		m_controllerIndex[1] = -2;
 
-		m_needWinNumber = 3;	// 勝利に必要なラウンド数の設定
-
-		// カウントダウンの初期化
-		D3DXVECTOR2 pos(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y);	// 位置を設定
-		m_countDownUI = CCountDownUI::Create(pos);	// カウントダウンの開始
+		if (m_charcterSelect == nullptr)
+		{
+			CharcterSelectInit();
+		}
+		else
+		{
+			assert(false);
+		}
 	}
 }
 
@@ -332,14 +382,62 @@ void CGame::CharctorSelect()
 		return;
 	}
 
-	// コントローラーの番号をプレイヤー数分作成する
-	m_controllerIndex.resize(2);
-	m_controllerIndex[0] = -1;
-	m_controllerIndex[1] = -2;
+	m_charcterSelect->Update();
 
-	// カウントダウンの初期化
-	D3DXVECTOR2 pos(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y);	// 位置を設定
-	m_countDownUI = CCountDownUI::Create(pos);	// カウントダウンの開始
+	CInput* input = CInput::GetKey();
+	std::vector<int> deviceIndexUp = input->TriggerDevice(KEY_UP);
+	std::vector<int> deviceIndexDown = input->TriggerDevice(KEY_DOWN);
+
+	for (int i = 0; i < (int)deviceIndexUp.size(); i++)
+	{
+		bool isDuplication = false;	// 重複しているか否か
+
+		for (int j = 0; j < (int)m_controllerIndex.size(); j++)
+		{
+			/* ↓重複チェック↓ */
+
+			if (m_controllerIndex[j] == deviceIndexUp[i])
+			{
+				isDuplication = true;
+				break;
+			}
+		}
+
+		if (isDuplication)
+		{
+			continue;
+		}
+
+			/* ↓重複無しだった↓ */
+
+			for (int j = 0; j < (int)m_controllerIndex.size(); j++)
+			{
+				if (m_controllerIndex[j] == -2)
+				{
+					m_controllerIndex[j] = deviceIndexUp[i];
+					break;
+				}
+			}
+	}
+
+	// 入力デバイス
+	std::vector<int> deviceIndexLeft = input->TriggerDevice(KEY_LEFT);
+	int cntLeft = 0;
+	std::vector<int> deviceIndexRight = input->TriggerDevice(KEY_RIGHT);
+	int cntRight = 0;
+
+	if (input->Trigger(KEY_DECISION))
+	{
+		// 終了処理
+		m_charcterSelect->SetIsDeleted();
+		m_charcterSelect->Uninit();
+		delete m_charcterSelect;
+		m_charcterSelect = nullptr;
+
+		// カウントダウンの初期化
+		D3DXVECTOR2 pos(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y);	// 位置を設定
+		m_countDownUI = CCountDownUI::Create(pos);	// カウントダウンの開始
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -448,6 +546,7 @@ void CGame::BattleUpdate()
 			delete m_countDownUI;
 			m_countDownUI = nullptr;
 		}
+		return;
 	}
 
 	/* ↓ラウンド開始のカウントダウンUIが存在しない場合↓ */

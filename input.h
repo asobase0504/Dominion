@@ -2,6 +2,7 @@
 //
 // 入力処理 [input.h]
 // Author : KOZUNA HIROHITO
+// Author2 : YUDA KAITO
 // 
 //=============================================================================
 
@@ -13,6 +14,7 @@
 //*****************************************************************************
 #include "inputkeydata.h"
 #include "DirectInput.h"
+#include <vector>
 
 //----------------------------------------------------------------------------
 //前方宣言
@@ -40,12 +42,21 @@ public:
 	//*インプットが必要な時呼び出す
 	static CInput *GetKey() { return m_pInput; }		//プレイやトリガーなどのアドレスの取得
 
+	// 全てのデバイス
 	bool Press(STAN_DART_INPUT_KEY key);				//総合プレス
 	bool Trigger(STAN_DART_INPUT_KEY key);				//総合トリガー
 	bool Release(STAN_DART_INPUT_KEY key);				//総合リリース
+
+	// 入力しているデバイスを指定
 	bool Press(STAN_DART_INPUT_KEY key, int nNum);		//総合プレス
 	bool Trigger(STAN_DART_INPUT_KEY key, int nNum);	//総合トリガー
 	bool Release(STAN_DART_INPUT_KEY key, int nNum);	//総合リリース
+
+	// 入力しているデバイスを返す
+	std::vector<int> PressDevice(STAN_DART_INPUT_KEY key);		// 総合プレス
+	std::vector<int> TriggerDevice(STAN_DART_INPUT_KEY key);	// 総合トリガー
+	std::vector<int> ReleaseDevice(STAN_DART_INPUT_KEY key);	// 総合リリース
+
 	bool Press(int nKey);								//キーボードプレス
 	bool Trigger(int nkey);								//キーボードトリガー
 	bool Release(int nkey);								//キーボードリリース

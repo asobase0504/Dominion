@@ -2,6 +2,7 @@
 //
 // 入力処理 [input.cpp]
 // Author1 : KOZUNA HIROHITO
+// Author2 : YUDA KAITO
 //
 //=============================================================================
 
@@ -770,6 +771,81 @@ bool CInput::Release(STAN_DART_INPUT_KEY key, int nNum)
 	}
 
 	return false;
+}
+
+//*************************************************************************************
+// 入力したデバイスの番号を取得 (Press)
+//*************************************************************************************
+std::vector<int> CInput::PressDevice(STAN_DART_INPUT_KEY key)
+{
+	std::vector<int> inputedDeviceIndex;
+
+	// キーボード入力の調査
+	if (Release(key, -1))
+	{
+		inputedDeviceIndex.push_back(-1);
+	}
+
+	// JoyPad入力の調査
+	for (int i = 0;i < m_pJoyPad->GetJoyPadNumMax();i++)
+	{
+		if (Release(key, i))
+		{
+			inputedDeviceIndex.push_back(i);
+		}
+	}
+	
+	return inputedDeviceIndex;
+}
+
+//*************************************************************************************
+// 入力したデバイスの番号を取得 (Trigger)
+//*************************************************************************************
+std::vector<int> CInput::TriggerDevice(STAN_DART_INPUT_KEY key)
+{
+	std::vector<int> inputedDeviceIndex;
+
+	// キーボード入力の調査
+	if (Trigger(key, -1))
+	{
+		inputedDeviceIndex.push_back(-1);
+	}
+
+	// JoyPad入力の調査
+	for (int i = 0; i < m_pJoyPad->GetJoyPadNumMax(); i++)
+	{
+		if (Trigger(key, i))
+		{
+			inputedDeviceIndex.push_back(i);
+		}
+	}
+
+	return inputedDeviceIndex;
+}
+
+//*************************************************************************************
+// 入力したデバイスの番号を取得 (Release)
+//*************************************************************************************
+std::vector<int> CInput::ReleaseDevice(STAN_DART_INPUT_KEY key)
+{
+	std::vector<int> inputedDeviceIndex;
+
+	// キーボード入力の調査
+	if (Release(key, -1))
+	{
+		inputedDeviceIndex.push_back(-1);
+	}
+
+	// JoyPad入力の調査
+	for (int i = 0; i < m_pJoyPad->GetJoyPadNumMax(); i++)
+	{
+		if (Release(key, i))
+		{
+			inputedDeviceIndex.push_back(i);
+		}
+	}
+
+	return inputedDeviceIndex;
 }
 
 //*************************************************************************************

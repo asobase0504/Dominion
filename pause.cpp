@@ -116,13 +116,11 @@ void CPause::Uninit()
 //-----------------------------------------
 void CPause::Update()
 {
-	m_menu->Update();
-
-	CInput* input = CInput::GetKey();
-
 	if (m_menu != nullptr)
 	{
 		m_menu->Update();
+
+		CInput* input = CInput::GetKey();
 		if (input->Trigger(KEY_DECISION))
 		{
 			m_status = (Status)m_menu->GetSelectIdx()[0];
