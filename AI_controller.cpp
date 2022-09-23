@@ -16,14 +16,8 @@
 #include "stage.h"
 #include "map.h"
 #include <vector>
-#include <cstdlib>
 
-#include <crtdbg.h>
-#ifdef _DEBUG
-#define DEBUG_PRINT(...) _RPT_BASE(_CRT_WARN, __FILE__, __LINE__, NULL, __VA_ARGS__)
-#else
-#define DEBUG_PRINT(...) ((void)0)
-#endif
+#include "utility.h"
 
 //-----------------------------------------
 // コンストラクタ
@@ -370,11 +364,13 @@ void CAIController::MoveToChase()
 	bool isConnectX;
 	if (SUCCEEDED(m_aStar->CalcPath(&status)))
 	{
+		DEBUG_PRINT("XPlanPath : Success\n");	// デバッグ表示
 		isConnectX = true;
 		routePlanX = m_aStar->GetPath();
 	}
 	else
 	{
+		DEBUG_PRINT("XPlanPath : Failure\n");	// デバッグ表示
 		isConnectX = false;
 	}
 
@@ -389,13 +385,14 @@ void CAIController::MoveToChase()
 	bool isConnectY;
 	if (SUCCEEDED(m_aStar->CalcPath(&status)))
 	{
+		DEBUG_PRINT("YPlanPath : Success\n");	// デバッグ表示
 		isConnectY = true;
 		routePlanY = m_aStar->GetPath();
 	}
 	else
 	{
+		DEBUG_PRINT("YPlanPath : Failure\n");	// デバッグ表示
 		isConnectY = false;
-
 	}
 
 	if (routePlanY.size() > 15)
@@ -416,10 +413,12 @@ void CAIController::MoveToChase()
 				if (distX <= 0)
 				{
 					m_shotType = LEFT_SHOT;
+					DEBUG_PRINT("ChaseShot : LEFT_SHOT\n");	// デバッグ表示
 				}
 				else
 				{
 					m_shotType = RIGHT_SHOT;
+					DEBUG_PRINT("ChaseShot : RIGHT_SHOT\n");	// デバッグ表示
 				}
 			}
 			else
@@ -427,10 +426,12 @@ void CAIController::MoveToChase()
 				if (distY <= 0)
 				{
 					m_shotType = UP_SHOT;
+					DEBUG_PRINT("ChaseShot : UP_SHOT\n");	// デバッグ表示
 				}
 				else
 				{
 					m_shotType = DOWN_SHOT;
+					DEBUG_PRINT("ChaseShot : DOWN_SHOT\n");	// デバッグ表示
 				}
 			}
 		}

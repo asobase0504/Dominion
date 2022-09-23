@@ -20,12 +20,7 @@
 #include "block.h"
 #include <assert.h>
 
-#include <crtdbg.h>
-#ifdef _DEBUG
-#define DEBUG_PRINT(...) _RPT_BASE(_CRT_WARN, __FILE__, __LINE__, NULL, __VA_ARGS__)
-#else
-#define DEBUG_PRINT(...) ((void)0)
-#endif
+#include "utility.h"
 
 //-----------------------------------------------------------------------------
 // コンストラクタ
