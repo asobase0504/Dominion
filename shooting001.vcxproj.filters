@@ -203,6 +203,9 @@
     <ClCompile Include="tutorial.cpp">
       <Filter>ソース ファイル\03_Mode\03_Tutorial</Filter>
     </ClCompile>
+    <ClCompile Include="utility.cpp">
+      <Filter>ソース ファイル\00_Main\00_InSide</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="input.h">
@@ -330,6 +333,9 @@
     </ClInclude>
     <ClInclude Include="tutorial.h">
       <Filter>ソース ファイル\03_Mode\03_Tutorial</Filter>
+    </ClInclude>
+    <ClInclude Include="utility.h">
+      <Filter>ソース ファイル\00_Main\00_InSide</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

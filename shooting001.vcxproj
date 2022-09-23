@@ -194,6 +194,7 @@
     <ClCompile Include="ui_countdown.cpp" />
     <ClCompile Include="ui_end_game.cpp" />
     <ClCompile Include="ui_obtained_setnumber.cpp" />
+    <ClCompile Include="utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="A-Star.h" />
@@ -238,6 +239,7 @@
     <ClInclude Include="ui_countdown.h" />
     <ClInclude Include="ui_end_game.h" />
     <ClInclude Include="ui_obtained_setnumber.h" />
+    <ClInclude Include="utility.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="data\FILE\color.json" />
