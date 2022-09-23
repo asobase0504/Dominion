@@ -78,6 +78,7 @@ HRESULT CGame::Init()
 
 	StageSelectInit();
 
+	m_needWinNumber = 1;
 	return S_OK;
 }
 
@@ -355,11 +356,6 @@ void CGame::PeopleNumberSelectUpdate()
 		{
 			m_winNumber[i] = 0;
 		}
-
-		// コントローラーの番号をプレイヤー数分作成する
-		m_controllerIndex.resize(m_peopleNumber);
-		m_controllerIndex[0] = -1;
-		m_controllerIndex[1] = -2;
 
 		if (m_charcterSelect == nullptr)
 		{

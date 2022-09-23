@@ -39,6 +39,9 @@ public:
 	SHOT_TYPE BulletShot() override;
 private: // プライベート関数
 
+	// Setter
+	void SetMovePath(const std::vector<POINT>& inPath);
+
 	//A*の情報代入関数
 	ASTAR_PARAM SetAStarParam(POINT inGoal);
 	ASTAR_PARAM SetAStarParam(int inX,int inY);

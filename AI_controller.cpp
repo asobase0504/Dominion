@@ -51,7 +51,7 @@ HRESULT CAIController::Init()
 
 	CGame* modeGame = (CGame*)CApplication::GetInstance()->GetMode();
 	m_aStar->Init(modeGame->GetStage()->GetMap()->GetBlockAll(), m_toOrder->GetTeam());
-	m_path = m_aStar->GetPath();
+	SetMovePath(m_aStar->GetPath());
 
 	return S_OK;
 }
@@ -119,13 +119,13 @@ D3DXVECTOR3 CAIController::Move()
 	{
 		if (m_cellIndex < 0)
 		{
-			bool isCenterHit = (m_path[m_cellIndex - 1].x == m_toOrder->GetCenterBlock()[0]) && (m_path[m_cellIndex - 1].y == m_toOrder->GetCenterBlock()[1]);
+			bool isCenterHit = (m_path.at(m_cellIndex - 1).x == m_toOrder->GetCenterBlock().at(0)) && (m_path.at(m_cellIndex - 1).y == m_toOrder->GetCenterBlock().at(1));
 
 			int ofBlock = 0;
 
 			for (int i = 0; i < (int)m_toOrder->GetOfBlock().size(); i++)
 			{
-				if (!m_toOrder->GetOfBlock()[i].empty())
+				if (!m_toOrder->GetOfBlock().at(i).empty())
 				{
 					ofBlock++;
 				}
@@ -143,19 +143,19 @@ D3DXVECTOR3 CAIController::Move()
 		m_cellIndex = 0;
 
 		DEBUG_PRINT("MovingSearch\n");	// 移動先をデバッグ表示
-		DEBUG_PRINT("Order : x = %d,y = %d\n", m_toOrder->GetCenterBlock()[0], m_toOrder->GetCenterBlock()[1]);	// 移動先をデバッグ表示
+		DEBUG_PRINT("Order : x = %d,y = %d\n", m_toOrder->GetCenterBlock().at(0), m_toOrder->GetCenterBlock().at(1));	// 移動先をデバッグ表示
 		for (int i = 0; i < (int)m_path.size(); i++)
 		{
-			bool isCenterHit = (m_path[i].x == m_toOrder->GetCenterBlock()[0]) && (m_path[i].y == m_toOrder->GetCenterBlock()[1]);
+			bool isCenterHit = (m_path.at(i).x == m_toOrder->GetCenterBlock().at(0)) && (m_path.at(i).y == m_toOrder->GetCenterBlock().at(1));
 
-			DEBUG_PRINT("path  : x = %d,y = %d\n", m_path[i].x, m_path[i].y);	// 検索を掛けたパスをデバッグ表示
+			DEBUG_PRINT("path  : x = %d,y = %d\n", m_path.at(i).x, m_path.at(i).y);	// 検索を掛けたパスをデバッグ表示
 
 			if (!(isCenterHit))
 			{
 				continue;
 			}
 
-			DEBUG_PRINT("success : x = %d,y = %d\n", m_toOrder->GetCenterBlock()[0], m_toOrder->GetCenterBlock()[1]);	// 出力にデバッグ表示
+			DEBUG_PRINT("success : x = %d,y = %d\n", m_toOrder->GetCenterBlock().at(0), m_toOrder->GetCenterBlock().at(1));	// 出力にデバッグ表示
 			m_cellIndex = i;
 			break;
 		}
@@ -170,8 +170,8 @@ D3DXVECTOR3 CAIController::Move()
 	}
 
 	D3DXVECTOR3 move;
-	move.x = (float)(m_path[m_cellIndex - 1].x - m_path[m_cellIndex].x);
-	move.y = (float)(m_path[m_cellIndex - 1].y - m_path[m_cellIndex].y);
+	move.x = (float)(m_path.at(m_cellIndex - 1).x - m_path.at(m_cellIndex).x);
+	move.y = (float)(m_path.at(m_cellIndex - 1).y - m_path.at(m_cellIndex).y);
 	move.z = 0.0f;
 
 	return move;
@@ -186,15 +186,25 @@ CController::SHOT_TYPE CAIController::BulletShot()
 }
 
 //-----------------------------------------
+// 移動パスを設定
+//-----------------------------------------
+void CAIController::SetMovePath(const std::vector<POINT>& inPath)
+{
+	m_cellIndex = 0;
+	m_isEndMove = true;
+	m_path = inPath;
+}
+
+//-----------------------------------------
 // A*Paramの情報を設定する
 //-----------------------------------------
 ASTAR_PARAM CAIController::SetAStarParam(POINT inGoal)
 {
 	ASTAR_PARAM status;
-	status.ptStartPos.x = m_toOrder->GetCenterBlock()[0];
-	status.ptStartPos.y = m_toOrder->GetCenterBlock()[1];
-	status.ptCurrentPos.x = m_toOrder->GetCenterBlock()[0];
-	status.ptCurrentPos.y = m_toOrder->GetCenterBlock()[1];
+	status.ptStartPos.x = m_toOrder->GetCenterBlock().at(0);
+	status.ptStartPos.y = m_toOrder->GetCenterBlock().at(1);
+	status.ptCurrentPos.x = m_toOrder->GetCenterBlock().at(0);
+	status.ptCurrentPos.y = m_toOrder->GetCenterBlock().at(1);
 
 	status.ptGoalPos.x = inGoal.x;
 	status.ptGoalPos.y = inGoal.y;
@@ -208,10 +218,10 @@ ASTAR_PARAM CAIController::SetAStarParam(POINT inGoal)
 ASTAR_PARAM CAIController::SetAStarParam(int inX, int inY)
 {
 	ASTAR_PARAM status;
-	status.ptStartPos.x = m_toOrder->GetCenterBlock()[0];
-	status.ptStartPos.y = m_toOrder->GetCenterBlock()[1];
-	status.ptCurrentPos.x = m_toOrder->GetCenterBlock()[0];
-	status.ptCurrentPos.y = m_toOrder->GetCenterBlock()[1];
+	status.ptStartPos.x = m_toOrder->GetCenterBlock().at(0);
+	status.ptStartPos.y = m_toOrder->GetCenterBlock().at(1);
+	status.ptCurrentPos.x = m_toOrder->GetCenterBlock().at(0);
+	status.ptCurrentPos.y = m_toOrder->GetCenterBlock().at(1);
 
 	status.ptGoalPos.x = inX;
 	status.ptGoalPos.y = inY;
@@ -230,18 +240,18 @@ void CAIController::FindClosestEnemy()
 
 	for (int i = 0; i < (int)character.size(); i++)
 	{
-		if (m_toOrder->GetTeam() == character[i]->GetTeam())
+		if (m_toOrder->GetTeam() == character.at(i)->GetTeam())
 		{
 			continue;
 		}
 
-		int distX = m_toOrder->GetCenterBlock()[0] - character[i]->GetCenterBlock()[0];
-		int distY = m_toOrder->GetCenterBlock()[1] - character[i]->GetCenterBlock()[1];
+		int distX = m_toOrder->GetCenterBlock().at(0) - character.at(i)->GetCenterBlock().at(0);
+		int distY = m_toOrder->GetCenterBlock().at(1) - character.at(i)->GetCenterBlock().at(1);
 
 		if (dist > distX + distY)
 		{
 			dist = distX + distY;
-			m_enemy = character[i];
+			m_enemy = character.at(i);
 		}
 	}
 }
@@ -287,7 +297,7 @@ bool CAIController::IsBulletHitPos()
 			// 自身が所属しているブロックを全部チェックする
 			for (int i = 0; i < (int)ofBlockCharcter.size(); i++)
 			{
-				if (ofBlockCharcter[i].empty())
+				if (ofBlockCharcter.at(i).empty())
 				{
 					continue;
 				}
@@ -297,15 +307,15 @@ bool CAIController::IsBulletHitPos()
 				// 対象が所属しているブロックを全部チェックする
 				for (int j = 0; j < 4; j++)
 				{
-					if (ofBlockTarget[j].empty())
+					if (ofBlockTarget.at(j).empty())
 					{
 						continue;
 					}
 
 					/* ↓所属ブロックがあった場合↓ */
 
-					bool isXAxisMatched = ofBlockCharcter[i][0] == ofBlockTarget[j][0];	// X軸の一致
-					bool isYAxisMatched = ofBlockCharcter[i][1] == ofBlockTarget[j][1];	// Y軸の一致
+					bool isXAxisMatched = ofBlockCharcter.at(i).at(0) == ofBlockTarget.at(j).at(0);	// X軸の一致
+					bool isYAxisMatched = ofBlockCharcter.at(i).at(1) == ofBlockTarget.at(j).at(1);	// Y軸の一致
 					if (isXAxisMatched || isYAxisMatched)
 					{
 						m_hitBullet = bullet;
@@ -337,7 +347,7 @@ bool CAIController::IsPathCutting()
 
 	for (int i = 0; i < (int)m_path.size(); i++)
 	{
-		if (mapStage->GetBlock(m_path[i].x, m_path[i].y)->GetType() != m_toOrder->GetTeam())
+		if (mapStage->GetBlock(m_path.at(i).x, m_path.at(i).y)->GetType() != m_toOrder->GetTeam())
 		{
 			return true;
 		}
@@ -358,7 +368,7 @@ D3DXVECTOR3 CAIController::MoveToAvoid()
 //-----------------------------------------------------------------------------
 void CAIController::MoveToChase()
 {
-	ASTAR_PARAM status = SetAStarParam(m_toOrder->GetCenterBlock()[0], m_enemy->GetCenterBlock()[1]);
+	ASTAR_PARAM status = SetAStarParam(m_toOrder->GetCenterBlock().at(0), m_enemy->GetCenterBlock().at(1));
 
 	std::vector<POINT> routePlanX;
 	bool isConnectX;
@@ -379,7 +389,7 @@ void CAIController::MoveToChase()
 		isConnectX = false;
 	}
 
-	status = SetAStarParam(m_enemy->GetCenterBlock()[0], m_toOrder->GetCenterBlock()[1]);
+	status = SetAStarParam(m_enemy->GetCenterBlock().at(0), m_toOrder->GetCenterBlock().at(1));
 
 	std::vector<POINT> routePlanY;
 	bool isConnectY;
@@ -402,8 +412,8 @@ void CAIController::MoveToChase()
 
 	if (!isConnectX && !isConnectY)
 	{
-		int distX = m_enemy->GetCenterBlock()[0] - m_toOrder->GetCenterBlock()[0];
-		int distY = m_enemy->GetCenterBlock()[1] - m_toOrder->GetCenterBlock()[1];
+		int distX = m_enemy->GetCenterBlock().at(0) - m_toOrder->GetCenterBlock().at(0);
+		int distY = m_enemy->GetCenterBlock().at(1) - m_toOrder->GetCenterBlock().at(1);
 		
 		/* ↓パスが作れなかった場合↓ */
 		if (m_toOrder->GetRemainsBullet() > 3)
@@ -444,12 +454,12 @@ void CAIController::MoveToChase()
 	{
 		/* ↓X軸のみパスが作れた場合↓ */
 
-		m_path = routePlanX;
+		SetMovePath(routePlanX);
 	}
 	if (!isConnectX && isConnectY)
 	{
 		/* ↓Y軸のみパスが作れた場合↓ */
-		m_path = routePlanY;
+		SetMovePath(routePlanY);
 	}
 	if (isConnectX && isConnectY)
 	{
@@ -457,11 +467,11 @@ void CAIController::MoveToChase()
 
 		if (routePlanX.size() <= routePlanY.size())
 		{
-			m_path = routePlanX;
+			SetMovePath(routePlanX);
 		}
 		else
 		{
-			m_path = routePlanY;
+			SetMovePath(routePlanY);
 		}
 	}
 }
@@ -487,12 +497,12 @@ CController::SHOT_TYPE CAIController::ShootToAttack()
 
 	m_attackCoolDownCount = 0;
 
-	int distX = m_enemy->GetCenterBlock()[0] - m_toOrder->GetCenterBlock()[0];
-	int distY = m_enemy->GetCenterBlock()[1] - m_toOrder->GetCenterBlock()[1];
+	int distX = m_enemy->GetCenterBlock().at(0) - m_toOrder->GetCenterBlock().at(0);
+	int distY = m_enemy->GetCenterBlock().at(1) - m_toOrder->GetCenterBlock().at(1);
 
 	if (distX == 0)
 	{
-		if (m_enemy->GetCenterBlock()[1] < m_toOrder->GetCenterBlock()[1])
+		if (m_enemy->GetCenterBlock().at(1) < m_toOrder->GetCenterBlock().at(1))
 		{
 			return UP_SHOT;
 		}
@@ -504,7 +514,7 @@ CController::SHOT_TYPE CAIController::ShootToAttack()
 
 	if (distY == 0)
 	{
-		if (m_enemy->GetCenterBlock()[0] < m_toOrder->GetCenterBlock()[0])
+		if (m_enemy->GetCenterBlock().at(0) < m_toOrder->GetCenterBlock().at(0))
 		{
 			return LEFT_SHOT;
 		}
@@ -544,29 +554,29 @@ CController::SHOT_TYPE CAIController::ShootToOffsetBullet()
 
 	for (int i = 0; i < (int)ofBlockCharcter.size(); i++)
 	{
-		if (ofBlockCharcter[i].empty())
+		if (ofBlockCharcter.at(i).empty())
 		{
 			continue;
 		}
 
 		for (int j = 0; j < (int)ofBlockTarget.size(); j++)
 		{
-			if (ofBlockTarget[j].empty())
+			if (ofBlockTarget.at(j).empty())
 			{
 				continue;
 			}
 
-			bool isXAxisMatched = ofBlockCharcter[i][0] == ofBlockTarget[j][0];	// X軸の一致
-			bool isYAxisMatched = ofBlockCharcter[i][1] == ofBlockTarget[j][1];	// Y軸の一致
+			bool isXAxisMatched = ofBlockCharcter.at(i).at(0) == ofBlockTarget.at(j).at(0);	// X軸の一致
+			bool isYAxisMatched = ofBlockCharcter.at(i).at(1) == ofBlockTarget.at(j).at(1);	// Y軸の一致
 
 			if (isXAxisMatched)
 			{
-				if ((ofBlockCharcter[i][1] - 5 < ofBlockTarget[j][1]) && (ofBlockCharcter[i][1] > ofBlockTarget[j][1]))
+				if ((ofBlockCharcter.at(i).at(1) - 5 < ofBlockTarget.at(j).at(1)) && (ofBlockCharcter.at(i).at(1) > ofBlockTarget.at(j).at(1)))
 				{
 					isBulletShot = true;
 					return UP_SHOT;
 				}
-				else if ((ofBlockCharcter[i][1] + 5 > ofBlockTarget[j][1]) && (ofBlockCharcter[i][1] < ofBlockTarget[j][1]))
+				else if ((ofBlockCharcter.at(i).at(1) + 5 > ofBlockTarget.at(j).at(1)) && (ofBlockCharcter.at(i).at(1) < ofBlockTarget.at(j).at(1)))
 				{
 					isBulletShot = true;
 					return DOWN_SHOT;
@@ -574,12 +584,12 @@ CController::SHOT_TYPE CAIController::ShootToOffsetBullet()
 			}
 			else if (isYAxisMatched)
 			{
-				if ((ofBlockCharcter[i][0] - 5 < ofBlockTarget[j][0]) && (ofBlockCharcter[i][0] > ofBlockTarget[j][0]))
+				if ((ofBlockCharcter.at(i).at(0) - 5 < ofBlockTarget.at(j).at(0)) && (ofBlockCharcter.at(i).at(0) > ofBlockTarget.at(j).at(0)))
 				{
 					isBulletShot = true;
 					return LEFT_SHOT;
 				}
-				else if ((ofBlockCharcter[i][0] + 5 > ofBlockTarget[j][0]) && (ofBlockCharcter[i][0] < ofBlockTarget[j][0]))
+				else if ((ofBlockCharcter.at(i).at(0) + 5 > ofBlockTarget.at(j).at(0)) && (ofBlockCharcter.at(i).at(0) < ofBlockTarget.at(j).at(0)))
 				{
 					isBulletShot = true;
 					return RIGHT_SHOT;
