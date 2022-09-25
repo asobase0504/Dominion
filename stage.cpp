@@ -137,7 +137,7 @@ void CStage::PassOnceCreatePlater()
 		return;
 	}
 
-	if (m_PreparingCount <= CCountDownUI::READY_TIME + CCountDownUI::GO_TIME)
+	if (m_PreparingCount <= 5)
 	{
 		m_PreparingCount++;
 		return;

@@ -54,6 +54,8 @@ public:	// パブリック関数
 	// Setter
 	void SetSelectIdx(int Y, int X);
 	void SetSelectIdx(std::vector<int> inIdx);
+	void SetInterval(D3DXVECTOR2 inIntervar);
+	void SetInterval(float inIntervarX, float inIntervarY);
 	void SetIsDeleted();
 	void SetItems(const std::vector<std::vector<CMenuItem*>>& inItems);
 
@@ -106,6 +108,8 @@ public:	// パブリック関数
 	CMenuItem(CObject::TYPE type = CObject::TYPE::NONE);
 	virtual ~CMenuItem() override;
 
+	virtual HRESULT Init() override;
+
 	virtual void PopUpdate();
 	virtual void SelectUpdate();
 	virtual void NomalUpdate();
@@ -113,10 +117,15 @@ public:	// パブリック関数
 
 	// Setter
 	void SetPopDuringUpdateAccept(bool inAccept) { m_isPopDuringUpdateAccept = inAccept; }
+
+	// Getter
+	bool GetisPopNow() { return m_isPopNow; }
+
 private: // プライベート関数
 
-private: // メンバー変数
-	bool m_isPopDuringUpdateAccept;	// ポップ中アップデートを受け入れるか
+protected: // メンバー変数
+	bool m_isPopDuringUpdateAccept;	// ポップ中他のアップデートを受け入れるか
+	bool m_isPopNow;	// 現在ポップ中か
 };
 
 #endif // !_CHARACTER_H_

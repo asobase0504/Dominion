@@ -84,22 +84,7 @@ void CTutorial::Uninit()
 //-----------------------------------------------------------------------------
 void CTutorial::Update()
 {
-	//// ステージ選択中
-	//StageSelectUpdate();
-	//if (m_stageSelect != nullptr)
-	//{
-	//	if (CInput::GetKey()->Trigger(KEY_BACK))
-	//	{
-	//		m_stageSelect->Uninit();
-	//		delete m_stageSelect;
-	//		m_stageSelect = nullptr;
-
-	//		CApplication::GetInstance()->GetSound()->Play(CSound::LABEL_SE_DECISION);
-	//		//	画面の遷移
-	//		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::TITLE);
-	//		return;
-	//	}
-	//}
+	//m_stage->Update();
 }
 
 //-----------------------------------------------------------------------------

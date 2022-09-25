@@ -169,21 +169,6 @@ void CObject2D::SetPos(const D3DXVECTOR3 & inPos)
 		pVtx[3].pos.x = m_pos.x + m_size.x * 0.5f;
 		pVtx[3].pos.y = m_pos.y + m_size.y * 0.5f;
 		pVtx[3].pos.z = 0.0f;
-		//pVtx[0].pos.x = m_pos.x + sinf(m_rotY + m_fAngle + -D3DX_PI) * m_fLength;
-		//pVtx[0].pos.y = m_pos.y + cosf(m_rotY + m_fAngle + -D3DX_PI) * m_fLength;
-		//pVtx[0].pos.z = 0.0f;
-
-		//pVtx[1].pos.x = m_pos.x + sinf(m_rotY + -m_fAngle + D3DX_PI) * m_fLength;
-		//pVtx[1].pos.y = m_pos.y + cosf(m_rotY + -m_fAngle + D3DX_PI) * m_fLength;
-		//pVtx[1].pos.z = 0.0f;
-
-		//pVtx[2].pos.x = m_pos.x + sinf(m_rotY + m_fAngle * -1.0f) * m_fLength;
-		//pVtx[2].pos.y = m_pos.y + cosf(m_rotY + m_fAngle * -1.0f) * m_fLength;
-		//pVtx[2].pos.z = 0.0f;
-
-		//pVtx[3].pos.x = m_pos.x + sinf(m_rotY + m_fAngle) * m_fLength;
-		//pVtx[3].pos.y = m_pos.y + cosf(m_rotY + m_fAngle) * m_fLength;
-		//pVtx[3].pos.z = 0.0f;
 		break;
 	case CObject2D::TOP:
 		break;

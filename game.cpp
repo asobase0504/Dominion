@@ -14,6 +14,7 @@
 #include "ui_end_game.h"
 #include "pause.h"
 #include "menu.h"
+#include "menu_stage_select.h"
 #include "input.h"
 #include <assert.h>
 #include <functional>
@@ -92,32 +93,7 @@ void CGame::StageSelectInit()
 	// 仮ステージの設置
 	ResetStage();
 
-	// フレームの設定
-	CMenuFream* fream = new CMenuFream;
-	{
-		fream->Init();
-		fream->SetColor(CApplication::GetInstance()->GetColor(0));
-		fream->SetColorAlpha(0.55f);
-	}
-
-	std::vector<std::vector<CMenuItem*>> items;
-	std::vector<CMenuItem*> X;
-	for (int i = 0; i < (int)m_stageInfo.size(); i++)
-	{
-
-		CMenuItem* item = new CMenuItem;
-		item->Init();
-		item->SetSize(D3DXVECTOR2(80.0f, 80.0f));			// 大きさの設定
-		item->SetColor(CApplication::GetInstance()->GetColor(0));			// 色の設定
-
-		X.push_back(item);
-	}
-	items.push_back(X);
-
-	D3DXVECTOR2 area = CApplication::GetInstance()->GetScreenSize();
-	area.y *= 0.25f;
-	m_stageSelect = CMenu::Create(CApplication::GetInstance()->GetScreenCenter(), area, fream);
-	m_stageSelect->SetItems(items);
+	m_stageSelect = CStageSelectMenu::Create(m_stageInfo.size());
 }
 
 //-----------------------------------------------------------------------------

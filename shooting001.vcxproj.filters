@@ -75,6 +75,12 @@
     <Filter Include="ソース ファイル\03_Mode\03_Tutorial">
       <UniqueIdentifier>{104c158d-21c7-4f09-a2f8-c232e9da0e0d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\07_UI\00_Menu\00_TeamSelect">
+      <UniqueIdentifier>{941783e8-e199-47bd-9326-a25d290d7aeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\07_UI\00_Menu\01_StageSelect">
+      <UniqueIdentifier>{4a60b3b2-e397-4885-8dfa-ef4d1b237181}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="input.cpp">
@@ -207,7 +213,10 @@
       <Filter>ソース ファイル\00_Main\00_InSide</Filter>
     </ClCompile>
     <ClCompile Include="menu_team_select.cpp">
-      <Filter>ソース ファイル\07_UI\00_Menu</Filter>
+      <Filter>ソース ファイル\07_UI\00_Menu\00_TeamSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="menu_stage_select.cpp">
+      <Filter>ソース ファイル\07_UI\00_Menu\01_StageSelect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -341,7 +350,10 @@
       <Filter>ソース ファイル\00_Main\00_InSide</Filter>
     </ClInclude>
     <ClInclude Include="menu_team_select.h">
-      <Filter>ソース ファイル\07_UI\00_Menu</Filter>
+      <Filter>ソース ファイル\07_UI\00_Menu\00_TeamSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="menu_stage_select.h">
+      <Filter>ソース ファイル\07_UI\00_Menu\01_StageSelect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

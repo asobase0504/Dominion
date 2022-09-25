@@ -37,51 +37,109 @@ void CTeamSelectMenu::UpdateAfterDecision()
 {
 }
 
-CTeamSelectMenuFream::CTeamSelectMenuFream(CObject::TYPE type)
+//=========================================
+// 
+// チーム選択メニューフレームクラス
+// Author YudaKaito
+// 
+//=========================================
+//-----------------------------------------
+// コンストラクタ
+//-----------------------------------------
+CTeamSelectMenuFream::CTeamSelectMenuFream(CObject::TYPE type):
+	CMenuFream(type)
 {
 }
 
+//-----------------------------------------
+// デストラクタ
+//-----------------------------------------
 CTeamSelectMenuFream::~CTeamSelectMenuFream()
 {
 }
 
+//-----------------------------------------
+// 初期化
+//-----------------------------------------
 HRESULT CTeamSelectMenuFream::Init()
 {
 	return E_NOTIMPL;
 }
 
+//-----------------------------------------
+// 終了
+//-----------------------------------------
 void CTeamSelectMenuFream::Uninit()
 {
 }
 
+//-----------------------------------------
+// 更新
+//-----------------------------------------
 void CTeamSelectMenuFream::Update()
 {
 }
 
-void CTeamSelectMenuFream::Draw()
+//=========================================
+// 
+// チーム選択メニューアイテムクラス
+// Author YudaKaito
+// 
+//=========================================
+//-----------------------------------------
+// コンストラクタ
+//-----------------------------------------
+CTeamSelectMenuItem::CTeamSelectMenuItem(CObject::TYPE type) :
+	CMenuItem(type)
 {
 }
 
-CTeamSelectMenuItem::CTeamSelectMenuItem(CObject::TYPE type)
-{
-}
-
+//-----------------------------------------
+// デストラクタ
+//-----------------------------------------
 CTeamSelectMenuItem::~CTeamSelectMenuItem()
 {
 }
 
+//-----------------------------------------
+// 初期化
+//-----------------------------------------
+HRESULT CTeamSelectMenuItem::Init()
+{
+	return E_NOTIMPL;
+}
+
+//-----------------------------------------
+// 終了
+//-----------------------------------------
+void CTeamSelectMenuItem::Uninit()
+{
+}
+
+//-----------------------------------------
+// 出現状態の更新
+//-----------------------------------------
 void CTeamSelectMenuItem::PopUpdate()
 {
 }
 
+//-----------------------------------------
+// 選択状態の更新
+//-----------------------------------------
 void CTeamSelectMenuItem::SelectUpdate()
 {
 }
 
+//-----------------------------------------
+// 通常状態の更新
+//-----------------------------------------
 void CTeamSelectMenuItem::NomalUpdate()
 {
 }
 
+//-----------------------------------------
+// 終了状態の更新
+//-----------------------------------------
 void CTeamSelectMenuItem::EndUpdate()
 {
 }
