@@ -86,7 +86,8 @@ HRESULT CPause::Init()
 
 		D3DXVECTOR2 pos(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y);
 		D3DXVECTOR2 area((float)CApplication::GetInstance()->SCREEN_WIDTH, (float)CApplication::GetInstance()->CENTER_Y * 0.8f);
-		m_menu = CMenu::Create(pos, area, fream, items);
+		m_menu = CMenu::Create(pos, area, fream);
+		m_menu->SetItems(items);
 	}
 
 	return S_OK;

@@ -64,6 +64,21 @@ void CMenu::Uninit()
 //-----------------------------------------
 void CMenu::Update()
 {
+	if (!m_isDexision)
+	{
+		UpdateBeforeDecision();
+	}
+	else
+	{
+		UpdateAfterDecision();
+	}
+}
+
+//-----------------------------------------
+// 決定前の更新
+//-----------------------------------------
+void CMenu::UpdateBeforeDecision()
+{
 	CInput* input = CInput::GetKey();
 	if (input->Trigger(KEY_UP))
 	{
@@ -82,21 +97,6 @@ void CMenu::Update()
 		Select(CMenu::RIGHT);
 	}
 
-	if (!m_isDexision)
-	{
-		UpdateBeforeDecision();
-	}
-	else
-	{
-		UpdateAfterDecision();
-	}
-}
-
-//-----------------------------------------
-// 決定前の更新
-//-----------------------------------------
-void CMenu::UpdateBeforeDecision()
-{
 	for (int i = 0; i < (int)m_item.size(); i++)
 	{
 		for (int j = 0; j < (int)m_item[i].size(); j++)
@@ -204,6 +204,24 @@ bool CMenu::Decision(bool inDecison)
 }
 
 //-----------------------------------------
+// 選択された番号の追加X軸
+//-----------------------------------------
+void CMenu::AddItemX(CMenuItem * inItem, int indexY)
+{
+	m_item[indexY].push_back(inItem);
+	SetItemPos();
+}
+
+//-----------------------------------------
+// 選択された番号の追加Y軸
+//-----------------------------------------
+void CMenu::AddItemY(std::vector<CMenuItem*> inItems)
+{
+	m_item.push_back(inItems);
+	SetItemPos();
+}
+
+//-----------------------------------------
 // 選択された番号の設定
 //-----------------------------------------
 void CMenu::SetSelectIdx(int Y, int X)
@@ -236,9 +254,18 @@ void CMenu::SetIsDeleted()
 }
 
 //-----------------------------------------
+// アイテムの設定
+//-----------------------------------------
+void CMenu::SetItems(const std::vector<std::vector<CMenuItem*>>& inItems)
+{
+	m_item = inItems;	// 項目の設定
+	SetItemPos();
+}
+
+//-----------------------------------------
 // 作成
 //-----------------------------------------
-CMenu * CMenu::Create(D3DXVECTOR2 inPos, D3DXVECTOR2 inArea, CMenuFream * inFream, std::vector<std::vector<CMenuItem*>> inItem)
+CMenu * CMenu::Create(D3DXVECTOR2 inPos, D3DXVECTOR2 inArea, CMenuFream * inFream)
 {
 	CMenu* menu = new CMenu;
 
@@ -258,10 +285,6 @@ CMenu * CMenu::Create(D3DXVECTOR2 inPos, D3DXVECTOR2 inArea, CMenuFream * inFrea
 		menu->m_Area = inArea;	// 範囲の設定
 		menu->m_fream->SetSize((D3DXVECTOR2)menu->m_Area);	// フレームの大きさを設定
 	}
-
-	menu->m_item = inItem;	// 項目の設定
-
-	menu->SetItemPos();
 
 	return menu;
 }

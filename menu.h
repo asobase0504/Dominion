@@ -43,23 +43,29 @@ public:	// パブリック関数
 
 	void Select(SELECT_DIRECTION inDirection);
 	bool Decision(bool inDecison);
-	void UpdateBeforeDecision();
-	void UpdateAfterDecision();
+	virtual void UpdateBeforeDecision();
+	virtual void UpdateAfterDecision();
+
+	// 選択項目の追加
+	void AddItemX(CMenuItem* inItem , int indexY = 0);
+	void AddItemY(CMenuItem* inItems,int indexX = 0);
+	void AddItemY(std::vector<CMenuItem*> inItems);
 
 	// Setter
 	void SetSelectIdx(int Y, int X);
 	void SetSelectIdx(std::vector<int> inIdx);
 	void SetIsDeleted();
+	void SetItems(const std::vector<std::vector<CMenuItem*>>& inItems);
 
 	// Getter
 	const std::vector<int>& GetSelectIdx() { return m_selectIdx; }
 	CMenuFream* GetFream() { return m_fream; }
 
-	static CMenu* Create(D3DXVECTOR2 inPos, D3DXVECTOR2 inArea,CMenuFream* inFream, std::vector<std::vector<CMenuItem*>> inItem);
-private: // プライベート関数
+	static CMenu* Create(D3DXVECTOR2 inPos, D3DXVECTOR2 inArea,CMenuFream* inFream);
+protected: // プライベート関数
 	// Setter
 	void SetItemPos();
-private: // メンバー変数
+protected: // メンバー変数
 	D3DXVECTOR2 m_pos;	// 位置
 	D3DXVECTOR2 m_Area;	// 範囲
 	CMenuFream* m_fream;	// フレーム
@@ -104,10 +110,13 @@ public:	// パブリック関数
 	virtual void SelectUpdate();
 	virtual void NomalUpdate();
 	virtual void EndUpdate();
+
+	// Setter
+	void SetPopDuringUpdateAccept(bool inAccept) { m_isPopDuringUpdateAccept = inAccept; }
 private: // プライベート関数
 
 private: // メンバー変数
-
+	bool m_isPopDuringUpdateAccept;	// ポップ中アップデートを受け入れるか
 };
 
 #endif // !_CHARACTER_H_

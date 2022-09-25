@@ -169,6 +169,7 @@
     <ClCompile Include="inputjoypad.cpp" />
     <ClCompile Include="inputkeyboard.cpp" />
     <ClCompile Include="menu.cpp" />
+    <ClCompile Include="menu_team_select.cpp" />
     <ClCompile Include="pause.cpp" />
     <ClCompile Include="menu_item.cpp" />
     <ClCompile Include="sound.cpp" />
@@ -215,6 +216,7 @@
     <ClInclude Include="inputkeyboard.h" />
     <ClInclude Include="inputkeydata.h" />
     <ClInclude Include="menu.h" />
+    <ClInclude Include="menu_team_select.h" />
     <ClInclude Include="pause.h" />
     <ClInclude Include="menu_item.h" />
     <ClInclude Include="sound.h" />

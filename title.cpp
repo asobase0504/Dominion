@@ -113,7 +113,8 @@ HRESULT CTitle::Init()
 
 		D3DXVECTOR2 pos(CApplication::GetInstance()->CENTER_X * 1.55f, CApplication::GetInstance()->CENTER_Y * 1.2f);
 		D3DXVECTOR2 area(500.0f, 550.0f);
-		m_manu = CMenu::Create(pos, area, fream, items);
+		m_manu = CMenu::Create(pos, area, fream);
+		m_manu->SetItems(items);
 	}
 
 	return S_OK;

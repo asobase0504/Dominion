@@ -87,6 +87,8 @@ HRESULT CGame::Init()
 //-----------------------------------------------------------------------------
 void CGame::StageSelectInit()
 {
+	m_updateLagTime = 0;
+
 	// 仮ステージの設置
 	ResetStage();
 
@@ -114,7 +116,8 @@ void CGame::StageSelectInit()
 
 	D3DXVECTOR2 area = CApplication::GetInstance()->GetScreenSize();
 	area.y *= 0.25f;
-	m_stageSelect = CMenu::Create(CApplication::GetInstance()->GetScreenCenter(), area, fream, items);
+	m_stageSelect = CMenu::Create(CApplication::GetInstance()->GetScreenCenter(), area, fream);
+	m_stageSelect->SetItems(items);
 }
 
 //-----------------------------------------------------------------------------
@@ -122,6 +125,8 @@ void CGame::StageSelectInit()
 //-----------------------------------------------------------------------------
 void CGame::PeopleNumberSelectInit()
 {
+	m_updateLagTime = 0;
+
 	// フレームの設定
 	CMenuFream* fream = new CMenuFream;
 	{
@@ -145,7 +150,8 @@ void CGame::PeopleNumberSelectInit()
 
 	D3DXVECTOR2 area = CApplication::GetInstance()->GetScreenSize();
 	area.y *= 0.25f;
-	m_peopleNumberSelect = CMenu::Create(CApplication::GetInstance()->GetScreenCenter(), area, fream, items);
+	m_peopleNumberSelect = CMenu::Create(CApplication::GetInstance()->GetScreenCenter(), area, fream);
+	m_peopleNumberSelect->SetItems(items);
 }
 
 //-----------------------------------------------------------------------------
@@ -153,6 +159,8 @@ void CGame::PeopleNumberSelectInit()
 //-----------------------------------------------------------------------------
 void CGame::CharcterSelectInit()
 {
+	m_updateLagTime = 0;
+
 	// フレームの設定
 	CMenuFream* fream = new CMenuFream;
 	{
@@ -176,7 +184,8 @@ void CGame::CharcterSelectInit()
 
 	D3DXVECTOR2 area = CApplication::GetInstance()->GetScreenSize();
 	area.y *= 0.25f;
-	m_charcterSelect = CMenu::Create(CApplication::GetInstance()->GetScreenCenter(), area, fream, items);
+	m_charcterSelect = CMenu::Create(CApplication::GetInstance()->GetScreenCenter(), area, fream);
+	m_charcterSelect->SetItems(items);
 
 	// コントローラーの番号をプレイヤー数分作成する
 	m_controllerIndex.resize(m_peopleNumber);
@@ -254,12 +263,6 @@ void CGame::Uninit()
 //-----------------------------------------------------------------------------
 void CGame::Update()
 {
-	// キャラクター選択中
-	CharctorSelect();
-
-	// 人数選択中
-	PeopleNumberSelectUpdate();
-
 	// ステージ選択中
 	StageSelectUpdate();
 	if (m_stageSelect != nullptr)
@@ -269,13 +272,19 @@ void CGame::Update()
 			m_stageSelect->Uninit();
 			delete m_stageSelect;
 			m_stageSelect = nullptr;
-			
+
 			CApplication::GetInstance()->GetSound()->Play(CSound::LABEL_SE_DECISION);
 			// 画面の遷移
 			CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::TITLE);
 			return;
 		}
 	}
+
+	// 人数選択中
+	PeopleNumberSelectUpdate();
+
+	// キャラクター選択中
+	CharctorSelect();
 
 	if (m_charcterSelect == nullptr && m_peopleNumberSelect == nullptr && m_stageSelect == nullptr)
 	{
@@ -294,13 +303,19 @@ void CGame::StageSelectUpdate()
 		return;
 	}
 
+	if (m_updateLagTime <= 0)
+	{
+		m_updateLagTime++;
+		return;
+	}
+
 	m_stageSelect->Update();
 
 	if (m_stageIndex != m_stageSelect->GetSelectIdx()[1])
 	{
 		m_stageIndex = m_stageSelect->GetSelectIdx()[1];
-		// 仮ステージの設置
-		ResetStage();
+
+		ResetStage();	// 仮ステージの設置
 	}
 
 	CInput* input = CInput::GetKey();
@@ -333,10 +348,17 @@ void CGame::PeopleNumberSelectUpdate()
 		return;
 	}
 
+	if (m_updateLagTime <= 0)
+	{
+		m_updateLagTime++;
+		return;
+	}
+
 	m_peopleNumberSelect->Update();
 
 	CInput* input = CInput::GetKey();
 
+	// 決定ボタン
 	if (input->Trigger(KEY_DECISION))
 	{
 		CApplication::GetInstance()->GetSound()->Play(CSound::LABEL_SE_DECISION);
@@ -360,6 +382,26 @@ void CGame::PeopleNumberSelectUpdate()
 		if (m_charcterSelect == nullptr)
 		{
 			CharcterSelectInit();
+			return;
+		}
+		else
+		{
+			assert(false);
+		}
+	}
+
+	// 戻るボタン
+	if (input->Trigger(KEY_BACK))
+	{
+		if (m_stageSelect == nullptr)
+		{
+			m_peopleNumberSelect->SetIsDeleted();
+			m_peopleNumberSelect->Uninit();
+			delete m_peopleNumberSelect;
+			m_peopleNumberSelect = nullptr;
+
+			StageSelectInit();
+			return;
 		}
 		else
 		{
@@ -375,6 +417,12 @@ void CGame::CharctorSelect()
 {
 	if (m_charcterSelect == nullptr)
 	{
+		return;
+	}
+
+	if (m_updateLagTime <= 0)
+	{
+		m_updateLagTime++;
 		return;
 	}
 
@@ -416,12 +464,7 @@ void CGame::CharctorSelect()
 			}
 	}
 
-	// 入力デバイス
-	std::vector<int> deviceIndexLeft = input->TriggerDevice(KEY_LEFT);
-	int cntLeft = 0;
-	std::vector<int> deviceIndexRight = input->TriggerDevice(KEY_RIGHT);
-	int cntRight = 0;
-
+	// 決定ボタン
 	if (input->Trigger(KEY_DECISION))
 	{
 		// 終了処理
@@ -433,6 +476,25 @@ void CGame::CharctorSelect()
 		// カウントダウンの初期化
 		D3DXVECTOR2 pos(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y);	// 位置を設定
 		m_countDownUI = CCountDownUI::Create(pos);	// カウントダウンの開始
+	}
+
+	// 戻るボタン
+	if (input->Trigger(KEY_BACK))
+	{
+		if (m_stageSelect == nullptr)
+		{
+			m_charcterSelect->SetIsDeleted();
+			m_charcterSelect->Uninit();
+			delete m_charcterSelect;
+			m_charcterSelect = nullptr;
+
+			PeopleNumberSelectInit();
+			return;
+		}
+		else
+		{
+			assert(false);
+		}
 	}
 }
 

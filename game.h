@@ -66,6 +66,8 @@ private: // 動的メンバー変数
 
 	CPause* m_pause;
 
+	int m_updateLagTime;
+
 	/* ステージ選択系統 */
 	CMenu* m_stageSelect;		// ステージ選択
 	nlohmann::json m_stageInfo;	// ステージ情報の集まり

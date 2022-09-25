@@ -80,7 +80,8 @@ HRESULT CCustomize::Init()
 		D3DXVECTOR2 pos(application->CENTER_X, application->CENTER_Y);
 		D3DXVECTOR2 area = application->GetScreenSize();
 		area.y *= 0.25f;
-		m_manu = CMenu::Create(pos, area, fream, items);
+		m_manu = CMenu::Create(pos, area, fream);
+		m_manu->SetItems(items);
 	}
 
 	m_stage = new CMap;

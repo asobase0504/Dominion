@@ -206,6 +206,9 @@
     <ClCompile Include="utility.cpp">
       <Filter>ソース ファイル\00_Main\00_InSide</Filter>
     </ClCompile>
+    <ClCompile Include="menu_team_select.cpp">
+      <Filter>ソース ファイル\07_UI\00_Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="input.h">
@@ -336,6 +339,9 @@
     </ClInclude>
     <ClInclude Include="utility.h">
       <Filter>ソース ファイル\00_Main\00_InSide</Filter>
+    </ClInclude>
+    <ClInclude Include="menu_team_select.h">
+      <Filter>ソース ファイル\07_UI\00_Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

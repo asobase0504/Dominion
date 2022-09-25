@@ -198,7 +198,8 @@ HRESULT CEndGameUI::Init()
 		D3DXVECTOR2 pos = application->GetScreenCenter();
 		pos.y *= 1.25f;
 
-		selectMenu = CMenu::Create(pos, area, fream, items);
+		selectMenu = CMenu::Create(pos, area, fream);
+		selectMenu->SetItems(items);
 	}
 	return S_OK;
 }
