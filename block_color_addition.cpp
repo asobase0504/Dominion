@@ -2,7 +2,6 @@
 #include "application.h"
 #include "renderer.h"
 #include "map.h"
-#include "game.h"
 #include "stage.h"
 
 const int CBlockColorAddition::PRIORITY_BELONG = 2;
@@ -71,7 +70,7 @@ void CBlockColorAddition::Draw()
 //--------------------------------------------------
 // ì¬
 //--------------------------------------------------
-CBlockColorAddition * CBlockColorAddition::Create(const D3DXVECTOR3 & inPos, CBlock* inParent)
+CBlockColorAddition * CBlockColorAddition::Create(const D3DXVECTOR3 & inPos, CBlock* inParent,CMap* inMap)
 {
 	CBlockColorAddition* colorAddition = new CBlockColorAddition;
 
@@ -83,10 +82,8 @@ CBlockColorAddition * CBlockColorAddition::Create(const D3DXVECTOR3 & inPos, CBl
 	colorAddition->m_parent = inParent;
 	colorAddition->Init();
 	colorAddition->SetPos(inPos);
-	CGame* modeGame = (CGame*)CApplication::GetInstance()->GetMode();
-	CMap* map = modeGame->GetStage()->GetMap();
 
-	colorAddition->SetSize(D3DXVECTOR2(map->GetBlockSize(), map->GetBlockSize()));
+	colorAddition->SetSize(D3DXVECTOR2(inMap->GetBlockSize(), inMap->GetBlockSize()));
 	D3DXCOLOR col(CApplication::GetInstance()->GetColor(2));
 	col.a = BIGIN_ALPHA;
 	colorAddition->SetColor(col);

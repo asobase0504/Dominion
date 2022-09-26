@@ -17,6 +17,7 @@ class CController;
 class CBullet;
 class CBlock;
 class CRemaubsBullet;
+class CStage;
 
 //-----------------------------------------
 // プレイヤークラス
@@ -67,6 +68,7 @@ public:
 	void SetTeam(const TEAM inTeam);
 	bool SetBlockIndex(const int count,std::vector<int> inIndex);
 	void SetOperationState(const bool inState) { m_isOperationState = inState; }
+	void SetStage(CStage* inStage);
 
 	// Getter
 	std::vector<std::vector<int>> GetOfBlock() { return m_ofBlockIndex; }
@@ -88,6 +90,7 @@ private: // プライベート関数
 
 private:
 	CController* m_controller;	// 命令を出す人
+	CStage* m_stage;	// ステージ
 	TEAM m_team;				// 所属してるチーム
 	D3DXVECTOR3 m_move;			// 移動量
 	std::vector<CRemaubsBullet*> m_remainsBulletDisplay;	// 表示数

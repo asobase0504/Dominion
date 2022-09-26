@@ -54,7 +54,6 @@ public:	// メンバー関数
 	// Getter
 	CStage* GetStage() { return m_stage; }	// ステージ取得
 	nlohmann::json GetStageInfo() { return m_stageInfo[m_stageIndex]; }	// ステージ情報取得
-	std::vector<int> GetControllerIndex() { return m_controllerIndex; }	// コントローラー番号取得
 	int GetNeedWinNumber() { return m_needWinNumber; }	// ラウンド数取得
 	int GetWinNumber(int inIndex) { return m_winNumber[inIndex]; }	// 勝利数取得
 	int GetWinner() { return m_winnerIndex; }						// 勝利したチーム番号取得

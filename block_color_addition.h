@@ -15,6 +15,11 @@
 #include "block.h"
 
 //--------------------------------------------------
+// 前方宣言
+//--------------------------------------------------
+class CMap;
+
+//--------------------------------------------------
 // ブロッククラス
 //--------------------------------------------------
 class CBlockColorAddition : public CObject2D
@@ -32,7 +37,7 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	static CBlockColorAddition* Create(const D3DXVECTOR3& inPos, CBlock* inParent);
+	static CBlockColorAddition* Create(const D3DXVECTOR3& inPos, CBlock* inParent, CMap* inMap);
 private:
 	CBlock* m_parent;
 };

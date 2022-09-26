@@ -122,9 +122,6 @@
     <ClCompile Include="ui_countdown.cpp">
       <Filter>ソース ファイル\07_UI</Filter>
     </ClCompile>
-    <ClCompile Include="title_status.cpp">
-      <Filter>ソース ファイル\03_Mode\01_Title</Filter>
-    </ClCompile>
     <ClCompile Include="ui_obtained_setnumber.cpp">
       <Filter>ソース ファイル\07_UI</Filter>
     </ClCompile>

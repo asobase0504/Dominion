@@ -18,6 +18,7 @@
 //--------------------------------------------------
 class CBlockScraped;
 class CBlockColorAddition;
+class CMap;
 
 //--------------------------------------------------
 // ブロッククラス
@@ -57,7 +58,7 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	static CBlock* Create(BLOCK_TYPE type);
+	static CBlock* Create(BLOCK_TYPE type, CMap* inParent);
 	void ChangeType(DIRECTION inDirection);
 	BLOCK_TYPE GetType();
 
@@ -80,6 +81,7 @@ private: // プライベート関数
 	void UpdateInPop();
 private:
 	BLOCK_TYPE m_team;	// 状態
+	CMap* m_parent;		// 親
 	CBlockScraped* m_scraped;
 	CBlockColorAddition* m_colorAddition;
 	std::vector<CObject*> ridingObject;

@@ -12,7 +12,6 @@
 #include "game.h"
 #include "mode.h"
 #include "stage.h"
-#include "map.h"
 // デバッグ
 #include <assert.h>
 
@@ -92,7 +91,7 @@ void CBlockScraped::Draw()
 //--------------------------------------------------
 // 設定
 //--------------------------------------------------
-CBlockScraped* CBlockScraped::Create(const D3DXVECTOR3& inPos,CBlock::BLOCK_TYPE type, CBlock::DIRECTION inDirection)
+CBlockScraped* CBlockScraped::Create(const D3DXVECTOR3& inPos,CBlock::BLOCK_TYPE type, CBlock::DIRECTION inDirection,float inSize)
 {
 	CBlockScraped* blockScraped = new CBlockScraped;
 
@@ -125,42 +124,39 @@ CBlockScraped* CBlockScraped::Create(const D3DXVECTOR3& inPos,CBlock::BLOCK_TYPE
 		}
 	}
 
-	CGame* modeGame = (CGame*)CApplication::GetInstance()->GetMode();
-	CMap* map = modeGame->GetStage()->GetMap();
-
 	switch (inDirection)
 	{
 	case CBlock::TOP:
 		blockScraped->m_block[0]->SetAnchor(CObject2D::Anchor::DOWNRIGHT);
-		blockScraped->m_block[0]->SetPos(D3DXVECTOR3(inPos.x - map->GetBlockSize() * 0.5f, inPos.y + map->GetBlockSize() * 0.5f, inPos.z));
-		blockScraped->m_block[0]->SetSize(D3DXVECTOR2(map->GetBlockSize() * 0.9f * 0.5f, map->GetBlockSize() * 0.85f));
+		blockScraped->m_block[0]->SetPos(D3DXVECTOR3(inPos.x - inSize * 0.5f, inPos.y + inSize * 0.5f, inPos.z));
+		blockScraped->m_block[0]->SetSize(D3DXVECTOR2(inSize * 0.9f * 0.5f, inSize * 0.85f));
 		blockScraped->m_block[1]->SetAnchor(CObject2D::Anchor::DOWNLEFT);
-		blockScraped->m_block[1]->SetSize(D3DXVECTOR2(map->GetBlockSize() * 0.9f * 0.5f, map->GetBlockSize() * 0.85f));
-		blockScraped->m_block[1]->SetPos(D3DXVECTOR3(inPos.x + map->GetBlockSize() * 0.5f, inPos.y + map->GetBlockSize() * 0.5f, inPos.z));
+		blockScraped->m_block[1]->SetSize(D3DXVECTOR2(inSize * 0.9f * 0.5f, inSize * 0.85f));
+		blockScraped->m_block[1]->SetPos(D3DXVECTOR3(inPos.x + inSize * 0.5f, inPos.y + inSize * 0.5f, inPos.z));
 		break;
 	case CBlock::DOWN:
 		blockScraped->m_block[0]->SetAnchor(CObject2D::Anchor::TOPLEFT);
-		blockScraped->m_block[0]->SetPos(D3DXVECTOR3(inPos.x + map->GetBlockSize() * 0.5f, inPos.y - map->GetBlockSize() * 0.5f, inPos.z));
-		blockScraped->m_block[0]->SetSize(D3DXVECTOR2(map->GetBlockSize() * 0.9f * 0.5f, map->GetBlockSize() * 0.85f));
+		blockScraped->m_block[0]->SetPos(D3DXVECTOR3(inPos.x + inSize * 0.5f, inPos.y - inSize * 0.5f, inPos.z));
+		blockScraped->m_block[0]->SetSize(D3DXVECTOR2(inSize * 0.9f * 0.5f, inSize * 0.85f));
 		blockScraped->m_block[1]->SetAnchor(CObject2D::Anchor::TOPRIGHT);
-		blockScraped->m_block[1]->SetPos(D3DXVECTOR3(inPos.x - map->GetBlockSize() * 0.5f, inPos.y - map->GetBlockSize() * 0.5f, inPos.z));
-		blockScraped->m_block[1]->SetSize(D3DXVECTOR2(map->GetBlockSize() * 0.9f * 0.5f, map->GetBlockSize() * 0.85f));
+		blockScraped->m_block[1]->SetPos(D3DXVECTOR3(inPos.x - inSize * 0.5f, inPos.y - inSize * 0.5f, inPos.z));
+		blockScraped->m_block[1]->SetSize(D3DXVECTOR2(inSize * 0.9f * 0.5f, inSize * 0.85f));
 		break;
 	case CBlock::LEFT:
 		blockScraped->m_block[0]->SetAnchor(CObject2D::Anchor::TOPRIGHT);
-		blockScraped->m_block[0]->SetPos(D3DXVECTOR3(inPos.x - map->GetBlockSize() * 0.5f, inPos.y - map->GetBlockSize() * 0.5f, inPos.z));
-		blockScraped->m_block[0]->SetSize(D3DXVECTOR2(map->GetBlockSize() * 0.85f, map->GetBlockSize() * 0.9f * 0.5f));
+		blockScraped->m_block[0]->SetPos(D3DXVECTOR3(inPos.x - inSize * 0.5f, inPos.y - inSize * 0.5f, inPos.z));
+		blockScraped->m_block[0]->SetSize(D3DXVECTOR2(inSize * 0.85f, inSize * 0.9f * 0.5f));
 		blockScraped->m_block[1]->SetAnchor(CObject2D::Anchor::DOWNRIGHT);
-		blockScraped->m_block[1]->SetPos(D3DXVECTOR3(inPos.x - map->GetBlockSize() * 0.5f, inPos.y + map->GetBlockSize() * 0.5f, inPos.z));
-		blockScraped->m_block[1]->SetSize(D3DXVECTOR2(map->GetBlockSize() * 0.85f, map->GetBlockSize() * 0.9f * 0.5f));
+		blockScraped->m_block[1]->SetPos(D3DXVECTOR3(inPos.x - inSize * 0.5f, inPos.y + inSize * 0.5f, inPos.z));
+		blockScraped->m_block[1]->SetSize(D3DXVECTOR2(inSize * 0.85f, inSize * 0.9f * 0.5f));
 		break;
 	case CBlock::RIGHT:
 		blockScraped->m_block[0]->SetAnchor(CObject2D::Anchor::TOPLEFT);
-		blockScraped->m_block[0]->SetPos(D3DXVECTOR3(inPos.x + map->GetBlockSize() * 0.5f, inPos.y - map->GetBlockSize() * 0.5f, inPos.z));
-		blockScraped->m_block[0]->SetSize(D3DXVECTOR2(map->GetBlockSize() * 0.85f, map->GetBlockSize() * 0.9f * 0.5f));
+		blockScraped->m_block[0]->SetPos(D3DXVECTOR3(inPos.x + inSize * 0.5f, inPos.y - inSize * 0.5f, inPos.z));
+		blockScraped->m_block[0]->SetSize(D3DXVECTOR2(inSize * 0.85f, inSize * 0.9f * 0.5f));
 		blockScraped->m_block[1]->SetAnchor(CObject2D::Anchor::DOWNLEFT);
-		blockScraped->m_block[1]->SetPos(D3DXVECTOR3(inPos.x + map->GetBlockSize() * 0.5f, inPos.y + map->GetBlockSize() * 0.5f, inPos.z));
-		blockScraped->m_block[1]->SetSize(D3DXVECTOR2(map->GetBlockSize() * 0.85f, map->GetBlockSize() * 0.9f * 0.5f));
+		blockScraped->m_block[1]->SetPos(D3DXVECTOR3(inPos.x + inSize * 0.5f, inPos.y + inSize * 0.5f, inPos.z));
+		blockScraped->m_block[1]->SetSize(D3DXVECTOR2(inSize * 0.85f, inSize * 0.9f * 0.5f));
 		break;
 	default:
 		break;

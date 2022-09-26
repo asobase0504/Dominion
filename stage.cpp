@@ -1,6 +1,5 @@
 #include "stage.h"
 #include "application.h"
-#include "game.h"
 #include "character.h"
 #include "block.h"
 #include "map.h"
@@ -153,6 +152,7 @@ void CStage::PassOnceCreatePlater()
 		int y = stage["PLAYERS"].at(inIdx)["SPAWN"].at(1);				// Yの位置番号を取得
 		CCharacter::TEAM inTeam = stage["PLAYERS"].at(inIdx)["TYPE"];	// チームの作成
 		character.push_back(CCharacter::Create(inTeam));				// 生成
+		character.at(inIdx)->SetStage(this);
 		float size = map->GetBlockSize() * 0.65f;						// 大きさの設定
 		character.at(inIdx)->SetSize(D3DXVECTOR2(size, size));			// 大きさの代入
 		D3DXVECTOR3 pos = map->GetBlock(x, y)->GetPos();				// 位置の取得
@@ -162,15 +162,12 @@ void CStage::PassOnceCreatePlater()
 		character.at(inIdx)->SetController(inController);				// 命令者の設定
 	};
 
-	CGame* gameMode = (CGame*)CApplication::GetInstance()->GetMode();
-	std::vector<int> charcterIndex = gameMode->GetControllerIndex();
-
 	// キャラクターの設定
-	for (int i = 0; i < (int)charcterIndex.size(); i++)
+	for (int i = 0; i < (int)m_controllerIndex.size(); i++)
 	{
-		if (charcterIndex[i] != -2)
+		if (m_controllerIndex[i] != -2)
 		{
-			CPlayerController* incontroller = new CPlayerController(charcterIndex[i]);
+			CPlayerController* incontroller = new CPlayerController(m_controllerIndex[i]);
 			playerSet(i, incontroller);
 			incontroller->Init();
 		}

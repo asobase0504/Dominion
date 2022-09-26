@@ -30,7 +30,7 @@ public:
 	void Update();
 	void Draw();
 
-	static CBlockScraped* Create(const D3DXVECTOR3& inPos,CBlock::BLOCK_TYPE type, CBlock::DIRECTION inDirection);
+	static CBlockScraped* Create(const D3DXVECTOR3& inPos,CBlock::BLOCK_TYPE type, CBlock::DIRECTION inDirection, float inSize);
 
 	void SetIsDeleted();
 private:

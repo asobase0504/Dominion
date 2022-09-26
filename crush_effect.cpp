@@ -10,7 +10,6 @@
 #include "crush_effect.h"
 #include "application.h"
 #include "stage.h"
-#include "game.h"
 #include "map.h"
 #include "block.h"
 #include "collision.h"
@@ -68,18 +67,14 @@ void CCrushEffect::Update()
 	// ‘Ì—Í‚ÌŒ¸­
 	m_life--;
 
-	//m_move *= 0.75f;
-
-	CGame* modeGame = (CGame*)CApplication::GetInstance()->GetMode();
-	CMap* cMap = modeGame->GetStage()->GetMap();
-	int Xindex = cMap->GetMaxXBlock();
-	int Yindex = cMap->GetMaxYBlock();
+	int Xindex = m_map->GetMaxXBlock();
+	int Yindex = m_map->GetMaxYBlock();
 
 	for (int x = 0; x < Xindex ; x++)
 	{
 		for (int y = 0; y < Yindex; y++)
 		{
-			CBlock* block = cMap->GetBlock(x, y);
+			CBlock* block = m_map->GetBlock(x, y);
 
 			if (block->GetType() == m_team)
 			{
@@ -115,7 +110,7 @@ void CCrushEffect::Draw()
 //-----------------------------------------
 // ¶¬
 //-----------------------------------------
-CCrushEffect* CCrushEffect::Create(const D3DXVECTOR3& inPos, const D3DXVECTOR3 inMove, const D3DXCOLOR inColor, const CBlock::BLOCK_TYPE inTeam)
+CCrushEffect* CCrushEffect::Create(const D3DXVECTOR3& inPos, const D3DXVECTOR3 inMove, const D3DXCOLOR inColor, const CBlock::BLOCK_TYPE inTeam,CMap* inMap)
 {
 	CCrushEffect* crush = new CCrushEffect;
 
@@ -128,6 +123,7 @@ CCrushEffect* CCrushEffect::Create(const D3DXVECTOR3& inPos, const D3DXVECTOR3 i
 	D3DXVECTOR3 pos = inPos;
 	pos.x += ((rand() / (float)RAND_MAX) * (25.0f - -25.0f)) + -25.0f;
 	pos.y += ((rand() / (float)RAND_MAX) * (25.0f - -25.0f)) + -25.0f;
+	crush->m_map = inMap;
 	crush->SetPos(inPos);
 	crush->SetColor(inColor);
 	crush->m_team = inTeam;

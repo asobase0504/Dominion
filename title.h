@@ -42,6 +42,7 @@ public:	// メンバー関数
 private: // 動的メンバー変数
 	CMenu* m_manu;
 	Status m_status;
+	int m_decisionDvice;
 };
 
 #endif // !_TITLE_H_

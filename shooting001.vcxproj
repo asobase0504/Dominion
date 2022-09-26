@@ -192,7 +192,6 @@
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="title.cpp" />
-    <ClCompile Include="title_status.cpp" />
     <ClCompile Include="tutorial.cpp" />
     <ClCompile Include="ui_countdown.cpp" />
     <ClCompile Include="ui_end_game.cpp" />

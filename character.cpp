@@ -10,7 +10,6 @@
 #include "character.h"
 #include "application.h"
 #include "mode.h"
-#include "game.h"
 #include "map.h"
 #include "bullet.h"
 #include "controller.h"
@@ -35,6 +34,7 @@ const float CCharacter::MOVE_SPEAD = 5.0f;		// 移動速度
 //-----------------------------------------
 CCharacter::CCharacter(CObject::TYPE type) :
 	CObject2D(type),
+	m_stage(nullptr),
 	m_controller(nullptr),
 	m_remainsBulletCount(0),
 	m_reloadCount(0),
@@ -111,8 +111,8 @@ void CCharacter::Update()
 	CObject2D::SetPos(m_pos);		// 位置の設定
 
 	{ // 自身が所属しているブロックに軌跡を表示
-		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-		CMap* pMap = game->GetStage()->GetMap();
+
+		CMap* pMap = m_stage->GetMap();
 		CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
 		pBlock->SetAdditionColor();
 	}
@@ -167,11 +167,11 @@ void CCharacter::BulletShot()
 	// 弾を撃ちだすラムダ式
 	auto Shot = [this](const D3DXVECTOR3& inMove)
 	{
-		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-		CMap* pMap = game->GetStage()->GetMap();
+
+		CMap* pMap = m_stage->GetMap();
 		CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
 
-		CBullet* bullet = CBullet::Create(pBlock->GetPos(), inMove, m_team);
+		CBullet* bullet = CBullet::Create(pBlock->GetPos(), inMove, m_team, pMap);
 		bullet->SetBlockIndex(0, m_ofBlockIndexCenter);
 		m_remainsBulletDisplay[m_remainsBulletCount - 1]->SetColorAlpha(0.0f);
 		m_remainsBulletCount--;
@@ -194,24 +194,24 @@ void CCharacter::BulletShot()
 		break;
 	case CController::UP_CHARGE_SHOT:
 	{
-		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-		CMap* pMap = game->GetStage()->GetMap();
+
+		CMap* pMap = m_stage->GetMap();
 		CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
 		CBlock* pBlockUp = pMap->GetBlock(m_ofBlockIndexCenter[0] - 1, m_ofBlockIndexCenter[1]);
 		CBlock* pBlockDown = pMap->GetBlock(m_ofBlockIndexCenter[0] + 1, m_ofBlockIndexCenter[1]);
 		D3DXVECTOR3 move = D3DXVECTOR3(0.0f, -1.0f, 0.0f);
 
 		CBullet* bullet;
-		bullet = CBullet::Create(pBlock->GetPos(), move, m_team);
+		bullet = CBullet::Create(pBlock->GetPos(), move, m_team, pMap);
 		bullet->SetBlockIndex(0, m_ofBlockIndexCenter);
 		if (pBlockUp->GetType() != CBlock::BLOCK_TYPE::NONE)
 		{
-			bullet = CBullet::Create(pBlockUp->GetPos(), move, m_team);
+			bullet = CBullet::Create(pBlockUp->GetPos(), move, m_team, pMap);
 			bullet->SetBlockIndex(0, { m_ofBlockIndexCenter[0] - 1, m_ofBlockIndexCenter[1] });
 		}
 		if (pBlockDown->GetType() != CBlock::BLOCK_TYPE::NONE)
 		{
-			bullet = CBullet::Create(pBlockDown->GetPos(), move, m_team);
+			bullet = CBullet::Create(pBlockDown->GetPos(), move, m_team, pMap);
 			bullet->SetBlockIndex(0, { m_ofBlockIndexCenter[0] + 1, m_ofBlockIndexCenter[1] });
 		}
 
@@ -221,8 +221,8 @@ void CCharacter::BulletShot()
 		break;
 	case CController::DOWN_CHARGE_SHOT:
 	{
-		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-		CMap* pMap = game->GetStage()->GetMap();
+
+		CMap* pMap = m_stage->GetMap();
 
 		// 弾を出現させるブロック
 		CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
@@ -232,16 +232,16 @@ void CCharacter::BulletShot()
 		D3DXVECTOR3 move(0.0f, 1.0f, 0.0f);	// 移動量
 
 		CBullet* bullet;
-		bullet = CBullet::Create(pBlock->GetPos(), move, m_team);
+		bullet = CBullet::Create(pBlock->GetPos(), move, m_team, pMap);
 		bullet->SetBlockIndex(0, m_ofBlockIndexCenter);
 		if (pBlockUp->GetType() != CBlock::BLOCK_TYPE::NONE)
 		{
-			bullet = CBullet::Create(pBlockUp->GetPos(), move, m_team);
+			bullet = CBullet::Create(pBlockUp->GetPos(), move, m_team, pMap);
 			bullet->SetBlockIndex(0, { m_ofBlockIndexCenter[0] - 1, m_ofBlockIndexCenter[1] });
 		}
 		if (pBlockDown->GetType() != CBlock::BLOCK_TYPE::NONE)
 		{
-			bullet = CBullet::Create(pBlockDown->GetPos(), move, m_team);
+			bullet = CBullet::Create(pBlockDown->GetPos(), move, m_team, pMap);
 			bullet->SetBlockIndex(0, { m_ofBlockIndexCenter[0] + 1, m_ofBlockIndexCenter[1] });
 		}
 
@@ -251,24 +251,24 @@ void CCharacter::BulletShot()
 		break;
 	case CController::LEFT_CHARGE_SHOT:
 	{
-		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-		CMap* pMap = game->GetStage()->GetMap();
+
+		CMap* pMap = m_stage->GetMap();
 		CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
 		CBlock* pBlockUp = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1] - 1);
 		CBlock* pBlockDown = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1] + 1);
 		D3DXVECTOR3 move = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
 
 		CBullet* bullet;
-		bullet = CBullet::Create(pBlock->GetPos(), move, m_team);
+		bullet = CBullet::Create(pBlock->GetPos(), move, m_team, pMap);
 		bullet->SetBlockIndex(0, m_ofBlockIndexCenter);
 		if (pBlockUp->GetType() != CBlock::BLOCK_TYPE::NONE)
 		{
-			bullet = CBullet::Create(pBlockUp->GetPos(), move, m_team);
+			bullet = CBullet::Create(pBlockUp->GetPos(), move, m_team, pMap);
 			bullet->SetBlockIndex(0, { m_ofBlockIndexCenter[0] - 1, m_ofBlockIndexCenter[1] });
 		}
 		if (pBlockDown->GetType() != CBlock::BLOCK_TYPE::NONE)
 		{
-			bullet = CBullet::Create(pBlockDown->GetPos(), move, m_team);
+			bullet = CBullet::Create(pBlockDown->GetPos(), move, m_team, pMap);
 			bullet->SetBlockIndex(0, { m_ofBlockIndexCenter[0] + 1, m_ofBlockIndexCenter[1] });
 		}
 
@@ -278,24 +278,24 @@ void CCharacter::BulletShot()
 	break;
 	case CController::RIGHT_CHARGE_SHOT:
 	{
-		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-		CMap* pMap = game->GetStage()->GetMap();
+
+		CMap* pMap = m_stage->GetMap();
 		CBlock* pBlock = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
 		CBlock* pBlockUp = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1] - 1);
 		CBlock* pBlockDown = pMap->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1] + 1);
 		D3DXVECTOR3 move = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
 
 		CBullet* bullet;
-		bullet = CBullet::Create(pBlock->GetPos(), move, m_team);
+		bullet = CBullet::Create(pBlock->GetPos(), move, m_team, pMap);
 		bullet->SetBlockIndex(0, m_ofBlockIndexCenter);
 		if (pBlockUp->GetType() != CBlock::BLOCK_TYPE::NONE)
 		{
-			bullet = CBullet::Create(pBlockUp->GetPos(), move, m_team);
+			bullet = CBullet::Create(pBlockUp->GetPos(), move, m_team, pMap);
 			bullet->SetBlockIndex(0, { m_ofBlockIndexCenter[0] - 1, m_ofBlockIndexCenter[1] });
 		}
 		if (pBlockDown->GetType() != CBlock::BLOCK_TYPE::NONE)
 		{
-			bullet = CBullet::Create(pBlockDown->GetPos(), move, m_team);
+			bullet = CBullet::Create(pBlockDown->GetPos(), move, m_team, pMap);
 			bullet->SetBlockIndex(0, { m_ofBlockIndexCenter[0] + 1, m_ofBlockIndexCenter[1] });
 		}
 
@@ -364,6 +364,14 @@ bool CCharacter::SetBlockIndex(const int count, std::vector<int> inIndex)
 	m_ofBlockIndex[count] = inIndex;
 	m_ofBlockCount++;
 	return true;
+}
+
+//-----------------------------------------
+// ステージの設定
+//-----------------------------------------
+void CCharacter::SetStage(CStage * inStage)
+{
+	m_stage = inStage;
 }
 
 //-----------------------------------------
@@ -442,8 +450,8 @@ void CCharacter::ScreenFromOutTime()
 			int y = character->m_ofBlockIndex[i][1];
 
 			// そのブロックがキャラクターの中心が所属してるブロックがチェック
-			CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-			CBlock* block = game->GetStage()->GetMap()->GetBlock(x, y);
+	
+			CBlock* block = m_stage->GetMap()->GetBlock(x, y);
 			D3DXVECTOR3 blockSize = D3DXVECTOR3(block->GetSize().x, block->GetSize().y, 0.0f);	// ブロックの大きさ
 
 			if (Collision::RectangleAndRectangle(m_pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), block->GetPos(), blockSize))
@@ -509,8 +517,8 @@ void CCharacter::Collision()
 	// 一つのブロックとの当たり判定処理
 	auto HitBlock = [this](int x, int y, DIRECTION inDirection, std::vector<DIRECTION> inAround)
 	{
-		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-		CMap* pMap = game->GetStage()->GetMap();
+
+		CMap* pMap = m_stage->GetMap();
 		CBlock* block = pMap->GetBlock(x, y);
 
 		if ((int)m_team == (int)block->CBlock::GetType())
@@ -556,8 +564,8 @@ void CCharacter::Collision()
 		int TopY = m_ofBlockIndexCenter[1] - 1;
 		int BottomY = m_ofBlockIndexCenter[1] + 1;
 
-		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-		CMap* pMap = game->GetStage()->GetMap();
+
+		CMap* pMap = m_stage->GetMap();
 
 		// ブロック端の場合の処理
 		if (LeftX < 0)
@@ -619,8 +627,8 @@ void CCharacter::Collision()
 	}
 
 	{
-		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-		CBlock* block = game->GetStage()->GetMap()->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
+
+		CBlock* block = m_stage->GetMap()->GetBlock(m_ofBlockIndexCenter[0], m_ofBlockIndexCenter[1]);
 		
 		if ((int)m_team != (int)block->CBlock::GetType())
 		{
@@ -634,7 +642,7 @@ void CCharacter::Collision()
 				move.x = ((rand() / (float)RAND_MAX) * (40.0f - -40.0f)) + -40.0f;
 				move.y = ((rand() / (float)RAND_MAX) * (40.0f - -40.0f)) + -40.0f;
 				move.z = 0.0f;
-				CCrushEffect::Create(pos, move, CApplication::GetInstance()->GetColor(m_team), block->CBlock::GetType());
+				CCrushEffect::Create(pos, move, CApplication::GetInstance()->GetColor(m_team), block->CBlock::GetType(),m_stage->GetMap());
 			}
 
 			m_isDeleted = true;	// 死亡状態にする

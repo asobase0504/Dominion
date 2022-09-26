@@ -83,7 +83,7 @@ void CMap::Set()
 		{
 			float halfX = m_blockIdx[y].size() * 0.5f;
 
-			m_block[y].push_back(CBlock::Create(m_blockIdx[y][x]));
+			m_block[y].push_back(CBlock::Create(m_blockIdx[y][x],this));
 
 			D3DXVECTOR3 pos = {};
 			pos.x = (CApplication::GetInstance()->CENTER_X - BLOCK_SIZE * halfX + BLOCK_SIZE * 0.5f) + (x * BLOCK_SIZE);

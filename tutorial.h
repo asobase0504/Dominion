@@ -38,6 +38,10 @@ public:	// メンバー関数
 	void Uninit() override;
 	void Update() override;
 	void Draw() override;
+
+	// Setter
+	void SetControllerIndex(const int inControllerIndex);
+
 private: // 動的プライベート関数
 	void ResetStage();
 
@@ -54,7 +58,6 @@ private: // 動的メンバー変数
 
 	/* キャラクター選択系統 */
 	CMenu* m_charcterSelect;			// キャラクター選択
-	std::vector<int> m_controllerIndex;	// コントローラーの番号
 };
 
 #endif // !_GAME_H_

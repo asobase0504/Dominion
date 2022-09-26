@@ -34,7 +34,11 @@ public:	// メンバー関数
 	void Update();
 	void Draw();
 	void AllDelete();
-	// ゲッタ―
+
+	// Setter
+	void SetControllerIndex(const std::vector<int>& inControllerIndex) { m_controllerIndex = inControllerIndex; }
+
+	// Getter
 	bool GetEndSet() { return m_isEndGame; }
 	int GetWinnerIndex();
 	CMap* GetMap() { return map; }
@@ -44,7 +48,9 @@ private: // プライベート関数
 	void PassOnceCreatePlater();
 	void DeleteBullet();
 private: // 動的メンバー変数
+
 	std::vector<CCharacter*> character;	// キャラクター
+	std::vector<int> m_controllerIndex;
 	std::vector<CController*> controller;	// コントローラー
 	nlohmann::json stage;	// ステージの情報
 	CMap* map;			// マップデータ

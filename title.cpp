@@ -16,6 +16,7 @@
 #include "input.h"
 #include "menu_item.h"
 #include "sound.h"
+#include "tutorial.h"
 
 //-----------------------------------------------------------------------------
 // コンストラクタ
@@ -138,15 +139,19 @@ void CTitle::Uninit()
 //-----------------------------------------------------------------------------
 void CTitle::Update()
 {
+	CInput* input = CInput::GetKey();
 	switch (m_status)
 	{
 	case CTitle::Status::NONE:
 	{
-		CInput* input = CInput::GetKey();
-
 		if (m_manu != nullptr)
 		{
 			m_manu->Update();
+		}
+
+		if (input->Trigger(KEY_DECISION))
+		{
+			m_decisionDvice = input->TriggerDevice(KEY_DECISION).at(0);
 		}
 
 		if (m_manu->Decision(input->Trigger(KEY_DECISION)))
@@ -159,7 +164,12 @@ void CTitle::Update()
 		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::GAME);
 		break;
 	case CTitle::Status::TUTORIAL:
+	{
+		int decisionDvice = m_decisionDvice;
 		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::TUTORIAL);
+		CTutorial* tutorialMode = (CTutorial*)CApplication::GetInstance()->GetMode();
+		tutorialMode->SetControllerIndex(decisionDvice);
+	}
 		break;
 	case CTitle::Status::CUSTOMIZE:
 		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::CUSTUM);

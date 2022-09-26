@@ -443,6 +443,8 @@ void CGame::CharctorSelect()
 	// Œˆ’èƒ{ƒ^ƒ“
 	if (input->Trigger(KEY_DECISION))
 	{
+		m_stage->SetControllerIndex(m_controllerIndex);
+
 		// I—¹ˆ—
 		m_charcterSelect->SetIsDeleted();
 		m_charcterSelect->Uninit();

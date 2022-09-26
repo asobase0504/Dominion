@@ -12,6 +12,7 @@
 #include "character.h"
 #include "bullet.h"
 #include "application.h"
+#include "map.h"
 #include "block_scraped.h"
 #include "block_color_addition.h"
 
@@ -104,7 +105,7 @@ void CBlock::Draw()
 //-----------------------------------------------------------------------------
 // 設定
 //-----------------------------------------------------------------------------
-CBlock* CBlock::Create(CBlock::BLOCK_TYPE type)
+CBlock* CBlock::Create(CBlock::BLOCK_TYPE type,CMap* inParent)
 {
 	CBlock* block = new CBlock;
 
@@ -115,6 +116,7 @@ CBlock* CBlock::Create(CBlock::BLOCK_TYPE type)
 
 	block->Init();
 
+	block->m_parent = inParent;
 	block->m_team = type;
 
 	switch (type)
@@ -168,7 +170,7 @@ void CBlock::ChangeType(DIRECTION inDirection)
 		m_team = CBlock::BLOCK_TYPE::BLOCK_02;
 		for (int i = 0; i < 2; i++)
 		{
-			CCrushEffect::Create(m_pos, move, m_col, m_team);
+			CCrushEffect::Create(m_pos, move, m_col, m_team, m_parent);
 		}
 
 		SetColor(CApplication::GetInstance()->GetColor(1));
@@ -180,14 +182,14 @@ void CBlock::ChangeType(DIRECTION inDirection)
 			delete m_scraped;
 			m_scraped = nullptr;
 		}
-		m_scraped = CBlockScraped::Create(m_pos,CBlock::BLOCK_01, inDirection);
+		m_scraped = CBlockScraped::Create(m_pos,CBlock::BLOCK_01, inDirection, m_parent->GetBlockSize());
 		break;
 	case CBlock::BLOCK_TYPE::BLOCK_02:
 		m_team = CBlock::BLOCK_TYPE::BLOCK_01;
 
 		for (int i = 0; i < 2; i++)
 		{
-			CCrushEffect::Create(m_pos, move, m_col, m_team);
+			CCrushEffect::Create(m_pos, move, m_col, m_team, m_parent);
 		}
 
 		SetColor(CApplication::GetInstance()->GetColor(0));
@@ -198,7 +200,7 @@ void CBlock::ChangeType(DIRECTION inDirection)
 			delete m_scraped;
 			m_scraped = nullptr;
 		}
-		m_scraped = CBlockScraped::Create(m_pos, CBlock::BLOCK_02, inDirection);
+		m_scraped = CBlockScraped::Create(m_pos, CBlock::BLOCK_02, inDirection, m_parent->GetBlockSize());
 		break;
 	default:
 		MessageBox(NULL, TEXT("想定外の列挙型を検出。"), TEXT("swith文の条件式"), MB_ICONHAND);
@@ -336,7 +338,7 @@ void CBlock::SetAdditionColor()
 		return;
 	}
 
-	m_colorAddition = CBlockColorAddition::Create(m_pos, this);
+	m_colorAddition = CBlockColorAddition::Create(m_pos, this, m_parent);
 }
 
 //-----------------------------------------------------------------------------

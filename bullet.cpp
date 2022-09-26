@@ -12,7 +12,6 @@
 #include "application.h"
 #include "collision.h"
 #include "block.h"
-#include "game.h"
 #include "stage.h"
 #include "map.h"
 #include "sound.h"
@@ -71,7 +70,7 @@ void CBullet::Update()
 	// 位置の設定
 	SetPos(GetPos() + m_move);
 
-	CBulletEffect* effect = CBulletEffect::Create(GetPos());
+	CBulletEffect* effect = CBulletEffect::Create(GetPos(),m_map->GetBlockSize());
 	effect->SetColor(GetColor());
 
 	// 当たり判定
@@ -131,7 +130,7 @@ bool CBullet::SetBlockIndex(const int count, std::vector<int> inIndex)
 //-----------------------------------------
 // 生成
 //-----------------------------------------
-CBullet* CBullet::Create(const D3DXVECTOR3& inPos, const D3DXVECTOR3& inMove, const CCharacter::TEAM inTeam)
+CBullet* CBullet::Create(const D3DXVECTOR3& inPos, const D3DXVECTOR3& inMove, const CCharacter::TEAM inTeam,CMap* inMap)
 {
 	CBullet* bullet = new CBullet;
 
@@ -140,10 +139,9 @@ CBullet* CBullet::Create(const D3DXVECTOR3& inPos, const D3DXVECTOR3& inMove, co
 		return nullptr;
 	}
 
-	CGame* gameMode = (CGame*)CApplication::GetInstance()->GetMode();	// ゲームモード
-	float size = gameMode->GetStage()->GetMap()->GetBlockSize();		// 大きさ取得
-
 	bullet->Init();
+	bullet->m_map = inMap;
+	float size = bullet->m_map->GetBlockSize();		// 大きさ取得
 	bullet->SetPos(inPos);
 	bullet->m_move = inMove;
 
@@ -169,11 +167,9 @@ void CBullet::Collision()
 	// 自陣のブロックに当たった場合そのブロックの番号を保存するラムダ式関数
 	auto HitBlock = [this](int x, int y)
 	{
-		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-		CMap* pMap = game->GetStage()->GetMap();
 
 		// 当たったか否か
-		bool isHit = HitWithBlock(pMap->GetBlock(x, y));
+		bool isHit = HitWithBlock(m_map->GetBlock(x, y));
 
 		if (isHit)
 		{ // 当たった場合
@@ -199,23 +195,20 @@ void CBullet::Collision()
 		int TopY = m_ofBlockIndex[i][1] - 1;	// Y軸の上側
 		int BottomY = m_ofBlockIndex[i][1] + 1;	// Y軸の下側
 
-		CGame* game = (CGame*)CApplication::GetInstance()->GetMode();
-		CMap* pMap = game->GetStage()->GetMap();
-
 		// ブロック端の場合の処理
 		if (LeftX < 0)
 		{
-			LeftX = pMap->GetMaxXBlock() - 1;
+			LeftX = m_map->GetMaxXBlock() - 1;
 		}
-		if (RightX > pMap->GetMaxXBlock() - 1)
+		if (RightX > m_map->GetMaxXBlock() - 1)
 		{
 			RightX = 0;
 		}
 		if (TopY < 0)
 		{
-			TopY = pMap->GetMaxYBlock() - 1;
+			TopY = m_map->GetMaxYBlock() - 1;
 		}
-		if (BottomY > pMap->GetMaxYBlock() - 1)
+		if (BottomY > m_map->GetMaxYBlock() - 1)
 		{
 			BottomY = 0;
 		}
