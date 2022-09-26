@@ -140,9 +140,14 @@ void CTutorial::Update()
 			break;
 		}
 	}
-
+	
 	CheckMission();
 	ResetText();
+
+	if (CInput::GetKey()->Trigger(KEY_BACK))
+	{
+		CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::TITLE);
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -310,6 +315,9 @@ void CTutorial::ResetText()
 	}
 }
 
+//-----------------------------------------------------------------------------
+// ミッションの状況確認
+//-----------------------------------------------------------------------------
 void CTutorial::CheckMission()
 {
 	if (m_isSuccess.empty())
