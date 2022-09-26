@@ -68,14 +68,14 @@ protected: // プライベート関数
 	// Setter
 	void SetItemPos();
 protected: // メンバー変数
-	D3DXVECTOR2 m_pos;	// 位置
-	D3DXVECTOR2 m_Area;	// 範囲
-	CMenuFream* m_fream;	// フレーム
+	D3DXVECTOR2 m_pos;								// 位置
+	D3DXVECTOR2 m_Area;								// 範囲
+	CMenuFream* m_fream;							// フレーム
 	std::vector<std::vector<CMenuItem*>> m_item;	// 項目
 	std::vector<int> m_selectIdx;					// 現在選択中の番号
 	D3DXVECTOR2 m_fInterval;						// 項目の間隔
 	D3DXVECTOR2 m_AroundWhitespace;					// 周りの余白
-	bool m_isDexision;	// 決定しているか否か
+	bool m_isDexision;								// 決定しているか否か
 	int m_decisionAfterglowCount;					// 決定後の余韻カウント
 };
 

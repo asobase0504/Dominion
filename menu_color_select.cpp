@@ -1,13 +1,13 @@
 //=============================================================================
 // 
-// ステージ選択メニュークラス
+// カラー選択メニュークラス
 // Author YudaKaito
 // 
 //=============================================================================
 //-----------------------------------------------------------------------------
 // include
 //-----------------------------------------------------------------------------
-#include "menu_stage_select.h"
+#include "menu_color_select.h"
 #include "application.h"
 #include "sound.h"
 #include "input.h"
@@ -15,39 +15,41 @@
 //-----------------------------------------------------------------------------
 // コンストラクタ
 //-----------------------------------------------------------------------------
-CStageSelectMenu::CStageSelectMenu()
+CColorSelectMenu::CColorSelectMenu()
 {
 }
 
 //-----------------------------------------------------------------------------
 // デストラクタ
 //-----------------------------------------------------------------------------
-CStageSelectMenu::~CStageSelectMenu()
+CColorSelectMenu::~CColorSelectMenu()
 {
 }
 
 //-----------------------------------------------------------------------------
 // 決定前の更新
 //-----------------------------------------------------------------------------
-void CStageSelectMenu::UpdateBeforeDecision()
+void CColorSelectMenu::UpdateBeforeDecision()
 {
 	CMenu::UpdateBeforeDecision();
+	// フレーム色の設定
+	m_fream->SetColor(CApplication::GetInstance()->GetColor(0));
 }
 
 //-----------------------------------------------------------------------------
 // 決定後の更新
 //-----------------------------------------------------------------------------
-void CStageSelectMenu::UpdateAfterDecision()
+void CColorSelectMenu::UpdateAfterDecision()
 {
 }
 
 //-----------------------------------------------------------------------------
 // 作成
 //-----------------------------------------------------------------------------
-CStageSelectMenu* CStageSelectMenu::Create(int inStageCount)
+CColorSelectMenu* CColorSelectMenu::Create(int inColorCount)
 {
 	// フレームの設定
-	CMenuFream* fream = new CMenuFream;
+	CMenuFream* fream = new CColorSelectMenuFream;
 	{
 		fream->Init();
 		fream->SetColor(CApplication::GetInstance()->GetColor(0));
@@ -56,10 +58,10 @@ CStageSelectMenu* CStageSelectMenu::Create(int inStageCount)
 
 	std::vector<std::vector<CMenuItem*>> items;
 	std::vector<CMenuItem*> X;
-	for (int i = 0; i < inStageCount; i++)
+	for (int i = 0; i < inColorCount; i++)
 	{
 
-		CMenuItem* item = new CStageSelectMenuItem;
+		CMenuItem* item = new CColorSelectMenuItem;
 		item->Init();
 		item->SetSize(D3DXVECTOR2(60.0f, 60.0f));			// 大きさの設定
 		item->SetColor(CApplication::GetInstance()->GetColor(0));			// 色の設定
@@ -72,8 +74,8 @@ CStageSelectMenu* CStageSelectMenu::Create(int inStageCount)
 	area.y *= 0.25f;
 
 	D3DXVECTOR2 pos(CApplication::GetInstance()->GetScreenCenter());
-	CStageSelectMenu* menu = (CStageSelectMenu*)CMenu::Create(pos, area, fream);
-	menu->SetInterval({25.0f,25.0f});
+	CColorSelectMenu* menu = (CColorSelectMenu*)CMenu::Create(pos, area, fream);
+	menu->SetInterval({ 25.0f,25.0f });
 	menu->SetItems(items);
 
 	return menu;
@@ -88,7 +90,7 @@ CStageSelectMenu* CStageSelectMenu::Create(int inStageCount)
 //-----------------------------------------------------------------------------
 // コンストラクタ
 //-----------------------------------------------------------------------------
-CStageSelectMenuFream::CStageSelectMenuFream(CObject::TYPE type) :
+CColorSelectMenuFream::CColorSelectMenuFream(CObject::TYPE type) :
 	CMenuFream(type)
 {
 }
@@ -96,21 +98,21 @@ CStageSelectMenuFream::CStageSelectMenuFream(CObject::TYPE type) :
 //-----------------------------------------------------------------------------
 // デストラクタ
 //-----------------------------------------------------------------------------
-CStageSelectMenuFream::~CStageSelectMenuFream()
+CColorSelectMenuFream::~CColorSelectMenuFream()
 {
 }
 
 //-----------------------------------------------------------------------------
 // 終了
 //-----------------------------------------------------------------------------
-void CStageSelectMenuFream::Uninit()
+void CColorSelectMenuFream::Uninit()
 {
 }
 
 //-----------------------------------------------------------------------------
 // 更新
 //-----------------------------------------------------------------------------
-void CStageSelectMenuFream::Update()
+void CColorSelectMenuFream::Update()
 {
 }
 
@@ -123,7 +125,7 @@ void CStageSelectMenuFream::Update()
 //-----------------------------------------------------------------------------
 // コンストラクタ
 //-----------------------------------------------------------------------------
-CStageSelectMenuItem::CStageSelectMenuItem(CObject::TYPE type) :
+CColorSelectMenuItem::CColorSelectMenuItem(CObject::TYPE type) :
 	CMenuItem(type),
 	m_SinTime(0)
 {
@@ -132,14 +134,14 @@ CStageSelectMenuItem::CStageSelectMenuItem(CObject::TYPE type) :
 //-----------------------------------------------------------------------------
 // デストラクタ
 //-----------------------------------------------------------------------------
-CStageSelectMenuItem::~CStageSelectMenuItem()
+CColorSelectMenuItem::~CColorSelectMenuItem()
 {
 }
 
 //-----------------------------------------------------------------------------
 // 初期化
 //-----------------------------------------------------------------------------
-HRESULT CStageSelectMenuItem::Init()
+HRESULT CColorSelectMenuItem::Init()
 {
 	{
 		m_EmphasisSelect = new CObject2D;
@@ -154,7 +156,7 @@ HRESULT CStageSelectMenuItem::Init()
 //-----------------------------------------------------------------------------
 // 終了
 //-----------------------------------------------------------------------------
-void CStageSelectMenuItem::Uninit()
+void CColorSelectMenuItem::Uninit()
 {
 	if (m_EmphasisSelect != nullptr)
 	{
@@ -168,7 +170,7 @@ void CStageSelectMenuItem::Uninit()
 //-----------------------------------------------------------------------------
 // 出現状態の更新
 //-----------------------------------------------------------------------------
-void CStageSelectMenuItem::PopUpdate()
+void CColorSelectMenuItem::PopUpdate()
 {
 	m_EmphasisSelect->SetPos(m_pos);
 	m_isPopNow = false;
@@ -177,13 +179,14 @@ void CStageSelectMenuItem::PopUpdate()
 //-----------------------------------------------------------------------------
 // 選択状態の更新
 //-----------------------------------------------------------------------------
-void CStageSelectMenuItem::SelectUpdate()
+void CColorSelectMenuItem::SelectUpdate()
 {
 	m_SinTime++;
 	SetColor(CApplication::GetInstance()->GetColor(0));	// 色の設定
 	D3DXVECTOR2 size(80.0f, 80.0f);
 	size.x += 5.0f * sinf(0.095f * m_SinTime);
 	size.y += 5.0f * sinf(0.095f * m_SinTime);
+	m_EmphasisSelect->SetColor(CApplication::GetInstance()->GetColor(1));
 	m_EmphasisSelect->SetSize(size);
 	m_EmphasisSelect->SetColorAlpha(1.0f);
 }
@@ -191,7 +194,7 @@ void CStageSelectMenuItem::SelectUpdate()
 //-----------------------------------------------------------------------------
 // 通常状態の更新
 //-----------------------------------------------------------------------------
-void CStageSelectMenuItem::NomalUpdate()
+void CColorSelectMenuItem::NomalUpdate()
 {
 	m_SinTime = 0;
 	SetColor(CApplication::GetInstance()->GetColor(1));	// 色の設定
@@ -201,6 +204,6 @@ void CStageSelectMenuItem::NomalUpdate()
 //-----------------------------------------------------------------------------
 // 終了状態の更新
 //-----------------------------------------------------------------------------
-void CStageSelectMenuItem::EndUpdate()
+void CColorSelectMenuItem::EndUpdate()
 {
 }

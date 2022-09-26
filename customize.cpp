@@ -13,6 +13,7 @@
 #include "application.h"
 #include "object2d.h"
 #include "menu.h"
+#include "menu_color_select.h"
 #include "input.h"
 #include "map.h"
 #include "file.h"
@@ -53,36 +54,7 @@ HRESULT CCustomize::Init()
 		m_bg->SetColor(application->GetColor(2));
 	}
 
-	// メニューの設定
-	{
-		// フレームの設定
-		CMenuFream* fream = new CMenuFream;
-		{
-			fream->Init();
-			fream->SetColor(application->GetColor(1));
-		}
-
-		// 項目の設定
-		std::vector<std::vector<CMenuItem*>> items;
-		std::vector<CMenuItem*> X;
-		for (int i = 0; i < application->GetColorSize(); i++)
-		{
-
-			CMenuItem* item = new CMenuItem;
-			item->Init();
-			item->SetSize(D3DXVECTOR2(80.0f, 80.0f));			// 大きさの設定
-			item->SetColor(application->GetColor(0));			// 色の設定
-
-			X.push_back(item);
-		}
-		items.push_back(X);
-
-		D3DXVECTOR2 pos(application->CENTER_X, application->CENTER_Y);
-		D3DXVECTOR2 area = application->GetScreenSize();
-		area.y *= 0.25f;
-		m_manu = CMenu::Create(pos, area, fream);
-		m_manu->SetItems(items);
-	}
+	m_manu = CColorSelectMenu::Create(application->GetColorSize());
 
 	m_stage = new CMap;
 	if (FAILED(m_stage->Init()))
@@ -125,8 +97,6 @@ void CCustomize::Update()
 	{
 		CApplication::GetInstance()->SetThemeColor(m_manu->GetSelectIdx()[1]);
 		m_bg->SetColor(CApplication::GetInstance()->GetColor(2));
-
-		m_manu->GetFream()->SetColor(CApplication::GetInstance()->GetColor(1));
 
 		// マップの解放
 		m_stage->Delete();
