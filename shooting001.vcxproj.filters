@@ -84,6 +84,9 @@
     <Filter Include="ソース ファイル\07_UI\00_Menu\02_ColorSelect">
       <UniqueIdentifier>{abaad82b-1d31-4c49-8522-0d243b59ec36}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\07_UI\00_Menu\03_TutorialText">
+      <UniqueIdentifier>{3d893e1f-6470-49e4-98b2-4d85575bba12}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="input.cpp">
@@ -220,6 +223,12 @@
     </ClCompile>
     <ClCompile Include="menu_color_select.cpp">
       <Filter>ソース ファイル\07_UI\00_Menu\02_ColorSelect</Filter>
+    </ClCompile>
+    <ClCompile Include="tutorial_text_menu.cpp">
+      <Filter>ソース ファイル\07_UI\00_Menu\03_TutorialText</Filter>
+    </ClCompile>
+    <ClCompile Include="menu_manager.cpp">
+      <Filter>ソース ファイル\07_UI\00_Menu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -360,6 +369,12 @@
     </ClInclude>
     <ClInclude Include="menu_color_select.h">
       <Filter>ソース ファイル\07_UI\00_Menu\02_ColorSelect</Filter>
+    </ClInclude>
+    <ClInclude Include="tutorial_text_menu.h">
+      <Filter>ソース ファイル\07_UI\00_Menu\03_TutorialText</Filter>
+    </ClInclude>
+    <ClInclude Include="menu_manager.h">
+      <Filter>ソース ファイル\07_UI\00_Menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -7,6 +7,7 @@
 #include "renderer.h"
 #include "object.h"
 #include "application.h"
+#include "mode.h"
 #include <tchar.h>
 
 //=============================================================================
@@ -157,6 +158,7 @@ void CRenderer::Draw()
 #endif // _DEBUG
 
 		CObject::DrawAll();	// オブジェクト
+		CApplication::GetInstance()->GetMode()->Draw();
 
 		// Direct3Dによる描画の終了
 		pD3DDevice->EndScene();

@@ -136,7 +136,7 @@ void CStage::PassOnceCreatePlater()
 		return;
 	}
 
-	if (m_PreparingCount <= 5)
+	if (m_PreparingCount <= 30)
 	{
 		m_PreparingCount++;
 		return;
