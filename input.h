@@ -67,7 +67,9 @@ public:
 	D3DXVECTOR3 VectorMoveKey();								//十字キー式のベクトル取得
 	D3DXVECTOR3 VectorMoveJoyStick(int nNum = 0, bool bleftandright = false); //ジョイスティックのベクトル取得
 	//*
-
+	
+	// Getter
+	int GetAcceptJoyPadCount();
 private:
 
 	CInputKeyboard *m_pKeyboard;	//キーボードの情報

@@ -940,3 +940,8 @@ D3DXVECTOR3 CInput::VectorMoveJoyStick(int nNum, bool bleftandright)
 	D3DXVec3Normalize(&VectorMove, &VectorMove);
 	return VectorMove;
 }
+
+int CInput::GetAcceptJoyPadCount()
+{
+	return m_pJoyPad->GetJoyPadNumMax();
+}

@@ -144,7 +144,7 @@ HRESULT CStageSelectMenuItem::Init()
 	{
 		m_EmphasisSelect = new CObject2D;
 		m_EmphasisSelect->Init();
-		m_EmphasisSelect->SetSize(D3DXVECTOR2(80.0f, 80.0f));
+		m_EmphasisSelect->SetSize(D3DXVECTOR2(0.0f, 0.0f));
 		m_EmphasisSelect->SetColor(CApplication::GetInstance()->GetColor(1));	// F‚Ìİ’è
 	}
 	CMenuItem::Init();

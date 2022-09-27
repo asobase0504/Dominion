@@ -15,6 +15,7 @@
 #include "pause.h"
 #include "menu.h"
 #include "menu_stage_select.h"
+#include "menu_number_Select.h"
 #include "input.h"
 #include <assert.h>
 #include <functional>
@@ -31,14 +32,17 @@ CGame::CGame() :
 	m_stageIndex(0),
 	m_stage(nullptr),
 	m_peopleNumberSelect(nullptr),
-	m_charcterSelect(nullptr),
 	m_countDownUI(nullptr),
 	m_obtainedSetNumberUI(nullptr),
 	m_endGameUI(nullptr),
+	m_contrellerTextureBg(nullptr),
 	m_needWinNumber(0),
 	m_winnerIndex(0),
 	m_peopleNumber(0)
 {
+	m_charcterBg.clear();
+	m_charcter.clear();
+	m_bulletSample.clear();
 	m_stageInfo.clear();
 	m_controllerIndex.clear();
 	m_winNumber.clear();
@@ -53,7 +57,6 @@ CGame::~CGame()
 	assert(m_endGameUI == nullptr);
 	assert(m_stage == nullptr);
 	assert(m_peopleNumberSelect == nullptr);
-	assert(m_charcterSelect == nullptr);
 	assert(m_countDownUI == nullptr);
 	assert(m_obtainedSetNumberUI == nullptr);
 	assert(m_stage == nullptr);
@@ -75,11 +78,12 @@ HRESULT CGame::Init()
 	}
 
 	// ステージ情報の取得
-	m_stageInfo = LoadJsonStage(L"data/FILE/STAGE/stage01.json")["STAGE"];
+	m_stageInfo = LoadJsonStage(L"data/FILE/STAGE/stage01.json").at("STAGE");
 
 	StageSelectInit();
 
 	m_needWinNumber = 1;
+	m_peopleNumber = 2;
 	return S_OK;
 }
 
@@ -88,11 +92,13 @@ HRESULT CGame::Init()
 //-----------------------------------------------------------------------------
 void CGame::StageSelectInit()
 {
+	// アップデートを通すラグをリセット
 	m_updateLagTime = 0;
 
 	// 仮ステージの設置
 	ResetStage();
 
+	// ステージセレクトメニューの作成
 	m_stageSelect = CStageSelectMenu::Create(m_stageInfo.size());
 }
 
@@ -115,19 +121,113 @@ void CGame::PeopleNumberSelectInit()
 	std::vector<CMenuItem*> X;
 	for (int i = 0; i < 2; i++)
 	{
-		CMenuItem* item = new CMenuItem;
+		CNumberSelectMenuItem* item = new CNumberSelectMenuItem;
 		item->Init();
 		item->SetSize(D3DXVECTOR2(80.0f, 80.0f));					// 大きさの設定
 		item->SetColor(CApplication::GetInstance()->GetColor(0));	// 色の設定
-
+		item->SetAbovePasteTexture(i == 0 ? "2PL" : "4PL");	// アイテムの上に貼るオブジェクトのテクスチャ設定
 		X.push_back(item);
 	}
 	items.push_back(X);
 
-	D3DXVECTOR2 area = CApplication::GetInstance()->GetScreenSize();
-	area.y *= 0.25f;
-	m_peopleNumberSelect = CMenu::Create(CApplication::GetInstance()->GetScreenCenter(), area, fream);
-	m_peopleNumberSelect->SetItems(items);
+	{
+		D3DXVECTOR2 area = CApplication::GetInstance()->GetScreenSize();
+		area.y *= 0.25f;
+		D3DXVECTOR2 pos(CApplication::GetInstance()->GetScreenCenter());
+		pos.y *= 1.5f;
+		m_peopleNumberSelect = CMenu::Create(pos, area, fream);
+		m_peopleNumberSelect->SetInterval({ 25.0f,25.0f });
+		m_peopleNumberSelect->SetItems(items);
+	}
+
+	m_charcterBg.resize(2);
+	for (int i = 0; i < 2; i++)
+	{
+		m_charcterBg.at(i) = new CObject2D(CObject::TYPE::NONE,2);
+		m_charcterBg.at(i)->Init();
+
+		D3DXVECTOR3 pos(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y, 0.0f);
+		pos.x *= (0.5f + 1.0f * i);
+		pos.y *= 0.75f;
+		m_charcterBg.at(i)->SetPos(pos);	// 色の設定
+		m_charcterBg.at(i)->SetColor(CApplication::GetInstance()->GetColor(i == 0 ? 0 : 1));	// 色の設定
+		D3DXVECTOR2 size(CApplication::GetInstance()->GetScreenSize());
+		size.x *= 0.5f;
+		size.y *= 0.25f;
+		m_charcterBg.at(i)->SetSize(size);	// 色の設定
+		m_charcterBg.at(i)->SetColorAlpha(0.95f);	// 色の設定
+	}
+
+	ResetCharcterSample();
+}
+
+//-----------------------------------------------------------------------------
+// 人数選択の削除
+//-----------------------------------------------------------------------------
+void CGame::PeopleNumberSelectDelete()
+{
+	for (int i = 0; i < (int)m_charcterBg.size(); i++)
+	{
+		m_charcterBg.at(i)->SetIsDeleted(true);
+	}
+	m_charcterBg.clear();
+
+	for (int i = 0; i < (int)m_charcter.size(); i++)
+	{
+		m_charcter.at(i)->SetIsDeleted(true);
+	}
+	m_charcter.clear();
+
+	for (int i = 0; i < (int)m_bulletSample.size(); i++)
+	{
+		m_bulletSample.at(i)->SetIsDeleted(true);
+		m_bulletSample.at(i)->Uninit();
+	}
+	m_bulletSample.clear();
+}
+
+//-----------------------------------------------------------------------------
+// キャラクターsample
+//-----------------------------------------------------------------------------
+void CGame::ResetCharcterSample()
+{
+	for (int i = 0; i < (int)m_charcter.size(); i++)
+	{
+		m_charcter.at(i)->SetIsDeleted(true);
+	}
+	m_charcter.clear();
+
+	for (int i = 0; i < (int)m_bulletSample.size(); i++)
+	{
+		m_bulletSample.at(i)->SetIsDeleted(true);
+	}
+	m_bulletSample.clear();
+
+	m_charcter.resize(m_peopleNumber);
+	m_bulletSample.resize(m_peopleNumber);
+	for (int i = 0; i < m_peopleNumber; i++)
+	{
+		bool team = (m_peopleNumber * 0.5f) <= i;
+
+		D3DXVECTOR3 pos(CApplication::GetInstance()->CENTER_X / m_peopleNumber, CApplication::GetInstance()->CENTER_Y, 0.0f);
+		pos.y *= 0.75f;
+		pos.x += pos.x * (i * 2);
+		D3DXVECTOR2 size(60.0f, 60.0f);
+
+		m_charcter.at(i) = new CObject2D;
+		m_charcter.at(i)->Init();		// 初期化
+		m_charcter.at(i)->SetPos(pos);	// 位置の設定
+		m_charcter.at(i)->SetColor(CApplication::GetInstance()->GetColor(team ? 0 : 1));	// 色の設定
+		m_charcter.at(i)->SetSize(size);	// 大きさの設定
+		m_charcter.at(i)->SetTexture("PLAYER");	// テクスチャの設定
+
+		m_bulletSample.at(i) = new CObject2D;
+		m_bulletSample.at(i)->Init();		// 初期化
+		m_bulletSample.at(i)->SetPos(pos);	// 位置の設定
+		m_bulletSample.at(i)->SetColor(CApplication::GetInstance()->GetColor(team ? 1 : 0));	// 色の設定
+		m_bulletSample.at(i)->SetSize(size);	// 大きさの設定
+		m_bulletSample.at(i)->SetTexture("BULLET_SAMPLE");	// テクスチャの設定
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -137,39 +237,100 @@ void CGame::CharcterSelectInit()
 {
 	m_updateLagTime = 0;
 
-	// フレームの設定
-	CMenuFream* fream = new CMenuFream;
+	// 背景の設定
+	if (m_contrellerTextureBg == nullptr)
 	{
-		fream->Init();
-		fream->SetColor(CApplication::GetInstance()->GetColor(0));
-		fream->SetColorAlpha(0.55f);
+		m_contrellerTextureBg = new CObject2D;
+		m_contrellerTextureBg->Init();
+		m_contrellerTextureBg->SetColor(CApplication::GetInstance()->GetColor(0));
+		m_contrellerTextureBg->SetColorAlpha(0.55f);
+		D3DXVECTOR2 size = CApplication::GetInstance()->GetScreenSize();
+		size.y *= 0.25f;
+		m_contrellerTextureBg->SetSize(size);
+		D3DXVECTOR3 pos(CApplication::GetInstance()->GetScreenCenter());
+		pos.y *= 1.5f;
+		pos.z = 0.0f;
+		m_contrellerTextureBg->SetPos(pos);
 	}
 
-	std::vector<std::vector<CMenuItem*>> items;
-	std::vector<CMenuItem*> X;
-	for (int i = 0; i < m_peopleNumber; i++)
+	// コントローラー誘導のテクスチャ
+	m_contrellerTexture.resize(CInput::GetKey()->GetAcceptJoyPadCount() + 1);
+	m_contrellerTeam.resize(CInput::GetKey()->GetAcceptJoyPadCount() + 1);
+	m_contrellerPos.resize(CInput::GetKey()->GetAcceptJoyPadCount() + 1);
+	for (int i = 0; i < (int)m_contrellerTexture.size(); i++)
 	{
-		CMenuItem* item = new CMenuItem;
-		item->Init();
-		item->SetSize(D3DXVECTOR2(80.0f, 80.0f));					// 大きさの設定
-		item->SetColor(CApplication::GetInstance()->GetColor(0));	// 色の設定
+		m_contrellerTeam.at(i) = 0;
+		D3DXVECTOR3 pos(CApplication::GetInstance()->CENTER_X / m_contrellerTexture.size(), CApplication::GetInstance()->CENTER_Y, 0.0f);
+		pos.y *= 1.5f;
+		pos.x += pos.x * (i * 2);
+		D3DXVECTOR2 size(70.0f, 70.0f);
 
-		X.push_back(item);
+		m_contrellerTexture.at(i) = new CObject2D;
+		m_contrellerTexture.at(i)->Init();		// 初期化
+		m_contrellerPos.at(i) = pos;
+		m_contrellerTexture.at(i)->SetPos(pos);	// 位置の設定
+		m_contrellerTexture.at(i)->SetColor(CApplication::GetInstance()->GetColor(1));	// 色の設定
+		m_contrellerTexture.at(i)->SetSize(size);	// 大きさの設定
+
+		if (CInput::GetKey()->GetAcceptJoyPadCount() != i)
+		{
+			m_contrellerTexture.at(i)->SetTexture("CONTLLER");	// テクスチャの設定
+		}
+		else
+		{
+			m_contrellerTexture.at(i)->SetTexture("KEYBOAD");	// テクスチャの設定
+		}
 	}
-	items.push_back(X);
-
-	D3DXVECTOR2 area = CApplication::GetInstance()->GetScreenSize();
-	area.y *= 0.25f;
-	m_charcterSelect = CMenu::Create(CApplication::GetInstance()->GetScreenCenter(), area, fream);
-	m_charcterSelect->SetItems(items);
 
 	// コントローラーの番号をプレイヤー数分作成する
 	m_controllerIndex.resize(m_peopleNumber);
 
 	for (int i = 0; i < (int)m_controllerIndex.size(); i++)
 	{
-		m_controllerIndex[i] = -2;
+		m_controllerIndex.at(i) = -2;
 	}
+}
+
+//-----------------------------------------------------------------------------
+// コントローラーの番号を設定
+//-----------------------------------------------------------------------------
+void CGame::SetControllerIndex()
+{
+	int team1 = 0;
+	int team2 = 1;
+	for (int i = 0; i < (int)m_contrellerTeam.size(); i++)
+	{
+		if (m_contrellerTeam.at(i) == 0)
+		{
+			continue;
+		}
+		else if (m_contrellerTeam.at(i) == -1)
+		{
+			if (i == (int)m_contrellerTeam.size() - 1)
+			{
+				m_controllerIndex.at(team1) = -1;
+			}
+			else
+			{
+				m_controllerIndex.at(team1) = i;
+			}
+			team1 += 2;
+		}
+		else if (m_contrellerTeam.at(i) == 1)
+		{
+			if (i == (int)m_contrellerTeam.size() - 1)
+			{
+				m_controllerIndex.at(team2) = -1;
+			}
+			else
+			{
+				m_controllerIndex.at(team2) = i;
+			}
+			team2 += 2;
+		}
+	}
+
+	m_stage->SetControllerIndex(m_controllerIndex);
 }
 
 //-----------------------------------------------------------------------------
@@ -177,6 +338,10 @@ void CGame::CharcterSelectInit()
 //-----------------------------------------------------------------------------
 void CGame::Uninit()
 {
+	m_charcterBg.clear();
+	m_charcter.clear();
+	m_bulletSample.clear();
+
 	if (m_countDownUI != nullptr)
 	{
 		m_countDownUI->Uninit();
@@ -219,13 +384,6 @@ void CGame::Uninit()
 		m_peopleNumberSelect = nullptr;
 	}
 
-	if (m_charcterSelect != nullptr)
-	{
-		m_charcterSelect->Uninit();
-		delete m_charcterSelect;
-		m_charcterSelect = nullptr;
-	}
-
 	if (m_pause != nullptr)
 	{
 		m_pause->Uninit();
@@ -262,7 +420,7 @@ void CGame::Update()
 	// キャラクター選択中
 	CharctorSelect();
 
-	if (m_charcterSelect == nullptr && m_peopleNumberSelect == nullptr && m_stageSelect == nullptr)
+	if (m_contrellerTextureBg == nullptr && m_peopleNumberSelect == nullptr && m_stageSelect == nullptr)
 	{
 		// バトル中
 		BattleUpdate();
@@ -287,9 +445,9 @@ void CGame::StageSelectUpdate()
 
 	m_stageSelect->Update();
 
-	if (m_stageIndex != m_stageSelect->GetSelectIdx()[1])
+	if (m_stageIndex != m_stageSelect->GetSelectIdx().at(1))
 	{
-		m_stageIndex = m_stageSelect->GetSelectIdx()[1];
+		m_stageIndex = m_stageSelect->GetSelectIdx().at(1);
 
 		ResetStage();	// 仮ステージの設置
 	}
@@ -332,6 +490,14 @@ void CGame::PeopleNumberSelectUpdate()
 
 	m_peopleNumberSelect->Update();
 
+	// 人数の設定
+	if (m_peopleNumber != m_peopleNumberSelect->GetSelectIdx().at(1) * 2 + 2)
+	{
+		m_peopleNumber = m_peopleNumberSelect->GetSelectIdx().at(1) * 2 + 2;
+
+		ResetCharcterSample();
+	}
+
 	CInput* input = CInput::GetKey();
 
 	// 決定ボタン
@@ -339,23 +505,27 @@ void CGame::PeopleNumberSelectUpdate()
 	{
 		CApplication::GetInstance()->GetSound()->Play(CSound::LABEL_SE_DECISION);
 
-		// 人数の設定
-		m_peopleNumber = m_peopleNumberSelect->GetSelectIdx()[1] * 2 + 2;
-
 		// 終了処理
-		m_peopleNumberSelect->SetIsDeleted();
-		m_peopleNumberSelect->Uninit();
-		delete m_peopleNumberSelect;
-		m_peopleNumberSelect = nullptr;
+		if (m_stageSelect == nullptr)
+		{
+			m_peopleNumberSelect->SetIsDeleted();
+			m_peopleNumberSelect->Uninit();
+			delete m_peopleNumberSelect;
+			m_peopleNumberSelect = nullptr;
+		}
+		else
+		{
+			assert(false);
+		}
 
 		// 勝ちをカウントするint型をチーム数分作成する。
 		m_winNumber.resize(m_peopleNumber);
 		for (int i = 0; i < (int)m_winNumber.size(); i++)
 		{
-			m_winNumber[i] = 0;
+			m_winNumber.at(i) = 0;
 		}
 
-		if (m_charcterSelect == nullptr)
+		if (m_contrellerTextureBg == nullptr)
 		{
 			CharcterSelectInit();
 			return;
@@ -375,14 +545,15 @@ void CGame::PeopleNumberSelectUpdate()
 			m_peopleNumberSelect->Uninit();
 			delete m_peopleNumberSelect;
 			m_peopleNumberSelect = nullptr;
-
-			StageSelectInit();
-			return;
 		}
 		else
 		{
 			assert(false);
 		}
+
+		PeopleNumberSelectDelete();
+
+		StageSelectInit();
 	}
 }
 
@@ -391,7 +562,7 @@ void CGame::PeopleNumberSelectUpdate()
 //-----------------------------------------------------------------------------
 void CGame::CharctorSelect()
 {
-	if (m_charcterSelect == nullptr)
+	if (m_contrellerTextureBg == nullptr)
 	{
 		return;
 	}
@@ -402,54 +573,134 @@ void CGame::CharctorSelect()
 		return;
 	}
 
-	m_charcterSelect->Update();
-
 	CInput* input = CInput::GetKey();
-	std::vector<int> deviceIndexUp = input->TriggerDevice(KEY_UP);
-	std::vector<int> deviceIndexDown = input->TriggerDevice(KEY_DOWN);
+	std::vector<int> deviceIndexLeft = input->TriggerDevice(KEY_LEFT);
+	std::vector<int> deviceIndexRigth = input->TriggerDevice(KEY_RIGHT);
 
-	for (int i = 0; i < (int)deviceIndexUp.size(); i++)
+	// 右の入力を管理
+	for (int i = 0; i < (int)deviceIndexLeft.size(); i++)
 	{
-		bool isDuplication = false;	// 重複しているか否か
+		int index = deviceIndexLeft[i];
 
-		for (int j = 0; j < (int)m_controllerIndex.size(); j++)
+		if (index == -1)
 		{
-			/* ↓重複チェック↓ */
-
-			if (m_controllerIndex[j] == deviceIndexUp[i])
-			{
-				isDuplication = true;
-				break;
-			}
+			index = m_contrellerTeam.size() - 1;
 		}
 
-		if (isDuplication)
+		if (m_contrellerTeam.at(index) <= -1)
 		{
 			continue;
 		}
 
-			/* ↓重複無しだった↓ */
+		/* ↓行き過ぎた入力じゃない場合↓ */
 
-			for (int j = 0; j < (int)m_controllerIndex.size(); j++)
+		int chack = 0;
+		for (int j = 0; j < (int)m_contrellerTeam.size(); j++)
+		{
+			// チームにすでに何人所属しているか調べる
+			if (m_contrellerTeam.at(j) == -1)
 			{
-				if (m_controllerIndex[j] == -2)
-				{
-					m_controllerIndex[j] = deviceIndexUp[i];
-					break;
-				}
+				chack++;
 			}
+		}
+
+		if (chack >= m_peopleNumber * 0.5f && (m_contrellerTeam.at(index) - 1 == -1))
+		{
+			// 全体の半分以上の人数が居た場合
+			return;
+		}
+
+		/* ↓プレイヤーの人数がチームの許容量以下の場合↓ */
+
+		m_contrellerTeam.at(index)--;
+	}
+
+	// 左の入力を管理
+	for (int i = 0; i < (int)deviceIndexRigth.size(); i++)
+	{
+		int index = deviceIndexRigth[i];
+
+		if (index == -1)
+		{
+			index = m_contrellerTeam.size() - 1;
+		}
+
+		if (m_contrellerTeam.at(index) >= 1)
+		{
+			continue;
+		}
+
+		/* ↓行き過ぎた入力じゃない場合↓ */
+		int chack = 0;
+		for (int j = 0; j < (int)m_contrellerTeam.size(); j++)
+		{
+			// チームにすでに何人所属しているか調べる
+			if (m_contrellerTeam.at(j) == 1)
+			{
+				chack++;
+			}
+		}
+
+		if (chack >= m_peopleNumber * 0.5f && (m_contrellerTeam.at(index) + 1 == 1))
+		{
+			// 全体の半分以上の人数が居た場合
+			return;
+		}
+
+		m_contrellerTeam.at(index)++;
+	}
+
+	int team1 = 0;
+	int team2 = m_peopleNumber * 0.5f;
+	for (int i = 0; i < (int)m_contrellerTexture.size(); i++)
+	{
+		switch (m_contrellerTeam.at(i))
+		{
+		case 0:
+			m_contrellerTexture.at(i)->SetPos(m_contrellerPos.at(i));
+			m_contrellerTexture.at(i)->SetColor(CApplication::GetInstance()->GetColor(1));
+			break;
+		case -1:
+		{
+			D3DXVECTOR3 pos = m_charcter.at(team1)->GetPos();
+			pos.y += 60.0f;
+			m_contrellerTexture.at(i)->SetPos(pos);
+			m_contrellerTexture.at(i)->SetColor(CApplication::GetInstance()->GetColor(1));
+			team1++;
+		}
+			break;
+		case 1:
+		{
+			D3DXVECTOR3 pos = m_charcter.at(team2)->GetPos();
+			pos.y += 60.0f;
+			m_contrellerTexture.at(i)->SetPos(pos);
+			m_contrellerTexture.at(i)->SetColor(CApplication::GetInstance()->GetColor(0));
+			team2++;
+		}
+		break;
+		default:
+			break;
+		}
 	}
 
 	// 決定ボタン
 	if (input->Trigger(KEY_DECISION))
 	{
-		m_stage->SetControllerIndex(m_controllerIndex);
+		// コントローラーの番号を設定する。
+		SetControllerIndex();
 
-		// 終了処理
-		m_charcterSelect->SetIsDeleted();
-		m_charcterSelect->Uninit();
-		delete m_charcterSelect;
-		m_charcterSelect = nullptr;
+		// 背景の削除
+		m_contrellerTextureBg->SetIsDeleted(true);
+		m_contrellerTextureBg = nullptr;
+
+		// コントローラーテクスチャの削除
+		for (int i = 0; i < (int)m_contrellerTexture.size(); i++)
+		{
+			m_contrellerTexture.at(i)->SetIsDeleted(true);
+		}
+		m_contrellerTexture.clear();
+
+		PeopleNumberSelectDelete();
 
 		// カウントダウンの初期化
 		D3DXVECTOR2 pos(CApplication::GetInstance()->CENTER_X, CApplication::GetInstance()->CENTER_Y);	// 位置を設定
@@ -461,10 +712,18 @@ void CGame::CharctorSelect()
 	{
 		if (m_stageSelect == nullptr)
 		{
-			m_charcterSelect->SetIsDeleted();
-			m_charcterSelect->Uninit();
-			delete m_charcterSelect;
-			m_charcterSelect = nullptr;
+			// 背景の削除
+			m_contrellerTextureBg->SetIsDeleted(true);
+			m_contrellerTextureBg = nullptr;
+
+			// コントローラーテクスチャの削除
+			for (int i = 0; i < (int)m_contrellerTexture.size(); i++)
+			{
+				m_contrellerTexture.at(i)->SetIsDeleted(true);
+			}
+			m_contrellerTexture.clear();
+
+			PeopleNumberSelectDelete();
 
 			PeopleNumberSelectInit();
 			return;
@@ -498,7 +757,7 @@ void CGame::BattleUpdate()
 			{
 				for (int i = 0; i < (int)m_winNumber.size(); i++)
 				{
-					m_winNumber[i] = 0;
+					m_winNumber.at(i) = 0;
 				}
 				// もう一度ゲームを行う
 				ResetStage();
@@ -529,15 +788,15 @@ void CGame::BattleUpdate()
 			delete m_endGameUI;
 			m_endGameUI = nullptr;
 
-			if (index[0] == 1)
+			if (index.at(0) == 1)
 			{
 				CApplication::GetInstance()->SetMode(CApplication::MODE_TYPE::TITLE);
 			}
-			if (index[0] == 0)
+			if (index.at(0) == 0)
 			{
 				for (int i = 0; i < (int)m_winNumber.size(); i++)
 				{
-					m_winNumber[i] = 0;
+					m_winNumber.at(i) = 0;
 				}
 				// もう一度ゲームを行う
 				ResetStage();
@@ -618,12 +877,12 @@ void CGame::BattleUpdate()
 void CGame::BattleEnd()
 {
 	m_winnerIndex = m_stage->GetWinnerIndex();
-	m_winNumber[m_winnerIndex]++;
+	m_winNumber.at(m_winnerIndex)++;
 
 	bool isRoundCountWon = false;
 	for (int i = 0; i < (int)m_winNumber.size(); i++)
 	{
-		if (m_winNumber[i] >= m_needWinNumber)
+		if (m_winNumber.at(i) >= m_needWinNumber)
 		{
 			isRoundCountWon = true;
 		}
@@ -665,4 +924,6 @@ void CGame::ResetStage()
 
 	m_stage = new CStage;
 	m_stage->Init(GetStageInfo());	// 初期化
+	m_stage->SetControllerIndex(m_controllerIndex);
+
 }

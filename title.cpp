@@ -152,6 +152,7 @@ void CTitle::Update()
 		if (input->Trigger(KEY_DECISION))
 		{
 			m_decisionDvice = input->TriggerDevice(KEY_DECISION).at(0);
+			m_status = (CTitle::Status)m_manu->GetSelectIdx()[0];
 		}
 
 		if (m_manu->Decision(input->Trigger(KEY_DECISION)))

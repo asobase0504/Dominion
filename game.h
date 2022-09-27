@@ -35,18 +35,10 @@ public:	// メンバー関数
 	~CGame() override;
 
 	HRESULT Init() override;
-	void StageSelectInit();
-	void PeopleNumberSelectInit();
-	void CharcterSelectInit();
 	void Uninit() override;
 
 	// 更新処理
 	void Update() override;
-	void StageSelectUpdate();
-	void PeopleNumberSelectUpdate();
-
-	void CharctorSelect();
-	void BattleUpdate();
 	void BattleEnd();
 
 	void Draw() override;
@@ -59,6 +51,23 @@ public:	// メンバー関数
 	int GetWinner() { return m_winnerIndex; }						// 勝利したチーム番号取得
 
 private: // 動的プライベート関数
+
+	/* ステージ選択系統 */
+	void StageSelectInit();
+	void StageSelectUpdate();
+
+	/* 人数選択系統 */
+	void PeopleNumberSelectInit();
+	void PeopleNumberSelectUpdate();
+	void PeopleNumberSelectDelete();
+	void ResetCharcterSample();
+
+	/* キャラクター選択系統 */
+	void CharctorSelect();
+	void CharcterSelectInit();
+	void SetControllerIndex();
+
+	void BattleUpdate();
 	void ResetStage();
 
 private: // 動的メンバー変数
@@ -66,6 +75,8 @@ private: // 動的メンバー変数
 	CPause* m_pause;
 
 	int m_updateLagTime;
+	std::vector<int> m_controllerIndex;	// コントローラーの番号
+	int m_peopleNumber;				// 今回の人数
 
 	/* ステージ選択系統 */
 	CMenu* m_stageSelect;		// ステージ選択
@@ -73,13 +84,17 @@ private: // 動的メンバー変数
 	int m_stageIndex;			// ステージ番号
 	CStage* m_stage;			// ステージ
 
-	/* 人数選択系統 */
+	/* 人数選択UI系統 */
 	CMenu* m_peopleNumberSelect;	// 人数選択
-	int m_peopleNumber;				// 今回の人数
-	
-	/* キャラクター選択系統 */
-	CMenu* m_charcterSelect;			// キャラクター選択
-	std::vector<int> m_controllerIndex;	// コントローラーの番号
+	std::vector<CObject2D*> m_charcterBg;	// キャラクターを置く位置の背景
+	std::vector<CObject2D*> m_charcter;		// キャラクターの画像
+	std::vector<CObject2D*> m_bulletSample;	// キャラクター弾数の画像
+
+	/* キャラクター選択UI系統 */
+	std::vector<int> m_contrellerTeam;				// コントローラーが所属する予定のチーム
+	std::vector<CObject2D*> m_contrellerTexture;	// コントローラーのテクスチャ
+	std::vector<D3DXVECTOR3> m_contrellerPos;		// コントローラーが何も選択してない時の位置
+	CObject2D* m_contrellerTextureBg; // コントローラーのテクスチャを置くは背景
 
 	/* 戦闘系統 */
 	// UI関係
