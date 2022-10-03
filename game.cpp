@@ -82,7 +82,7 @@ HRESULT CGame::Init()
 
 	StageSelectInit();
 
-	m_needWinNumber = 1;
+	m_needWinNumber = 3;
 	m_peopleNumber = 2;
 	return S_OK;
 }

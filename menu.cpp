@@ -57,6 +57,7 @@ HRESULT CMenu::Init()
 void CMenu::Uninit()
 {
 	m_item.clear();
+	m_item.clear();
 }
 
 //-----------------------------------------------------------------------------

@@ -290,8 +290,8 @@ void CTutorial::ResetText()
 			m_isSuccess.at(1) = false;
 			m_isSuccess.at(2) = false;
 			m_isSuccess.at(3) = false;
-			m_text.at(0) = "・Ｘキーを押して上に撃つ\n";
-			m_text.at(1) = "・Ｙキーを押して左に撃つ\n";
+			m_text.at(0) = "・Ｙキーを押して上に撃つ\n";
+			m_text.at(1) = "・Ｘキーを押して左に撃つ\n";
 			m_text.at(2) = "・Ａキーを押して下に撃つ\n";
 			m_text.at(3) = "・Ｂキーを押して右に撃つ\n";
 		}
@@ -305,8 +305,8 @@ void CTutorial::ResetText()
 			m_isSuccess.at(1) = false;
 			m_isSuccess.at(2) = false;
 			m_isSuccess.at(3) = false;
-			m_text.at(0) = "・Ｘキーを長押して上に撃つ\n";
-			m_text.at(1) = "・Ｙキーを長押して左に撃つ\n";
+			m_text.at(0) = "・Ｙキーを長押して上に撃つ\n";
+			m_text.at(1) = "・Ｘキーを長押して左に撃つ\n";
 			m_text.at(2) = "・Ａキーを長押して下に撃つ\n";
 			m_text.at(3) = "・Ｂキーを長押して右に撃つ\n";
 		}

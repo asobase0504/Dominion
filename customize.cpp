@@ -74,6 +74,7 @@ void CCustomize::Uninit()
 {
 	if (m_manu != nullptr)
 	{
+		m_manu->SetIsDeleted();
 		m_manu->Uninit();
 		delete m_manu;
 		m_manu = nullptr;
@@ -129,6 +130,7 @@ void CCustomize::Update()
 	}
 	if (CInput::GetKey()->Trigger(KEY_BACK))
 	{
+		m_manu->SetIsDeleted();
 		m_manu->Uninit();
 		delete m_manu;
 		m_manu = nullptr;
