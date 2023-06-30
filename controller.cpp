@@ -8,6 +8,9 @@
 // include
 //=========================================
 #include "controller.h"
+#include <iostream>
+#include <filesystem>
+#include <fstream>
 
 //-----------------------------------------
 // コンストラクタ

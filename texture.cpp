@@ -49,7 +49,7 @@ void CTexture::LoadAll()
 void CTexture::Load(std::string inKey, std::string inFileName)
 {
 	LPDIRECT3DDEVICE9 pDevice = CApplication::GetInstance()->GetRenderer()->GetDevice();
-	LPDIRECT3DTEXTURE9 texture;
+	LPDIRECT3DTEXTURE9 texture = nullptr;
 	std::string fileName = inFileName;
 
 	// テクスチャの読み込み
@@ -71,7 +71,7 @@ void CTexture::Load(std::string inKey, std::string inFileName)
 void CTexture::Load(std::vector<std::string> inTexture)
 {
 	LPDIRECT3DDEVICE9 pDevice = CApplication::GetInstance()->GetRenderer()->GetDevice();
-	LPDIRECT3DTEXTURE9 texture;
+	LPDIRECT3DTEXTURE9 texture = nullptr;
 	std::string fileName = inTexture[1];
 
 	// テクスチャの読み込み

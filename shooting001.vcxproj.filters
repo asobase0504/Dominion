@@ -24,9 +24,6 @@
     <Filter Include="ソース ファイル\03_Mode">
       <UniqueIdentifier>{48f00a93-53ea-4db8-9029-d9913dbc6a89}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\05_Cpntroller">
-      <UniqueIdentifier>{0d4dda8f-550b-4600-8408-706d6820c1bc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\07_UI">
       <UniqueIdentifier>{a2ea58af-17b6-4e77-ac73-b31195417e8e}</UniqueIdentifier>
     </Filter>
@@ -87,6 +84,9 @@
     <Filter Include="ソース ファイル\07_UI\00_Menu\03_PeopleNumberSelect">
       <UniqueIdentifier>{80881531-679e-4beb-9d25-213e325b0f82}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\05_Controller">
+      <UniqueIdentifier>{0d4dda8f-550b-4600-8408-706d6820c1bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="input.cpp">
@@ -99,7 +99,7 @@
       <Filter>ソース ファイル\03_Mode\01_Title</Filter>
     </ClCompile>
     <ClCompile Include="player_controller.cpp">
-      <Filter>ソース ファイル\05_Cpntroller</Filter>
+      <Filter>ソース ファイル\05_Controller</Filter>
     </ClCompile>
     <ClCompile Include="object.cpp">
       <Filter>ソース ファイル\02_Object</Filter>
@@ -108,7 +108,7 @@
       <Filter>ソース ファイル\02_Object</Filter>
     </ClCompile>
     <ClCompile Include="AI_controller.cpp">
-      <Filter>ソース ファイル\05_Cpntroller</Filter>
+      <Filter>ソース ファイル\05_Controller</Filter>
     </ClCompile>
     <ClCompile Include="mode.cpp">
       <Filter>ソース ファイル\03_Mode</Filter>
@@ -117,10 +117,10 @@
       <Filter>ソース ファイル\03_Mode\00_Game</Filter>
     </ClCompile>
     <ClCompile Include="controller.cpp">
-      <Filter>ソース ファイル\05_Cpntroller</Filter>
+      <Filter>ソース ファイル\05_Controller</Filter>
     </ClCompile>
     <ClCompile Include="A-Star.cpp">
-      <Filter>ソース ファイル\05_Cpntroller</Filter>
+      <Filter>ソース ファイル\05_Controller</Filter>
     </ClCompile>
     <ClCompile Include="ui_countdown.cpp">
       <Filter>ソース ファイル\07_UI</Filter>
@@ -239,7 +239,7 @@
       <Filter>ソース ファイル\03_Mode\01_Title</Filter>
     </ClInclude>
     <ClInclude Include="player_controller.h">
-      <Filter>ソース ファイル\05_Cpntroller</Filter>
+      <Filter>ソース ファイル\05_Controller</Filter>
     </ClInclude>
     <ClInclude Include="object.h">
       <Filter>ソース ファイル\02_Object</Filter>
@@ -248,7 +248,7 @@
       <Filter>ソース ファイル\02_Object</Filter>
     </ClInclude>
     <ClInclude Include="AI_controller.h">
-      <Filter>ソース ファイル\05_Cpntroller</Filter>
+      <Filter>ソース ファイル\05_Controller</Filter>
     </ClInclude>
     <ClInclude Include="mode.h">
       <Filter>ソース ファイル\03_Mode</Filter>
@@ -257,10 +257,10 @@
       <Filter>ソース ファイル\03_Mode\00_Game</Filter>
     </ClInclude>
     <ClInclude Include="controller.h">
-      <Filter>ソース ファイル\05_Cpntroller</Filter>
+      <Filter>ソース ファイル\05_Controller</Filter>
     </ClInclude>
     <ClInclude Include="A-Star.h">
-      <Filter>ソース ファイル\05_Cpntroller</Filter>
+      <Filter>ソース ファイル\05_Controller</Filter>
     </ClInclude>
     <ClInclude Include="ui_countdown.h">
       <Filter>ソース ファイル\07_UI</Filter>
